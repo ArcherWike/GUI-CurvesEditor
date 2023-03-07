@@ -1,6 +1,6 @@
 [![GUI-CurveEditor](https://svg-banners.vercel.app/api?type=rainbow&text1=GUI_Curves%20Editor&width=800&height=100)]()
 
-<h2></h2>
+<h2>-</h2>
 
 This application allows to create and manipulate Bezier curves. Users can add, move, or remove control points to change the shape of the curve.
 <h2></h2>
