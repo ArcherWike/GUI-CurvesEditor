@@ -1,0 +1,112 @@
+﻿<Window x:Class="UiDesign.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UiDesign"
+        mc:Ignorable="d"
+        Title="MainWindow" 
+        Height="840" Width="1600"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        Background="Transparent"
+        AllowsTransparency="True">
+    <Border Background="#4B4B4B"
+            CornerRadius="30" RenderTransformOrigin="0.5,0.5">
+        <Grid Grid.Column="0" Background="#1D2B32">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1240"/>
+                <ColumnDefinition Width="400"/>
+            </Grid.ColumnDefinitions>
+
+            
+
+            
+            <Grid.Resources>
+                <Pen x:Key="GrayPenKey" Brush="#808080"/>
+                <GeometryDrawing x:Key="SmallGridDrawing" Pen="{StaticResource GrayPenKey}" Geometry="M 40 40 L 200 40 L 200 200"/>
+                <GeometryDrawing x:Key="LargeGridDrawing" Pen="{StaticResource GrayPenKey}" Geometry="M 40 40 L 200 40 L 200 200"/>
+                <DrawingBrush x:Key="SmallGridBrush" TileMode="Tile" Viewport="0 0 40 40" ViewportUnits="Absolute" Opacity="0.75" Drawing="{StaticResource SmallGridDrawing}" />
+                <DrawingBrush x:Key="LargeGridBrush" TileMode="Tile" Viewport="40 0 200 200" ViewportUnits="Absolute" Drawing="{StaticResource LargeGridDrawing}"/>
+            </Grid.Resources>
+
+            <Canvas Background="{StaticResource SmallGridBrush}"/>
+            <Canvas Background="{StaticResource SmallGridBrush}"/>
+ 
+            
+           
+            
+            <Canvas Background="{StaticResource LargeGridBrush}">
+                <Line X1="40" Y1="0" X2="40" Y2="800" Stroke="Green" StrokeThickness="5"/>
+                <Line X1="10" Y1="800" X2="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Canvas}}" Y2="800" Stroke="Red" StrokeThickness="5"/>
+            </Canvas>
+
+            <Line
+            X1="1000" Y1="560"
+            X2="260" Y2="560"
+            Stroke="White"
+            StrokeThickness="4" />
+
+            <Line
+            X1="260" Y1="460"
+            X2="260" Y2="560"
+            Stroke="White"
+            StrokeThickness="4" />
+            
+            <Line
+            X1="1000" Y1="460"
+            X2="1000" Y2="560"
+            Stroke="White"
+            StrokeThickness="4" />
+
+            <Line
+            X1="900" Y1="260"
+            X2="900" Y2="190"
+            Stroke="White"
+            StrokeThickness="4" />
+
+            <Line
+            X1="360" Y1="260"
+            X2="360" Y2="190"
+            Stroke="White"
+            StrokeThickness="4" />
+
+
+
+
+            <StackPanel Grid.Column="1" Background="#111D24">
+                <Slider Width="240"
+                    Height="50" 
+                    Grid.Column="1" 
+                    Margin="60,125,60,625" 
+                    Minimum="5" Maximum="100" 
+                    TickPlacement="BottomRight" 
+                    TickFrequency="5" >
+                </Slider>
+
+            </StackPanel>
+            <TextBox Width="200" 
+                       Height="40"
+                       Style="{StaticResource ModernTextBox}"
+                       Grid.Column="1" Margin="80,26,80,734"/>
+
+
+            <TextBlock Text="X"
+                   VerticalAlignment="Bottom"
+                       HorizontalAlignment="Right"
+                   Foreground="Red"
+                   FontSize="22"
+                       Margin="0,0,20,7"/>
+            <TextBlock Text="Y"
+                   VerticalAlignment="Top"
+                       HorizontalAlignment="Left"
+                   Foreground="Green"
+                       Margin="20,0,0,0"
+                   FontSize="22"/>
+
+        </Grid>
+        
+
+     
+    </Border>
+</Window>
