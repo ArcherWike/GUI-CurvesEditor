@@ -23,72 +23,35 @@
 
             
             <Grid.Resources>
-                <Pen x:Key="GrayPenKey" Brush="#808080"/>
+                <Pen x:Key="GrayPenKey" Brush="#808080" Thickness="2"/>
                 <GeometryDrawing x:Key="SmallGridDrawing" Pen="{StaticResource GrayPenKey}" Geometry="M 40 40 L 200 40 L 200 200"/>
                 <GeometryDrawing x:Key="LargeGridDrawing" Pen="{StaticResource GrayPenKey}" Geometry="M 40 40 L 200 40 L 200 200"/>
-                <DrawingBrush x:Key="SmallGridBrush" TileMode="Tile" Viewport="0 0 40 40" ViewportUnits="Absolute" Opacity="0.75" Drawing="{StaticResource SmallGridDrawing}" />
+                <DrawingBrush x:Key="SmallGridBrush" TileMode="Tile" Viewport="0 0 40 40" ViewportUnits="Absolute" Opacity="1" Drawing="{StaticResource SmallGridDrawing}"/>
                 <DrawingBrush x:Key="LargeGridBrush" TileMode="Tile" Viewport="40 0 200 200" ViewportUnits="Absolute" Drawing="{StaticResource LargeGridDrawing}"/>
             </Grid.Resources>
 
             <Canvas Background="{StaticResource SmallGridBrush}"/>
-            <Canvas Background="{StaticResource SmallGridBrush}"/>
- 
-            
-           
-            
-            <Canvas Background="{StaticResource LargeGridBrush}">
+    
+
+            <Canvas Background="{StaticResource LargeGridBrush}" Name="CordSys"
+                    MouseLeftButtonUp="Canvas_MouseLeftButtonUp"
+                    MouseMove="CordSys_MouseMove">
+                
                 <Line X1="40" Y1="0" X2="40" Y2="800" Stroke="Green" StrokeThickness="5"/>
                 <Line X1="10" Y1="800" X2="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Canvas}}" Y2="800" Stroke="Red" StrokeThickness="5"/>
+                
             </Canvas>
 
-            <Line
-            X1="1000" Y1="560"
-            X2="260" Y2="560"
-            Stroke="White"
-            StrokeThickness="4" />
 
-            <Line
-            X1="260" Y1="460"
-            X2="260" Y2="560"
-            Stroke="White"
-            StrokeThickness="4" />
-            
-            <Line
-            X1="1000" Y1="460"
-            X2="1000" Y2="560"
-            Stroke="White"
-            StrokeThickness="4" />
-
-            <Line
-            X1="900" Y1="260"
-            X2="900" Y2="190"
-            Stroke="White"
-            StrokeThickness="4" />
-
-            <Line
-            X1="360" Y1="260"
-            X2="360" Y2="190"
-            Stroke="White"
-            StrokeThickness="4" />
 
 
 
 
             <StackPanel Grid.Column="1" Background="#111D24">
-                <Slider Width="240"
-                    Height="50" 
-                    Grid.Column="1" 
-                    Margin="60,125,60,625" 
-                    Minimum="5" Maximum="100" 
-                    TickPlacement="BottomRight" 
-                    TickFrequency="5" >
-                </Slider>
+               
 
             </StackPanel>
-            <TextBox Width="200" 
-                       Height="40"
-                       Style="{StaticResource ModernTextBox}"
-                       Grid.Column="1" Margin="80,26,80,734"/>
+
 
 
             <TextBlock Text="X"
