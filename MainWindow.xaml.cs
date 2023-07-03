@@ -27,9 +27,33 @@ namespace UiDesign
 
         Ellipse activepoint = null;
 
+        Ellipse circle_point = new Ellipse();
+        int rotator_deg = 90;
+        float angle = 0.0f;
+        Point CirclePoint = new Point(550, 400);
+        float rad = 150f;
+
+
+
+
         public MainWindow()
         {
             InitializeComponent();
+
+
+            // circle_point.Points.Add(CirclePoint);
+
+            circle_point.Stroke = Brushes.Red;
+            circle_point.Fill = System.Windows.Media.Brushes.Red;
+            circle_point.StrokeThickness = 10;
+            Canvas.SetLeft(circle_point, 200);
+            Canvas.SetTop(circle_point, 100);
+            circle_point.Width = 30;
+            circle_point.Height = 30;
+            SetPointPosition(circle_point, CirclePoint);
+            CordSys.Children.Add(circle_point);
+
+
         }
 
         private void AddPoint(Point mousePoint)
@@ -110,5 +134,29 @@ namespace UiDesign
 
             }
         }
+
+        //circle point
+        public Point GetCirclePoint(float radius, float angleInDegrees, Point origin)
+        {
+            float x = (float)(radius * Math.Cos(angleInDegrees * Math.PI / 180F) + origin.X);
+            float y = (float)(radius * Math.Sin(angleInDegrees * Math.PI / 180F) + origin.Y);
+
+            return new Point(x, y);
+        }
+        private void Canvas_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Point transformed_point = GetCirclePoint(rad, angle, CirclePoint);
+            angle += 5;
+            SetPointPosition(circle_point, transformed_point);
+            //polyline1.posi
+            // SetPointPosition(polyline1, CirclePoint);
+        }
+
+
+
+
+
+
+
     }
 }

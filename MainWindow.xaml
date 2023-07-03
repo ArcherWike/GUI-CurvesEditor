@@ -47,7 +47,7 @@
 
 
 
-            <StackPanel Grid.Column="1" Background="#111D24">
+            <StackPanel x:Name="SettingsWindow" Grid.Column="1" Background="#111D24">
                
 
             </StackPanel>
