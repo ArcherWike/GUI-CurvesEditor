@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Curves_editor.Core.Class;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,42 +19,43 @@ namespace UiDesign
 {
     public partial class MainWindow : Window
     {
-        List<Point> pointArray = new List<Point>();
+        
 
         Ellipse activepoint = null;
 
         Ellipse circle_point = new Ellipse();
-        int rotator_deg = 90;
-        float angle = 0.0f;
-        Point CirclePoint = new Point(550, 400);
-        float rad = 150f;
+        
+        Point CirclePoint = new Point(190, 120);
 
+        MovableCirclePoint movablePoint;
 
+        Curve curve = null;
 
+        public delegate void EllypseMoveHandler(object sender, AddPointEventArgs e);
+        public event EllypseMoveHandler OnEllypseMove;
 
         public MainWindow()
         {
             InitializeComponent();
 
+            Create_circle_point();
+            movablePoint = new MovableCirclePoint(CirclePoint, circle_point, this);
 
+
+        }
+
+        private void Create_circle_point()
+        {
             circle_point.Stroke = Brushes.Red;
             circle_point.Fill = System.Windows.Media.Brushes.Red;
             circle_point.StrokeThickness = 10;
-            Canvas.SetLeft(circle_point, 200);
-            Canvas.SetTop(circle_point, 100);
             circle_point.Width = 30;
             circle_point.Height = 30;
-            SetPointPosition(circle_point, CirclePoint);
-            CordSys.Children.Add(circle_point);
-
-            //timer
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(1);
-            timer.Tick += timer_Tick;
-            timer.Start();
+            
+            SettingsWindow.Children.Add(circle_point);
         }
 
-        private void AddPoint(Point mousePoint)
+        private Ellipse CreatePoint(Point mousePosition)
         {
             Ellipse myEllipse = new Ellipse();
 
@@ -61,19 +63,37 @@ namespace UiDesign
             myEllipse.Height = 30;
             myEllipse.Fill = System.Windows.Media.Brushes.White;
             CordSys.Children.Add(myEllipse);
-            SetPointPosition(myEllipse, mousePoint);
+            SetPointPosition(myEllipse, mousePosition);
             myEllipse.MouseEnter += Ellipse_mouseEnter;
             myEllipse.MouseLeave += Ellipse_mouseLeave;
             myEllipse.MouseLeftButtonDown += MyEllipse_MouseLeftButtonDown;
             myEllipse.MouseLeftButtonUp += MyEllipse_MouseLeftButtonUp;
 
+            return myEllipse;
         }
-
-        private void SetPointPosition(Ellipse myEllipse, Point mousePoint) 
+        void UpdatePoint(object sender, AddPointEventArgs e)
         {
+            if (curve != null)
+            {
+                //curve.UpdatePointPosition();
+            }
+        }
+        public void SetPointPosition(Ellipse myEllipse, Point mousePoint) 
+        {
+
+            if (curve != null)
+            {
+                Point delta = new Point(mousePoint.X - 15 - Canvas.GetLeft(myEllipse), 
+                    Canvas.GetTop(myEllipse) - mousePoint.Y + 15);
+
+                curve.UpdatePointPosition(myEllipse, delta);
+                /* AddPointEventArgs eventArgs = new AddPointEventArgs(delta);
+                 OnEllypseMove(myEllipse, eventArgs);*/
+            }
 
             Canvas.SetLeft(myEllipse, mousePoint.X - 15);
             Canvas.SetTop(myEllipse, mousePoint.Y - 15);
+
         }
         private void MyEllipse_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
@@ -92,6 +112,12 @@ namespace UiDesign
 
             return result;
         }
+        private Point GetCoordToCanvast(Point pointPosition)
+        {
+            Point result = new Point((pointPosition.X *200) + 40, 800 - pointPosition.Y * 200);
+
+            return result;
+        }
 
         private void Ellipse_mouseEnter(object sender, MouseEventArgs e)
         {
@@ -107,20 +133,13 @@ namespace UiDesign
 
         private void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            
-            pointArray.Add(GetCanvastToCoord(e.GetPosition(this.CordSys)));
-            AddPoint(e.GetPosition(this.CordSys));
-
-        }
-
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
-        private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-
+            if (curve == null)
+            {
+                curve = new Curve();
+                //OnEllypseMove += new EllypseMoveHandler(Curve.)
+                //curve.OnPointAdded += new Curve.AddPointHandler(DrawPoint);
+            }
+            curve.AddPoint(GetCanvastToCoord(e.GetPosition(this.CordSys)), CreatePoint(e.GetPosition(this.CordSys)));
         }
 
         private void CordSys_MouseMove(object sender, MouseEventArgs e)
@@ -128,24 +147,8 @@ namespace UiDesign
             if (activepoint != null)
             {
                 SetPointPosition(activepoint, e.GetPosition(this.CordSys));
-
+                
             }
-        }
-
-        //circle point
-        void timer_Tick(object sender, EventArgs e)
-        {
-            Point transformed_point = GetCirclePoint(rad, angle, CirclePoint);
-            angle += 5;
-            SetPointPosition(circle_point, transformed_point);
-        }
-
-        public Point GetCirclePoint(float radius, float angleInDegrees, Point origin)
-        {
-            float x = (float)(radius * Math.Cos(angleInDegrees * Math.PI / 180F) + origin.X);
-            float y = (float)(radius * Math.Sin(angleInDegrees * Math.PI / 180F) + origin.Y);
-
-            return new Point(x, y);
         }
     }
 }

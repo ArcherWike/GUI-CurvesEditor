@@ -85,7 +85,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Core\Class\Point.cs" />
+    <Compile Include="Core\Class\Curve.cs" />
+    <Compile Include="Core\Class\MovableCirclePoint.cs" />
     <Compile Include="Core\ObservableObject.cs" />
     <Compile Include="Core\RelayCommand.cs" />
     <Compile Include="MainWindow.xaml.cs">

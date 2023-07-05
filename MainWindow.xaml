@@ -42,15 +42,7 @@
                 
             </Canvas>
 
-
-
-
-
-
-            <StackPanel x:Name="SettingsWindow" Grid.Column="1" Background="#111D24">
-               
-
-            </StackPanel>
+            <Canvas x:Name="SettingsWindow" Grid.Column="1" Background="#111D24"></Canvas>
 
 
 
