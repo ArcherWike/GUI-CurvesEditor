@@ -1,60 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Shapes;
+using UiDesign;
 
 namespace Curves_editor.Core.Class
 {
-    class Curve_point
+    public class Curve_point
     {
-        public Point Position;
-        public Ellipse Ellipse_m { get; private set; }
+        public Point ellipse_positionID { get; set; }
+        public Ellipse ellipseID { get; set; }
         public Curve_point(Point position, Ellipse ellipse)
         {
-            Position = position;
-            Ellipse_m = ellipse;
-        }
-    }
-    public class AddPointEventArgs : EventArgs
-    {
-        public Point Position_change { get; private set; }
-        public Ellipse Ellipse_m { get; private set; }
-
-        public AddPointEventArgs(Point position, Ellipse ellipse)
-        {
-            Position_change = position;
-            Ellipse_m = ellipse;
+            ellipse_positionID = position;
+            ellipseID = ellipse;
         }
     }
 
     internal class Curve
     {
-        List<Curve_point> pointArray = new List<Curve_point>();
-        //public delegate void AddPointHandler(object sender, AddPointEventArgs e);
-        //public event AddPointHandler OnPointAdded;
+        public List<Curve_point> pointArray = new List<Curve_point>();
+        public List<Line> lines = new List<Line>();
 
         public void AddPoint(Point point, Ellipse ellipse)
         {
             Curve_point curve_Point = new Curve_point(point, ellipse);
             pointArray.Add(curve_Point);
-            /*if (OnPointAdded != null)
-            {
-                AddPointEventArgs eventArgs = new AddPointEventArgs(point);
-                OnPointAdded(this, eventArgs);
-            }*/
         }
 
         public void UpdatePointPosition(Ellipse sender, Point e)
         {
             foreach (Curve_point curve_Point in pointArray) 
-            { 
-                if (sender == curve_Point.Ellipse_m)
+            {
+                if (sender == curve_Point.ellipseID)
                 {
-                    curve_Point.Position.X += e.X;
-                    curve_Point.Position.Y += e.Y;
+                    curve_Point.ellipse_positionID = e;
                     break;
                 }
             } 

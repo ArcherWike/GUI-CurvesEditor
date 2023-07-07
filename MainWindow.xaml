@@ -19,9 +19,6 @@
                 <ColumnDefinition Width="400"/>
             </Grid.ColumnDefinitions>
 
-            
-
-            
             <Grid.Resources>
                 <Pen x:Key="GrayPenKey" Brush="#808080" Thickness="2"/>
                 <GeometryDrawing x:Key="SmallGridDrawing" Pen="{StaticResource GrayPenKey}" Geometry="M 40 40 L 200 40 L 200 200"/>
@@ -31,20 +28,23 @@
             </Grid.Resources>
 
             <Canvas Background="{StaticResource SmallGridBrush}"/>
-    
 
             <Canvas Background="{StaticResource LargeGridBrush}" Name="CordSys"
                     MouseLeftButtonUp="Canvas_MouseLeftButtonUp"
                     MouseMove="CordSys_MouseMove">
-                
+
                 <Line X1="40" Y1="0" X2="40" Y2="800" Stroke="Green" StrokeThickness="5"/>
                 <Line X1="10" Y1="800" X2="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Canvas}}" Y2="800" Stroke="Red" StrokeThickness="5"/>
-                
             </Canvas>
 
-            <Canvas x:Name="SettingsWindow" Grid.Column="1" Background="#111D24"></Canvas>
-
-
+            <Canvas x:Name="SettingsWindow" Grid.Column="1" Background="#111D24" Margin="0,0,40,0">
+                <DataGrid AutoGenerateColumns="False" x:Name="dataGrid" Height="372" Width="340" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="458">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding ellipse_positionID}" FontSize="24"/>
+                        <DataGridTextColumn Binding="{Binding ellipseID}" FontSize="24"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Canvas>
 
             <TextBlock Text="X"
                    VerticalAlignment="Bottom"
@@ -60,8 +60,5 @@
                    FontSize="22"/>
 
         </Grid>
-        
-
-     
     </Border>
 </Window>

@@ -39,7 +39,7 @@ namespace Curves_editor.Core.Class
         {
             Point transformed_point = GetCirclePoint(rad, angle, CirclePoint);
             angle += 5;
-            mainWindow_m.SetPointPosition(circle_point, transformed_point);
+            //mainWindow_m.SetPointPosition(circle_point, transformed_point);
         }
 
         public Point GetCirclePoint(float radius, float angleInDegrees, Point origin)
