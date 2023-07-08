@@ -34,7 +34,6 @@ namespace UiDesign
 
             Create_circle_point();
             movablePoint = new MovableCirclePoint(CirclePoint, circle_point, this);
-
         }
 
         private void Create_circle_point()
@@ -66,7 +65,6 @@ namespace UiDesign
 
         public void SetPointPosition(Ellipse myEllipse, Point mousePoint) 
         {
-
             if (curve != null)
             {
                Point delta = new Point((mousePoint.X - 15 - Canvas.GetLeft(myEllipse))/200,            
@@ -109,8 +107,7 @@ namespace UiDesign
         }
         private void Ellipse_mouseLeave(object sender, MouseEventArgs e)
         {
-            (sender as Ellipse).Fill = System.Windows.Media.Brushes.White;
-            dataGrid.Items.Refresh();
+            (sender as Ellipse).Fill = System.Windows.Media.Brushes.White;         
         }
 
         private void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -127,7 +124,8 @@ namespace UiDesign
         {
             if (activepoint != null)
             {
-                SetPointPosition(activepoint, e.GetPosition(this.CordSys));   
+                SetPointPosition(activepoint, e.GetPosition(this.CordSys));
+                dataGrid.Items.Refresh();
             }
         }
     }
