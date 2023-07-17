@@ -26,6 +26,8 @@ namespace UiDesign
         Point CirclePoint = new Point(190, 120);
         MovableCirclePoint movablePoint;
 
+        private List<Line> linesArray = new List<Line>();
+
         Curve curve = null;
 
         public MainWindow()
@@ -36,6 +38,17 @@ namespace UiDesign
             movablePoint = new MovableCirclePoint(CirclePoint, circle_point, this);
         }
 
+        private void OnLineAdded(object sender, AddLineEventArgs e)
+        {
+            Line myLine = new Line();
+            myLine.Stroke = System.Windows.Media.Brushes.LightSteelBlue;
+            myLine.X1 = e.line.X1;
+            myLine.Y1 = e.line.Y1;
+            myLine.X2 = e.line.X2;
+            myLine.Y2 = e.line.Y2;
+            CordSys.Children.Add(myLine);
+            linesArray.Add(myLine);
+        }
         private void Create_circle_point()
         {
             circle_point.Stroke = Brushes.Red;
@@ -62,6 +75,27 @@ namespace UiDesign
 
             return myEllipse;
         }
+
+        public void UpdateLinePosition(object sender, AddLineEventArgs e)
+        {
+            Line activeLine = linesArray[curve.activeIndex];
+            
+            if (sender == null)
+            {
+                activeLine.X1 = GetCoordToCanvast(new Point
+                (e.line.X1, e.line.Y1)).X;
+                activeLine.Y1 = GetCoordToCanvast(new Point
+                    (e.line.X1, e.line.Y1)).Y;
+            }
+            else
+            {
+                activeLine.X2 = GetCoordToCanvast(new Point
+                (e.line.X2, e.line.Y2)).X;
+                activeLine.Y2 = GetCoordToCanvast(new Point
+                    (e.line.X2, e.line.Y2)).Y;
+            } 
+        }
+
 
         public void SetPointPosition(Ellipse myEllipse, Point mousePoint) 
         {
@@ -115,9 +149,17 @@ namespace UiDesign
             if (curve == null)
             {
                 curve = new Curve();
-                dataGrid.ItemsSource = curve.pointArray;    
+                dataGrid.ItemsSource = curve.pointArray;
+
+                curve.OnLineAdded += new Curve.AddLineHandler(OnLineAdded);
+                curve.UpdateLinePosition += new Curve.AddLineHandler(UpdateLinePosition);
             }
-            curve.AddPoint(GetCanvastToCoord(e.GetPosition(this.CordSys)), CreatePoint(e.GetPosition(this.CordSys)));
+            if (activepoint == null) ///////////////##
+            {
+                curve.AddPoint(GetCanvastToCoord(
+                    e.GetPosition(this.CordSys)), 
+                    CreatePoint(e.GetPosition(this.CordSys)));
+            }
         }
 
         private void CordSys_MouseMove(object sender, MouseEventArgs e)
