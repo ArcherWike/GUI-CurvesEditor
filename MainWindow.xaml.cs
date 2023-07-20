@@ -42,10 +42,10 @@ namespace UiDesign
         {
             Line myLine = new Line();
             myLine.Stroke = System.Windows.Media.Brushes.LightSteelBlue;
-            myLine.X1 = e.line.X1;
+            /*myLine.X1 = e.line.X1;
             myLine.Y1 = e.line.Y1;
             myLine.X2 = e.line.X2;
-            myLine.Y2 = e.line.Y2;
+            myLine.Y2 = e.line.Y2;*/
             CordSys.Children.Add(myLine);
             linesArray.Add(myLine);
         }
@@ -78,9 +78,9 @@ namespace UiDesign
 
         public void UpdateLinePosition(object sender, AddLineEventArgs e)
         {
-            Line activeLine = linesArray[curve.activeIndex];
+            //Line activeLine = linesArray[curve.activeIndex];
             
-            if (sender == null)
+            /*if (sender == null)
             {
                 activeLine.X1 = GetCoordToCanvast(new Point
                 (e.line.X1, e.line.Y1)).X;
@@ -93,9 +93,30 @@ namespace UiDesign
                 (e.line.X2, e.line.Y2)).X;
                 activeLine.Y2 = GetCoordToCanvast(new Point
                     (e.line.X2, e.line.Y2)).Y;
-            } 
+            }*/ 
         }
+        public void UpdateLines(object sender, AddLineEventArgs e)
+        {
+            int point_index = 0;
+            foreach (Line active_line in linesArray)
+            {
+                Point startLine = GetCoordToCanvast(new Point(
+                    curve.pointArray[point_index].ellipse_positionID.X,
+                    curve.pointArray[point_index].ellipse_positionID.Y));
 
+                active_line.X1 = startLine.X;
+                active_line.Y1 = startLine.Y;
+
+                point_index++;
+
+                Point endLine = GetCoordToCanvast(new Point(
+                    curve.pointArray[point_index].ellipse_positionID.X,
+                    curve.pointArray[point_index].ellipse_positionID.Y));
+
+                active_line.X2 = endLine.X;
+                active_line.Y2 = endLine.Y;
+            }
+        }
 
         public void SetPointPosition(Ellipse myEllipse, Point mousePoint) 
         {
@@ -153,6 +174,7 @@ namespace UiDesign
 
                 curve.OnLineAdded += new Curve.AddLineHandler(OnLineAdded);
                 curve.UpdateLinePosition += new Curve.AddLineHandler(UpdateLinePosition);
+                curve.UpdateLines += new Curve.AddLineHandler(UpdateLines);
             }
             if (activepoint == null) ///////////////##
             {
