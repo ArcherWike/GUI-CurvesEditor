@@ -16,6 +16,8 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using static System.Net.Mime.MediaTypeNames;
 
+
+
 namespace UiDesign
 {
     public partial class MainWindow : Window
@@ -78,22 +80,22 @@ namespace UiDesign
 
         public void UpdateLinePosition(object sender, AddLineEventArgs e)
         {
-            //Line activeLine = linesArray[curve.activeIndex];
-            
-            /*if (sender == null)
+            Line activeLine = linesArray[curve.activeIndex];
+
+            if (sender == null)
             {
                 activeLine.X1 = GetCoordToCanvast(new Point
-                (e.line.X1, e.line.Y1)).X;
+                    (e.line.X1, e.line.Y1)).X;
                 activeLine.Y1 = GetCoordToCanvast(new Point
                     (e.line.X1, e.line.Y1)).Y;
             }
             else
             {
-                activeLine.X2 = GetCoordToCanvast(new Point
-                (e.line.X2, e.line.Y2)).X;
-                activeLine.Y2 = GetCoordToCanvast(new Point
-                    (e.line.X2, e.line.Y2)).Y;
-            }*/ 
+                Point newLinePoint = GetCoordToCanvast(new Point
+                    (e.line.X2, e.line.Y2));
+                activeLine.X2 = newLinePoint.X;
+                activeLine.Y2 = newLinePoint.Y;
+            }
         }
         public void UpdateLines(object sender, AddLineEventArgs e)
         {
@@ -118,24 +120,24 @@ namespace UiDesign
             }
         }
 
-        public void SetPointPosition(Ellipse myEllipse, Point mousePoint) 
+        public void SetPointPosition(Ellipse myEllipse, Point mousePoint)
         {
             if (curve != null)
             {
-               Point delta = new Point((mousePoint.X - 15 - Canvas.GetLeft(myEllipse))/200,            
-                    (Canvas.GetTop(myEllipse) - mousePoint.Y + 15)/200);
+                Point delta = new Point((mousePoint.X - 15 - Canvas.GetLeft(myEllipse)) / 200,
+                     (Canvas.GetTop(myEllipse) - mousePoint.Y + 15) / 200);
 
                 Point new_pos = GetCanvastToCoord(mousePoint);
                 curve.UpdatePointPosition(myEllipse, new_pos);
             }
 
             Canvas.SetLeft(myEllipse, mousePoint.X - 15);
-            Canvas.SetTop(myEllipse, mousePoint.Y - 15);         
+            Canvas.SetTop(myEllipse, mousePoint.Y - 15);
         }
         private void MyEllipse_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             activepoint = null;
-            e.Handled = true;          
+            e.Handled = true;
         }
 
         private void MyEllipse_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -145,13 +147,13 @@ namespace UiDesign
 
         public static Point GetCanvastToCoord(Point mousePosition)
         {
-            Point result = new Point((mousePosition.X - 40)/200, 4 - (mousePosition.Y/200));
+            Point result = new Point((mousePosition.X - 40) / 200, 4 - (mousePosition.Y / 200));
 
             return result;
         }
         public static Point GetCoordToCanvast(Point pointPosition)
         {
-            Point result = new Point((pointPosition.X *200) + 40, 800 - pointPosition.Y * 200);
+            Point result = new Point((pointPosition.X * 200) + 40, 800 - pointPosition.Y * 200);
 
             return result;
         }
@@ -162,7 +164,7 @@ namespace UiDesign
         }
         private void Ellipse_mouseLeave(object sender, MouseEventArgs e)
         {
-            (sender as Ellipse).Fill = System.Windows.Media.Brushes.White;         
+            (sender as Ellipse).Fill = System.Windows.Media.Brushes.White;
         }
 
         private void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -176,12 +178,12 @@ namespace UiDesign
                 curve.UpdateLinePosition += new Curve.AddLineHandler(UpdateLinePosition);
                 curve.UpdateLines += new Curve.AddLineHandler(UpdateLines);
             }
-            if (activepoint == null) ///////////////##
-            {
-                curve.AddPoint(GetCanvastToCoord(
-                    e.GetPosition(this.CordSys)), 
-                    CreatePoint(e.GetPosition(this.CordSys)));
-            }
+            //if (activepoint == null) ///////////////##
+            //{
+            curve.AddPoint(GetCanvastToCoord(
+                e.GetPosition(this.CordSys)),
+                CreatePoint(e.GetPosition(this.CordSys)));
+            //}
         }
 
         private void CordSys_MouseMove(object sender, MouseEventArgs e)
@@ -192,5 +194,14 @@ namespace UiDesign
                 dataGrid.Items.Refresh();
             }
         }
+
+
+
+        private void test(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+
     }
 }

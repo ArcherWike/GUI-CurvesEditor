@@ -31,7 +31,7 @@
 
             <Canvas Background="{StaticResource LargeGridBrush}" Name="CordSys"
                     MouseLeftButtonUp="Canvas_MouseLeftButtonUp"
-                    MouseMove="CordSys_MouseMove">
+                    MouseMove="CordSys_MouseMove" MouseRightButtonUp="test">
 
                 <Line X1="40" Y1="0" X2="40" Y2="800" Stroke="Green" StrokeThickness="5"/>
                 <Line X1="10" Y1="800" X2="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Canvas}}" Y2="800" Stroke="Red" StrokeThickness="5"/>

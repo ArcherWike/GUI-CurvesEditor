@@ -33,7 +33,7 @@ namespace Curves_editor.Core.Class
     internal class Curve
     {
         public List<Curve_point> pointArray = new List<Curve_point>();
-        public List<Line> lines = new List<Line>();
+        public List<Line> lines = new List<Line>(); //??
 
         public delegate void AddLineHandler(object sender, AddLineEventArgs e);
         public event AddLineHandler OnLineAdded;
@@ -50,6 +50,7 @@ namespace Curves_editor.Core.Class
                 int j = step - 1;
 
                 Point swapPoint = new Point(0,0);
+                Ellipse swap_ellipseID = null;
 
                 while (j >= 0 && key.ellipse_positionID.X < array[j].ellipse_positionID.X) 
                     {
@@ -57,9 +58,12 @@ namespace Curves_editor.Core.Class
                             array[j].ellipse_positionID.X, 
                             array[j].ellipse_positionID.Y);
 
+                        swap_ellipseID = array[j].ellipseID;
+
                         array[j + 1].ellipse_positionID = swapPoint;
+                        array[j + 1].ellipseID = swap_ellipseID;
                         
-                    j--;
+                        j--;
                         
                     }
                 
@@ -67,8 +71,10 @@ namespace Curves_editor.Core.Class
                             key.ellipse_positionID.X,
                             key.ellipse_positionID.Y);
 
-                array[j + 1].ellipse_positionID = swapPoint;
+                swap_ellipseID = key.ellipseID;
 
+                array[j + 1].ellipse_positionID = swapPoint;
+                array[j + 1].ellipseID = swap_ellipseID;
 
             }
             return array;
@@ -145,10 +151,11 @@ namespace Curves_editor.Core.Class
 
                         activeIndex = index - 1;
 
-                        lines[index - 1].X2 = pointArray[index].ellipse_positionID.X;
-                        lines[index - 1].Y2 = pointArray[index].ellipse_positionID.Y;
-                        eventArgs = new AddLineEventArgs(lines[index - 1]);
+                        lines[index].X2 = pointArray[index].ellipse_positionID.X;
+                        lines[index].Y2 = pointArray[index].ellipse_positionID.Y;
+                        eventArgs = new AddLineEventArgs(lines[index]);
                         UpdateLinePosition(this, eventArgs);
+
 
                         //pointArray = SortPoints(pointArray);
                         //UpdateLines(null, eventArgs);
