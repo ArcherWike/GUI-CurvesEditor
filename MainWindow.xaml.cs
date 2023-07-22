@@ -29,6 +29,7 @@ namespace UiDesign
         MovableCirclePoint movablePoint;
 
         private List<Line> linesArray = new List<Line>();
+        PointCollection myPointCollection = new PointCollection();
 
         Curve curve = null;
 
@@ -177,6 +178,7 @@ namespace UiDesign
                 curve.OnLineAdded += new Curve.AddLineHandler(OnLineAdded);
                 curve.UpdateLinePosition += new Curve.AddLineHandler(UpdateLinePosition);
                 curve.UpdateLines += new Curve.AddLineHandler(UpdateLines);
+                curve.AddNewSegmentPoint += new Curve.AddPointHandler(AddNewSegmentPoint);
             }
             //if (activepoint == null) ///////////////##
             //{
@@ -184,6 +186,13 @@ namespace UiDesign
                 e.GetPosition(this.CordSys)),
                 CreatePoint(e.GetPosition(this.CordSys)));
             //}
+        }
+
+        private void AddNewSegmentPoint(object sender, AddPointEventArgs e)
+        {
+            Point test = GetCoordToCanvast(new Point(e.point.X, e.point.Y));
+            myPointCollection.Add(test);
+            CreatePoint(test);
         }
 
         private void CordSys_MouseMove(object sender, MouseEventArgs e)
@@ -199,9 +208,38 @@ namespace UiDesign
 
         private void test(object sender, MouseButtonEventArgs e)
         {
-
+            PolyBezierSegmentExample();
         }
 
+        public void PolyBezierSegmentExample()
+        {
+            if (myPointCollection.Count > 10)
+            {
+                PathFigure myPathFigure = new PathFigure();
+                myPathFigure.StartPoint = curve.CurvePointCollection[0];
 
+                PolyBezierSegment myBezierSegment = new PolyBezierSegment();
+                //myBezierSegment.Points = myPointCollection;
+                myBezierSegment.Points = curve.CurvePointCollection;
+
+                PathSegmentCollection myPathSegmentCollection = new PathSegmentCollection();
+                myPathSegmentCollection.Add(myBezierSegment);
+
+                myPathFigure.Segments = myPathSegmentCollection;
+
+                PathFigureCollection myPathFigureCollection = new PathFigureCollection();
+                myPathFigureCollection.Add(myPathFigure);
+
+                PathGeometry myPathGeometry = new PathGeometry();
+                myPathGeometry.Figures = myPathFigureCollection;
+
+                Path myPath = new Path();
+                myPath.Stroke = Brushes.Green;
+                myPath.StrokeThickness = 1;
+
+                myPath.Data = myPathGeometry;
+                CordSys.Children.Add(myPath);
+            }
+        }
     }
 }

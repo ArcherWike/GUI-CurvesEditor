@@ -7,6 +7,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Shapes;
 using UiDesign;
 
@@ -30,6 +31,17 @@ namespace Curves_editor.Core.Class
             line = line_;
         }
     }
+
+    public class AddPointEventArgs : EventArgs
+    {
+        public Point point { get; private set; }
+
+        public AddPointEventArgs(Point point_)
+        {
+            point = point_;
+        }
+    }
+
     internal class Curve
     {
         public List<Curve_point> pointArray = new List<Curve_point>();
@@ -40,8 +52,20 @@ namespace Curves_editor.Core.Class
         public event AddLineHandler UpdateLinePosition;
         public event AddLineHandler UpdateLines;
 
+        public delegate void AddPointHandler(object sender, AddPointEventArgs e);
+        public event AddPointHandler AddNewSegmentPoint;
+
+
         public int activeIndex = 0;
         
+        public PointCollection CurvePointCollection = new PointCollection();
+
+        private static Point GetCoordToCanvast(Point pointPosition)
+        {
+            Point result = new Point((pointPosition.X * 200) + 40, 800 - pointPosition.Y * 200);
+
+            return result;
+        }
         public List<Curve_point> SortPoints(List<Curve_point> array)
         {
             for (int step = 1; step < array.Count; step++) 
@@ -79,10 +103,40 @@ namespace Curves_editor.Core.Class
             }
             return array;
         }
+        public void AddControlPoint(Curve_point curve_Point_ellipse)
+        {
+            int index = 0;
+            foreach (Curve_point curve_Point in pointArray)
+            {
+                if (curve_Point_ellipse == curve_Point && index > 0)
+                {
+                    double distance = Math.Abs(curve_Point_ellipse.ellipse_positionID.X - pointArray[index - 1].ellipse_positionID.X);
+
+                    AddPointEventArgs eventArgs = new AddPointEventArgs(new Point((curve_Point.ellipse_positionID.X - distance / 2) - 0.1, curve_Point.ellipse_positionID.Y + distance * 2.75));
+                    AddNewSegmentPoint(this, eventArgs);
+                    //eventArgs = new AddPointEventArgs(new Point((curve_Point.ellipse_positionID.X - distance / 2) + 1, curve_Point.ellipse_positionID.Y + distance * 2.75));
+                    eventArgs = new AddPointEventArgs(curve_Point_ellipse.ellipse_positionID);
+                    AddNewSegmentPoint(this, eventArgs);
+
+                    break;
+                }
+                index++;
+            }
+        }
+
         public void AddPoint(Point point, Ellipse ellipse)
         {
             Curve_point curve_Point = new Curve_point(point, ellipse);
             pointArray.Add(curve_Point);
+
+            AddControlPoint(curve_Point);
+
+            AddPointEventArgs eventArgs = new AddPointEventArgs(point);
+            AddNewSegmentPoint(this, eventArgs);
+
+            
+
+            //test_myPointCollection.Add(new Point(point.X, point.Y));
 
             pointArray = SortPoints(pointArray);
 
@@ -103,15 +157,12 @@ namespace Curves_editor.Core.Class
 
                 lines.Add(line);
 
-                if (OnLineAdded != null)
+                /*if (OnLineAdded != null)
                 {
                     AddLineEventArgs eventArgs = new AddLineEventArgs(line);
                     OnLineAdded(this, eventArgs);
                     UpdateLines(this, eventArgs);
-                }
-                //
-                //AddLineEventArgs eventArgs2 = new AddLineEventArgs(line);
-                //UpdateLines(null, eventArgs2);
+                }*/
             }
         }
 
@@ -123,6 +174,8 @@ namespace Curves_editor.Core.Class
                 if (sender == curve_Point.ellipseID)
                 {
                     curve_Point.ellipse_positionID = e;
+
+                    //test_myPointCollection[index] = e;
 
                     activeIndex = index;
 
