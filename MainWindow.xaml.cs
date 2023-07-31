@@ -33,6 +33,8 @@ namespace UiDesign
 
         Curve curve = null;
 
+
+        private FrameworkElement _title;
         public MainWindow()
         {
             InitializeComponent();
@@ -41,17 +43,6 @@ namespace UiDesign
             movablePoint = new MovableCirclePoint(CirclePoint, circle_point, this);
         }
 
-        private void OnLineAdded(object sender, AddLineEventArgs e)
-        {
-            Line myLine = new Line();
-            myLine.Stroke = System.Windows.Media.Brushes.LightSteelBlue;
-            /*myLine.X1 = e.line.X1;
-            myLine.Y1 = e.line.Y1;
-            myLine.X2 = e.line.X2;
-            myLine.Y2 = e.line.Y2;*/
-            CordSys.Children.Add(myLine);
-            linesArray.Add(myLine);
-        }
         private void Create_circle_point()
         {
             circle_point.Stroke = Brushes.Red;
@@ -77,48 +68,6 @@ namespace UiDesign
             myEllipse.MouseLeftButtonUp += MyEllipse_MouseLeftButtonUp;
 
             return myEllipse;
-        }
-
-        public void UpdateLinePosition(object sender, AddLineEventArgs e)
-        {
-            Line activeLine = linesArray[curve.activeIndex];
-
-            if (sender == null)
-            {
-                activeLine.X1 = GetCoordToCanvast(new Point
-                    (e.line.X1, e.line.Y1)).X;
-                activeLine.Y1 = GetCoordToCanvast(new Point
-                    (e.line.X1, e.line.Y1)).Y;
-            }
-            else
-            {
-                Point newLinePoint = GetCoordToCanvast(new Point
-                    (e.line.X2, e.line.Y2));
-                activeLine.X2 = newLinePoint.X;
-                activeLine.Y2 = newLinePoint.Y;
-            }
-        }
-        public void UpdateLines(object sender, AddLineEventArgs e)
-        {
-            int point_index = 0;
-            foreach (Line active_line in linesArray)
-            {
-                Point startLine = GetCoordToCanvast(new Point(
-                    curve.pointArray[point_index].ellipse_positionID.X,
-                    curve.pointArray[point_index].ellipse_positionID.Y));
-
-                active_line.X1 = startLine.X;
-                active_line.Y1 = startLine.Y;
-
-                point_index++;
-
-                Point endLine = GetCoordToCanvast(new Point(
-                    curve.pointArray[point_index].ellipse_positionID.X,
-                    curve.pointArray[point_index].ellipse_positionID.Y));
-
-                active_line.X2 = endLine.X;
-                active_line.Y2 = endLine.Y;
-            }
         }
 
         public void SetPointPosition(Ellipse myEllipse, Point mousePoint)
@@ -174,25 +123,14 @@ namespace UiDesign
             {
                 curve = new Curve();
                 dataGrid.ItemsSource = curve.pointArray;
-
-                curve.OnLineAdded += new Curve.AddLineHandler(OnLineAdded);
-                curve.UpdateLinePosition += new Curve.AddLineHandler(UpdateLinePosition);
-                curve.UpdateLines += new Curve.AddLineHandler(UpdateLines);
-                curve.AddNewSegmentPoint += new Curve.AddPointHandler(AddNewSegmentPoint);
             }
             //if (activepoint == null) ///////////////##
             //{
+
             curve.AddPoint(GetCanvastToCoord(
                 e.GetPosition(this.CordSys)),
                 CreatePoint(e.GetPosition(this.CordSys)));
             //}
-        }
-
-        private void AddNewSegmentPoint(object sender, AddPointEventArgs e)
-        {
-            Point test = GetCoordToCanvast(new Point(e.point.X, e.point.Y));
-            myPointCollection.Add(test);
-            CreatePoint(test);
         }
 
         private void CordSys_MouseMove(object sender, MouseEventArgs e)
@@ -204,8 +142,6 @@ namespace UiDesign
             }
         }
 
-
-
         private void test(object sender, MouseButtonEventArgs e)
         {
             PolyBezierSegmentExample();
@@ -213,10 +149,10 @@ namespace UiDesign
 
         public void PolyBezierSegmentExample()
         {
-            if (myPointCollection.Count > 10)
+            if (curve.CurvePointCollection.Count > 1)
             {
                 PathFigure myPathFigure = new PathFigure();
-                myPathFigure.StartPoint = curve.CurvePointCollection[0];
+                myPathFigure.StartPoint = curve.start_segmentPoint;
 
                 PolyBezierSegment myBezierSegment = new PolyBezierSegment();
                 //myBezierSegment.Points = myPointCollection;
@@ -240,6 +176,20 @@ namespace UiDesign
                 myPath.Data = myPathGeometry;
                 CordSys.Children.Add(myPath);
             }
+        }
+
+        private void GridOfWindow_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            this._title = (FrameworkElement)this.Template.FindName("GridOfWindow", this);
+            if (null != this._title)
+            {
+                this._title.MouseLeftButtonDown += new MouseButtonEventHandler(title_MouseLeftButtonDown);
+            }
+        }
+
+        private void title_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            DragMove();
         }
     }
 }

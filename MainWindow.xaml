@@ -6,14 +6,14 @@
         xmlns:local="clr-namespace:UiDesign"
         mc:Ignorable="d"
         Title="MainWindow" 
-        Height="840" Width="1600"
-        WindowStyle="None"
+        Height="900" Width="1600"
+        WindowStyle="SingleBorderWindow"
         ResizeMode="NoResize"
         Background="Transparent"
-        AllowsTransparency="True">
-    <Border Background="#4B4B4B"
-            CornerRadius="30" RenderTransformOrigin="0.5,0.5">
-        <Grid Grid.Column="0" Background="#1D2B32">
+        AllowsTransparency="False">
+    <Border  Background="#4B4B4B"
+            CornerRadius="30" RenderTransformOrigin="0.5,0.5" MouseLeftButtonDown="GridOfWindow_MouseLeftButtonDown">
+        <Grid x:Name="GridOfWindow" Grid.Column="0" Grid.Row="0" Background="#FFCBD9E0" Margin="0,66,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1240"/>
                 <ColumnDefinition Width="400"/>
@@ -27,14 +27,16 @@
                 <DrawingBrush x:Key="LargeGridBrush" TileMode="Tile" Viewport="40 0 200 200" ViewportUnits="Absolute" Drawing="{StaticResource LargeGridDrawing}"/>
             </Grid.Resources>
 
-            <Canvas Background="{StaticResource SmallGridBrush}"/>
+            <Canvas Background="#1D2B32">
+                <Canvas Grid.Column="0" Background="{StaticResource SmallGridBrush}">
+                    <Canvas Height="840" Width="1240" Background="{StaticResource LargeGridBrush}" x:Name="CordSys"
+                        MouseLeftButtonUp="Canvas_MouseLeftButtonUp"
+                        MouseMove="CordSys_MouseMove" MouseRightButtonUp="test" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Top="-3">
 
-            <Canvas Background="{StaticResource LargeGridBrush}" Name="CordSys"
-                    MouseLeftButtonUp="Canvas_MouseLeftButtonUp"
-                    MouseMove="CordSys_MouseMove" MouseRightButtonUp="test">
-
-                <Line X1="40" Y1="0" X2="40" Y2="800" Stroke="Green" StrokeThickness="5"/>
-                <Line X1="10" Y1="800" X2="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Canvas}}" Y2="800" Stroke="Red" StrokeThickness="5"/>
+                        <Line X1="40" Y1="0" X2="40" Y2="800" Stroke="Green" StrokeThickness="5"/>
+                        <Line X1="10" Y1="800" X2="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type Canvas}}}" Y2="800" Stroke="Red" StrokeThickness="5"/>
+                    </Canvas>
+                </Canvas>
             </Canvas>
 
             <Canvas x:Name="SettingsWindow" Grid.Column="1" Background="#111D24" Margin="0,0,40,0">
