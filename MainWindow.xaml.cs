@@ -66,22 +66,6 @@ namespace UiDesign
             return myEllipse;
         }
 
-        private Ellipse CreateControlPoint(Point mousePosition)
-        {
-            Ellipse myEllipse = new Ellipse();
-
-            myEllipse.Width = 20;
-            myEllipse.Height = 20;
-            myEllipse.Fill = System.Windows.Media.Brushes.SpringGreen;
-            CordSys.Children.Add(myEllipse);
-            SetPointPosition(myEllipse, mousePosition);
-            myEllipse.MouseEnter += Ellipse_mouseEnter;
-            myEllipse.MouseLeave += Ellipse_mouseLeave;
-            myEllipse.MouseLeftButtonDown += MyEllipse_MouseLeftButtonDown;
-            myEllipse.MouseLeftButtonUp += MyEllipse_MouseLeftButtonUp;
-
-            return myEllipse;
-        }
 
 
         public void SetPointPosition(Ellipse myEllipse, Point mousePoint)
@@ -98,6 +82,22 @@ namespace UiDesign
             Canvas.SetLeft(myEllipse, mousePoint.X - 15);
             Canvas.SetTop(myEllipse, mousePoint.Y - 15);
         }
+
+        public void SetControlPointPosition(Ellipse myEllipse, Point mousePoint)
+        {
+            if (curve != null)
+            {
+                Point delta = new Point((mousePoint.X - 10 - Canvas.GetLeft(myEllipse)) / 200,
+                     (Canvas.GetTop(myEllipse) - mousePoint.Y + 10) / 200);
+
+                Point new_pos = GetCanvastToCoord(mousePoint);
+                curve.UpdatePointPosition(myEllipse, new_pos);
+            }
+
+            Canvas.SetLeft(myEllipse, mousePoint.X - 15);
+            Canvas.SetTop(myEllipse, mousePoint.Y - 15);
+        }
+
         private void MyEllipse_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             activepoint = null;
@@ -149,22 +149,55 @@ namespace UiDesign
 
                 //curve.UpdateSegment += new Curve.SegmentHandler(SegmentViewUpdate);
                 curve.PathGeomertyAddToViewport += new Curve.PathHandler(UpdateSegmentViewport);
+
+                curve.OnLineAdded += new Curve.LineHandler(CreateLine);
+                curve.UpdateLine += new Curve.LineHandler(UpdateLine);
+                curve.OnCurvePointAdded += new Curve.CurvePointHandler(CreateCotrolPoint);
             }
             if (activepoint == null) ///////////////##
             {
-                if (curve.CheckNextPoint_isNormal((e.GetPosition(this.CordSys))) == true)
-                {
-                    curve.AddPoint((
-                e.GetPosition(this.CordSys)),
-                CreatePoint(e.GetPosition(this.CordSys)));
-                }
-                else
+
+                
+                
+/*                else
                 {
                     curve.AddPoint((
                 e.GetPosition(this.CordSys)),
                 CreateControlPoint(e.GetPosition(this.CordSys)));
-                }
+                }*/
 
+            }
+            curve.AddPoint((
+                    e.GetPosition(this.CordSys)),
+                    CreatePoint(e.GetPosition(this.CordSys)));
+        }
+
+        private void CreateCotrolPoint(object sender, CurvePointEventArgs e)
+        {
+
+            e.curvePoint.ellipseID.Width = 20;
+            e.curvePoint.ellipseID.Height = 20;
+            e.curvePoint.ellipseID.Fill = System.Windows.Media.Brushes.SpringGreen;
+            CordSys.Children.Add(e.curvePoint.ellipseID);
+            SetControlPointPosition(e.curvePoint.ellipseID, (e.curvePoint.ellipse_positionID));
+            e.curvePoint.ellipseID.MouseEnter += Ellipse_mouseEnter;
+            e.curvePoint.ellipseID.MouseLeave += Ellipse_mouseLeave;
+            e.curvePoint.ellipseID.MouseLeftButtonDown += MyEllipse_MouseLeftButtonDown;
+            e.curvePoint.ellipseID.MouseLeftButtonUp += MyEllipse_MouseLeftButtonUp;
+
+        }
+
+        private void UpdateLine(object sender, LineEventArgs e)
+        {
+            
+        }
+
+        private void CreateLine(object sender, LineEventArgs e)
+        {
+            foreach (Line line in e.linesArray)
+            {
+                line.Stroke = System.Windows.Media.Brushes.LightSteelBlue;
+                CordSys.Children.Add(line);
             }
         }
 
