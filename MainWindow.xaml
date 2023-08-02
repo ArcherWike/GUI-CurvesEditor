@@ -6,40 +6,63 @@
         xmlns:local="clr-namespace:UiDesign"
         mc:Ignorable="d"
         Title="MainWindow" 
-        Height="900" Width="1600"
+        Height="1000" Width="1680"
         WindowStyle="SingleBorderWindow"
         ResizeMode="NoResize"
-        Background="Transparent"
+        Background="#5f9186"
         AllowsTransparency="False">
-    <Border  Background="#4B4B4B"
-            CornerRadius="30" RenderTransformOrigin="0.5,0.5" MouseLeftButtonDown="GridOfWindow_MouseLeftButtonDown">
-        <Grid x:Name="GridOfWindow" Grid.Column="0" Grid.Row="0" Background="#FFCBD9E0" Margin="0,66,0,0">
+    <Border
+        CornerRadius="30" RenderTransformOrigin="0.5,0.5">
+        <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1240"/>
-                <ColumnDefinition Width="400"/>
+                <ColumnDefinition Width="1296"/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <Grid.Resources>
-                <Pen x:Key="GrayPenKey" Brush="#808080" Thickness="2"/>
-                <GeometryDrawing x:Key="SmallGridDrawing" Pen="{StaticResource GrayPenKey}" Geometry="M 40 40 L 200 40 L 200 200"/>
-                <GeometryDrawing x:Key="LargeGridDrawing" Pen="{StaticResource GrayPenKey}" Geometry="M 40 40 L 200 40 L 200 200"/>
-                <DrawingBrush x:Key="SmallGridBrush" TileMode="Tile" Viewport="0 0 40 40" ViewportUnits="Absolute" Opacity="1" Drawing="{StaticResource SmallGridDrawing}"/>
-                <DrawingBrush x:Key="LargeGridBrush" TileMode="Tile" Viewport="40 0 200 200" ViewportUnits="Absolute" Drawing="{StaticResource LargeGridDrawing}"/>
-            </Grid.Resources>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="88"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
 
-            <Canvas Background="#1D2B32">
-                <Canvas Grid.Column="0" Background="{StaticResource SmallGridBrush}">
-                    <Canvas Height="840" Width="1240" Background="{StaticResource LargeGridBrush}" x:Name="CordSys"
-                        MouseLeftButtonUp="Canvas_MouseLeftButtonUp"
-                        MouseMove="CordSys_MouseMove" MouseRightButtonUp="test" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Top="-3">
+            <TextBlock Text="Curve Editor"
+                   VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                   Foreground="White"
+                   FontSize="40" Height="88" Width="296"/>
 
-                        <Line X1="40" Y1="0" X2="40" Y2="800" Stroke="Green" StrokeThickness="5"/>
-                        <Line X1="10" Y1="800" X2="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type Canvas}}}" Y2="800" Stroke="Red" StrokeThickness="5"/>
+            <StackPanel Grid.Row="1" Background="#5e9b8e">
+                <Grid>
+                    <Grid.Resources>
+                        <Pen x:Key="GrayPenKey" Brush="LightGoldenrodYellow" Thickness="2"/>
+                        <GeometryDrawing x:Key="SmallGridDrawing" Pen="{StaticResource GrayPenKey}" Geometry="M 40 40 L 200 40 L 200 200"/>
+                        <GeometryDrawing x:Key="LargeGridDrawing" Pen="{StaticResource GrayPenKey}" Geometry="M 40 40 L 200 40 L 200 200"/>
+                        <DrawingBrush x:Key="SmallGridBrush" TileMode="Tile" Viewport="0 0 40 40" ViewportUnits="Absolute" Opacity="1" Drawing="{StaticResource SmallGridDrawing}"/>
+                        <DrawingBrush x:Key="LargeGridBrush" TileMode="Tile" Viewport="40 0 200 200" ViewportUnits="Absolute" Drawing="{StaticResource LargeGridDrawing}"/>
+                    </Grid.Resources>
+
+                    <Canvas Height="840" Width="1240" Background="{StaticResource SmallGridBrush}" Margin="0,80,0,0">
+                        <Canvas Height="840" Width="1240" Background="{StaticResource LargeGridBrush}" x:Name="CordSys"
+                            MouseLeftButtonUp="Canvas_MouseLeftButtonUp"
+                            MouseMove="CordSys_MouseMove" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Top="-3">
+
+                            <Line X1="40" Y1="0" X2="40" Y2="800" Stroke="Green" StrokeThickness="5"/>
+                            <Line X1="10" Y1="800" X2="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type Canvas}}}" Y2="800" Stroke="Red" StrokeThickness="5"/>
+                        </Canvas>
                     </Canvas>
-                </Canvas>
-            </Canvas>
+                </Grid>
+            </StackPanel>
 
-            <Canvas x:Name="SettingsWindow" Grid.Column="1" Background="#111D24" Margin="0,0,40,0">
+            
+            
+            <StackPanel Grid.Row="1" Grid.Column="1">
+                <RadioButton x:Name="ClearEvent_Button" Content="Clear"
+                                     Height="50"
+                                     Width="140"
+                                     Foreground="White"
+                                     FontSize="30"
+                             Style="{StaticResource MenuButtonTheme}" Click="Clear_Viewport"/>
+            </StackPanel>
+            <Canvas x:Name="SettingsWindow" Grid.Column="1" Margin="0,0,40,25" Grid.Row="1">
                 <DataGrid AutoGenerateColumns="False" x:Name="dataGrid" Height="372" Width="340" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="458">
                     <DataGrid.Columns>
                         <DataGridTextColumn Binding="{Binding ellipse_positionID}" FontSize="24"/>
@@ -47,20 +70,8 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </Canvas>
-
-            <TextBlock Text="X"
-                   VerticalAlignment="Bottom"
-                       HorizontalAlignment="Right"
-                   Foreground="Red"
-                   FontSize="22"
-                       Margin="0,0,20,7"/>
-            <TextBlock Text="Y"
-                   VerticalAlignment="Top"
-                       HorizontalAlignment="Left"
-                   Foreground="Green"
-                       Margin="20,0,0,0"
-                   FontSize="22"/>
-
         </Grid>
+
+
     </Border>
 </Window>

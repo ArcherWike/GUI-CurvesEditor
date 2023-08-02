@@ -1,6 +1,7 @@
 ﻿using Curves_editor.Core.Class;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Ink;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -16,25 +18,19 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using static System.Net.Mime.MediaTypeNames;
 
-
-
 namespace UiDesign
 {
     public partial class MainWindow : Window
     {
+        Path myPath = new Path();
         Ellipse activepoint = null;
 
         Ellipse circle_point = new Ellipse();
         Point CirclePoint = new Point(190, 120);
         MovableCirclePoint movablePoint;
 
-        private List<Line> linesArray = new List<Line>();
-        PointCollection myPointCollection = new PointCollection();
-
         Curve curve = null;
 
-
-        private FrameworkElement _title;
         public MainWindow()
         {
             InitializeComponent();
@@ -69,6 +65,24 @@ namespace UiDesign
 
             return myEllipse;
         }
+
+        private Ellipse CreateControlPoint(Point mousePosition)
+        {
+            Ellipse myEllipse = new Ellipse();
+
+            myEllipse.Width = 20;
+            myEllipse.Height = 20;
+            myEllipse.Fill = System.Windows.Media.Brushes.SpringGreen;
+            CordSys.Children.Add(myEllipse);
+            SetPointPosition(myEllipse, mousePosition);
+            myEllipse.MouseEnter += Ellipse_mouseEnter;
+            myEllipse.MouseLeave += Ellipse_mouseLeave;
+            myEllipse.MouseLeftButtonDown += MyEllipse_MouseLeftButtonDown;
+            myEllipse.MouseLeftButtonUp += MyEllipse_MouseLeftButtonUp;
+
+            return myEllipse;
+        }
+
 
         public void SetPointPosition(Ellipse myEllipse, Point mousePoint)
         {
@@ -114,23 +128,72 @@ namespace UiDesign
         }
         private void Ellipse_mouseLeave(object sender, MouseEventArgs e)
         {
-            (sender as Ellipse).Fill = System.Windows.Media.Brushes.White;
+            if ((sender as Ellipse).Width == 20)
+            {
+                (sender as Ellipse).Fill = System.Windows.Media.Brushes.Blue;
+            }
+            else
+            {
+                (sender as Ellipse).Fill = System.Windows.Media.Brushes.White;
+            }
         }
 
         private void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+
+
             if (curve == null)
             {
                 curve = new Curve();
-                dataGrid.ItemsSource = curve.pointArray;
-            }
-            //if (activepoint == null) ///////////////##
-            //{
+                dataGrid.ItemsSource = curve.base_pointArray;
 
-            curve.AddPoint(GetCanvastToCoord(
+                //curve.UpdateSegment += new Curve.SegmentHandler(SegmentViewUpdate);
+                curve.PathGeomertyAddToViewport += new Curve.PathHandler(UpdateSegmentViewport);
+            }
+            if (activepoint == null) ///////////////##
+            {
+                if (curve.CheckNextPoint_isNormal((e.GetPosition(this.CordSys))) == true)
+                {
+                    curve.AddPoint((
                 e.GetPosition(this.CordSys)),
                 CreatePoint(e.GetPosition(this.CordSys)));
-            //}
+                }
+                else
+                {
+                    curve.AddPoint((
+                e.GetPosition(this.CordSys)),
+                CreateControlPoint(e.GetPosition(this.CordSys)));
+                }
+
+            }
+        }
+
+        private void UpdateSegmentViewport(object sender, PathEventArgs e)
+        {
+
+            
+
+            CordSys.Children.Remove(e.pathGeometry);
+            /*myPath = new Path();
+            myPath.Stroke = Brushes.Black;
+            myPath.StrokeThickness = 1;
+            myPath.Data = e.pathGeometry;*/
+
+            e.pathGeometry.MouseLeftButtonDown += MypathGeometry_MouseLeftButtonDown;
+            e.pathGeometry.MouseLeftButtonUp += MypathGeometryLeftButtonUp;
+
+            CordSys.Children.Add(e.pathGeometry);
+
+        }
+
+        private void MypathGeometryLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            (sender as Path).Stroke = Brushes.Black;
+        }
+
+        private void MypathGeometry_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            (sender as Path).Stroke = Brushes.Yellow;
         }
 
         private void CordSys_MouseMove(object sender, MouseEventArgs e)
@@ -142,54 +205,14 @@ namespace UiDesign
             }
         }
 
-        private void test(object sender, MouseButtonEventArgs e)
+
+        private void Clear_Viewport(object sender, RoutedEventArgs e)
         {
-            PolyBezierSegmentExample();
-        }
-
-        public void PolyBezierSegmentExample()
-        {
-            if (curve.CurvePointCollection.Count > 1)
-            {
-                PathFigure myPathFigure = new PathFigure();
-                myPathFigure.StartPoint = curve.start_segmentPoint;
-
-                PolyBezierSegment myBezierSegment = new PolyBezierSegment();
-                //myBezierSegment.Points = myPointCollection;
-                myBezierSegment.Points = curve.CurvePointCollection;
-
-                PathSegmentCollection myPathSegmentCollection = new PathSegmentCollection();
-                myPathSegmentCollection.Add(myBezierSegment);
-
-                myPathFigure.Segments = myPathSegmentCollection;
-
-                PathFigureCollection myPathFigureCollection = new PathFigureCollection();
-                myPathFigureCollection.Add(myPathFigure);
-
-                PathGeometry myPathGeometry = new PathGeometry();
-                myPathGeometry.Figures = myPathFigureCollection;
-
-                Path myPath = new Path();
-                myPath.Stroke = Brushes.Green;
-                myPath.StrokeThickness = 1;
-
-                myPath.Data = myPathGeometry;
-                CordSys.Children.Add(myPath);
-            }
-        }
-
-        private void GridOfWindow_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            this._title = (FrameworkElement)this.Template.FindName("GridOfWindow", this);
-            if (null != this._title)
-            {
-                this._title.MouseLeftButtonDown += new MouseButtonEventHandler(title_MouseLeftButtonDown);
-            }
-        }
-
-        private void title_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            DragMove();
+            curve = null;
+            CordSys.Children.Clear();
+            dataGrid.ItemsSource = null;
+            dataGrid.Items.Refresh();
+            
         }
     }
 }
