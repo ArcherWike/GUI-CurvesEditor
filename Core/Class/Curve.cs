@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
@@ -14,11 +15,16 @@ using UiDesign;
 
 namespace Curves_editor.Core.Class
 {
-    enum pointType
+    public enum BezierType
     {
-        Normal,
-        Control
+        Line,
+        Cubic,
+        Quadratic,
     }
+
+
+
+
     public class Curve_point
     {
         public Point ellipse_positionID { get; set; }
@@ -32,96 +38,212 @@ namespace Curves_editor.Core.Class
             ellipseID = ellipse; 
         }
     }
-
-    
+        
     public class Segment_curve
     {
+        BezierType cuveType = BezierType.Quadratic;
+
         PathGeometry myPathGeometry = new PathGeometry();
         Path segmentPath = new Path();
 
         public List<Curve_point> points = new List<Curve_point>();
         public List<Line> lines = new List<Line>();
 
-        private static Point GetCoordToCanvast(Point pointPosition)
+        static Point GetCanvastToCoord(Point mousePosition)
+        {
+            Point result = new Point((mousePosition.X - 40) / 200, 4 - (mousePosition.Y / 200));
+
+            return result;
+        }
+        static Point GetCoordToCanvast(Point pointPosition)
         {
             Point result = new Point((pointPosition.X * 200) + 40, 800 - pointPosition.Y * 200);
 
             return result;
         }
 
-        public Segment_curve(Curve_point start_point, Curve_point end_point)
+
+        public Segment_curve(Curve_point start_point, Curve_point end_point, BezierType bezierType = BezierType.Quadratic)
         {
             points.Add(start_point);
-
-            Point newEndPos = GetCoordToCanvast(end_point.ellipse_positionID);
-            Point newStartPos = GetCoordToCanvast(start_point.ellipse_positionID);
-
-            Curve_point control_point = new Curve_point(new Point(
-                start_point.ellipse_positionID.X + (Math.Abs(end_point.ellipse_positionID.X - start_point.ellipse_positionID.X)/2),
-                start_point.ellipse_positionID.Y + (Math.Abs(end_point.ellipse_positionID.Y - start_point.ellipse_positionID.Y)/2)),
-                new Ellipse());
-
-            /*Curve_point control_point = new Curve_point(new Point(
-                Math.Abs(newEndPos.X - newStartPos.X),
-                Math.Abs(newEndPos.Y - newEndPos.Y)),
-                new Ellipse());*/
-
-            points.Add(control_point);
-            
             points.Add(end_point);
 
-            lines.Add(CreateLine(
-                start_point.ellipse_positionID,
-                control_point.ellipse_positionID));
-            lines.Add(CreateLine(
-                control_point.ellipse_positionID,
-                end_point.ellipse_positionID));
+            SetBezierType(bezierType);
         }
-        public Path SegmentGet_pathGeometry()
+
+
+        public void SetBezierType(BezierType bezierType = BezierType.Quadratic)
         {
-            segmentPath.Stroke = Brushes.Black;
-            segmentPath.StrokeThickness = 5;
+            cuveType = bezierType;
+            lines.Clear();
 
-            if (points.Count() < 4)
+            switch (cuveType)
             {
-                BezierSegment new_segment;
-                PathFigure pathFigure = new PathFigure();
+                case BezierType.Line:
 
-                myPathGeometry.Clear();
-                pathFigure.StartPoint = points[0].ellipse_positionID;
-                if (points.Count() == 2)
-                {
-                    Curve_point control_point = new Curve_point(new Point(
-                      Math.Abs(points[1].ellipse_positionID.X - points[0].ellipse_positionID.X),
-                      points[0].ellipse_positionID.Y + Math.Abs(points[1].ellipse_positionID.Y - points[0].ellipse_positionID.Y)),
-                      new Ellipse());
+                    List<Curve_point> newPoints = new List<Curve_point>();
 
-                    new_segment = new BezierSegment(
+                    newPoints.Add(points[0]);
+
+                    Point controlStartPoint = GetCanvastToCoord(new Point(points[0].ellipse_positionID.X, points[0].ellipse_positionID.Y));
+                    Point controlEndPoint = GetCanvastToCoord(new Point(points[points.Count() - 1].ellipse_positionID.X, points[points.Count() - 1].ellipse_positionID.Y));
+                    Curve_point control_point = new Curve_point(GetCoordToCanvast(new Point(
+                                Math.Abs(controlStartPoint.X + controlEndPoint.X) / 2,
+                                Math.Abs(controlStartPoint.Y + controlEndPoint.Y) / 2)
+                        ), new Ellipse());
+                    newPoints.Add(control_point);
+
+                    newPoints.Add(points[points.Count() - 1]);
+
+                    points = newPoints;
+
+                    break;
+
+                case BezierType.Cubic:
+                    List<Curve_point> newPoints2 = new List<Curve_point>();
+
+                    newPoints2.Add(points[0]);
+                    Curve_point control_point_1 = new Curve_point(new Point(
+                        points[0].ellipse_positionID.X + 1, points[0].ellipse_positionID.Y + 1),
+                        new Ellipse());
+                    
+                    Curve_point control_point_2 = new Curve_point(new Point(
+                        points[points.Count() - 1].ellipse_positionID.X + 1, points[points.Count() - 1].ellipse_positionID.Y + 1),
+                        new Ellipse());
+
+                    newPoints2.Add(control_point_1);
+                    newPoints2.Add(control_point_2);
+
+                    newPoints2.Add(points[points.Count() - 1]);
+
+                    points = newPoints2;
+
+                    lines.Add(CreateLine(
                         points[0].ellipse_positionID,
-                        control_point.ellipse_positionID,
-                        points[1].ellipse_positionID,
-                        true);
-                }
-                else
-                {
+                        control_point_1.ellipse_positionID));
+                    lines.Add(CreateLine(
+                        points[points.Count() - 1].ellipse_positionID,
+                        control_point_2.ellipse_positionID));
+
+                    break;
+
+                case BezierType.Quadratic:
+                    List<Curve_point> newPoints1 = new List<Curve_point>();
+
+                    newPoints1.Add(points[0]);
+
+                    Point controlStartPoint1 = GetCanvastToCoord(new Point(points[0].ellipse_positionID.X, points[0].ellipse_positionID.Y));
+                    Point controlEndPoint1 = GetCanvastToCoord(new Point(points[points.Count() - 1].ellipse_positionID.X, points[points.Count() - 1].ellipse_positionID.Y));
+                    Curve_point control_point1 = new Curve_point(GetCoordToCanvast(new Point(
+                                Math.Abs(controlStartPoint1.X + controlEndPoint1.X) / 2,
+                                Math.Abs(controlStartPoint1.Y + controlEndPoint1.Y) / 2)
+                        ), new Ellipse());
+                    newPoints1.Add(control_point1);
+
+                    newPoints1.Add(points[points.Count() - 1]);
+
+                    points = newPoints1;
+
+                    lines.Add(CreateLine(
+                        points[0].ellipse_positionID,
+                        control_point1.ellipse_positionID));
+                    lines.Add(CreateLine(
+                        control_point1.ellipse_positionID,
+                        points[points.Count() - 1].ellipse_positionID));
+
+                    break;
+            }
+        }
+
+
+        public Path SegmentGet_pathGeometry()
+        {          
+            segmentPath.Stroke = Brushes.Red;
+            segmentPath.StrokeThickness = 3;
+
+            BezierSegment new_segment;///
+            new_segment = new BezierSegment(
+                    points[0].ellipse_positionID,
+                    points[1].ellipse_positionID,
+                    points[2].ellipse_positionID,
+                    true);/////////////
+
+
+            PathFigure pathFigure = new PathFigure();
+
+            myPathGeometry.Clear();
+            pathFigure.StartPoint = points[0].ellipse_positionID;
+
+            switch (cuveType)
+            {
+
+                case BezierType.Line:
+                    Point controlStartPoint = GetCanvastToCoord(new Point(points[0].ellipse_positionID.X, points[0].ellipse_positionID.Y));
+                    Point controlEndPoint = GetCanvastToCoord(new Point(points[points.Count() - 1].ellipse_positionID.X, points[points.Count() - 1].ellipse_positionID.Y));
+                    points[1].ellipse_positionID = GetCoordToCanvast(new Point(
+                                Math.Abs(controlStartPoint.X + controlEndPoint.X) / 2,
+                                Math.Abs(controlStartPoint.Y + controlEndPoint.Y) / 2));
+
+
+                   /* QuadraticBezierSegment();*/
+                    
+
                     new_segment = new BezierSegment(
                         points[0].ellipse_positionID,
                         points[1].ellipse_positionID,
                         points[2].ellipse_positionID,
                         true);
-                }
-                pathFigure.Segments.Add(new_segment);
-                myPathGeometry.Figures.Add(pathFigure);
 
-                segmentPath.Data = myPathGeometry;
+                    break;
+
+                case BezierType.Cubic:
+                    PolyBezierSegment myBezierSegment = new PolyBezierSegment();
+                    //myBezierSegment.Points = myPointCollection;
+                    PointCollection myPointCollection = new PointCollection();
+                    foreach (Curve_point point in points)
+                    {
+                        myPointCollection.Add(point.ellipse_positionID);
+                    }
+
+                    myBezierSegment.Points = myPointCollection;
+
+                    /*PathSegmentCollection myPathSegmentCollection = new PathSegmentCollection();
+                    myPathSegmentCollection.Add(myBezierSegment);*/
+
+                    pathFigure.Segments.Add(myBezierSegment);
+
+                    break;
+
+                case BezierType.Quadratic:
+                    new_segment = new BezierSegment(
+                    points[0].ellipse_positionID,
+                    points[1].ellipse_positionID,
+                    points[2].ellipse_positionID,
+                    true);
+
+                    break;             
             }
+            pathFigure.Segments.Add(new_segment);
+            myPathGeometry.Figures.Add(pathFigure);
 
+            segmentPath.Data = myPathGeometry;
             return segmentPath;
         }
 
-        public Curve_point GetControlPoint()
+        public List<Curve_point> GetControlPointArray()
         {
-            return points[1];
+            List<Curve_point> controlPointArray = new List<Curve_point>();
+            
+            if (cuveType == BezierType.Line)
+            {
+                return controlPointArray;
+            }
+
+            for (int i = 0; i < points.Count() - 2; i++)
+            {
+                controlPointArray.Add(points[i + 1]);
+            }
+            return controlPointArray;
         }
 
         private Line CreateLine(Point start, Point end)
@@ -137,27 +259,38 @@ namespace Curves_editor.Core.Class
         }
         public List<Line> GetUpdatedLinesArray()
         {
-            lines[0].X1 = points[0].ellipse_positionID.X;
-            lines[0].Y1 = points[0].ellipse_positionID.Y;
-            lines[0].X2 = points[1].ellipse_positionID.X;
-            lines[0].Y2 = points[1].ellipse_positionID.Y;
+            switch (cuveType)
+            {
+                case BezierType.Line:
+                    break;
+                case BezierType.Cubic:
+                    lines[0].X1 = points[0].ellipse_positionID.X;
+                    lines[0].Y1 = points[0].ellipse_positionID.Y;
+                    lines[0].X2 = points[1].ellipse_positionID.X;
+                    lines[0].Y2 = points[1].ellipse_positionID.Y;
 
-            lines[1].X1 = points[1].ellipse_positionID.X;
-            lines[1].Y1 = points[1].ellipse_positionID.Y;
-            lines[1].X2 = points[2].ellipse_positionID.X;
-            lines[1].Y2 = points[2].ellipse_positionID.Y;
+                    lines[1].X1 = points[2].ellipse_positionID.X;
+                    lines[1].Y1 = points[2].ellipse_positionID.Y;
+                    lines[1].X2 = points[3].ellipse_positionID.X;
+                    lines[1].Y2 = points[3].ellipse_positionID.Y;
+                    break;
+                case BezierType.Quadratic:
+                    lines[0].X1 = points[0].ellipse_positionID.X;
+                    lines[0].Y1 = points[0].ellipse_positionID.Y;
+                    lines[0].X2 = points[1].ellipse_positionID.X;
+                    lines[0].Y2 = points[1].ellipse_positionID.Y;
 
-            return lines;
-        }
-        private void Create_controlPoint()
-        {
+                    lines[1].X1 = points[1].ellipse_positionID.X;
+                    lines[1].Y1 = points[1].ellipse_positionID.Y;
+                    lines[1].X2 = points[2].ellipse_positionID.X;
+                    lines[1].Y2 = points[2].ellipse_positionID.Y;
+                    break;
+            }
+
             
 
-            /*Curve_point end_point = points[points.Count - 1];
-
-            points[points.Count() - 1] = new_control_point;
-            points.Add(end_point);*/
-        }    
+            return lines;
+        }   
     }
 
     public class PathEventArgs : EventArgs
@@ -180,15 +313,19 @@ namespace Curves_editor.Core.Class
 
     public class CurvePointEventArgs : EventArgs
     {
-        public Curve_point curvePoint { get; private set; }
-        public CurvePointEventArgs(Curve_point point_) 
+        public List<Curve_point> curvePointArray { get; private set; }
+        public CurvePointEventArgs(List<Curve_point> point_) 
         { 
-            curvePoint = point_;
+            curvePointArray = point_;
         }
     }
 
     internal class Curve
     {
+        BezierType globalCuveType = BezierType.Quadratic;
+
+
+
         public List<Curve_point> base_pointArray = new List<Curve_point>();
         public List<Curve_point> pointArray = new List<Curve_point>();
         public List<Segment_curve> segmentsArray = new List<Segment_curve>();
@@ -199,9 +336,11 @@ namespace Curves_editor.Core.Class
         public delegate void LineHandler(object sender, LineEventArgs e);
         public event LineHandler OnLineAdded;
         public event LineHandler UpdateLine;
+        public event LineHandler DestroyLine;
 
         public delegate void CurvePointHandler(object sender, CurvePointEventArgs e);
         public event CurvePointHandler OnCurvePointAdded;
+        public event CurvePointHandler DestroyCurvePoint;
 
         public List<Curve_point> SortPoints(List<Curve_point> array)
         {
@@ -236,14 +375,8 @@ namespace Curves_editor.Core.Class
         }
         
 
-        public void DeleteCurves()
-        {
 
-            base_pointArray = new List<Curve_point>();
-            segmentsArray = new List<Segment_curve>();
-        }
-
-        private static Point GetCoordToCanvast(Point pointPosition)
+        public static Point GetCoordToCanvast(Point pointPosition)
         {
             Point result = new Point((pointPosition.X * 200) + 40, 800 - pointPosition.Y * 200);
 
@@ -257,6 +390,37 @@ namespace Curves_editor.Core.Class
             PathGeomertyAddToViewport(this, eventArgs);
         }
 
+        public void ChangeSegmentBezierType(BezierType bezierType)
+        {
+            globalCuveType = bezierType;
+            
+            /*if (segmentsArray.Count > 0) 
+            {*/
+                foreach (Segment_curve segment in segmentsArray)
+                {
+                    LineEventArgs eventArgs = new LineEventArgs(segment.GetUpdatedLinesArray());
+                    DestroyLine(this, eventArgs);
+
+                    CurvePointEventArgs eventArgs1 = new CurvePointEventArgs(segment.GetControlPointArray());
+                    DestroyCurvePoint(this, eventArgs1);
+
+                    segment.SetBezierType(bezierType);
+
+                    eventArgs = new LineEventArgs(segment.GetUpdatedLinesArray());
+                    OnLineAdded(this, eventArgs);
+
+                    eventArgs1 = new CurvePointEventArgs(segment.GetControlPointArray());
+                    foreach (Curve_point curvepoint in eventArgs1.curvePointArray)
+                    {
+                        pointArray.Add(curvepoint);
+                    }
+                    OnCurvePointAdded(this, eventArgs1);
+
+                    AddSegment_to_viewport(segment);
+                }
+            
+        }
+
 
         public void AddPoint(Point point, Ellipse ellipse)
         {
@@ -265,15 +429,19 @@ namespace Curves_editor.Core.Class
 
             if (base_pointArray.Count() > 0)
             {
-                Segment_curve segment_Curve = new Segment_curve(base_pointArray[base_pointArray.Count() - 1], curve_Point);
+                Segment_curve segment_Curve = new Segment_curve(base_pointArray[base_pointArray.Count() - 1], curve_Point, globalCuveType);
                 segmentsArray.Add(segment_Curve);
 
+                
                 LineEventArgs eventArgs = new LineEventArgs(segment_Curve.GetUpdatedLinesArray());
                 OnLineAdded(this, eventArgs);
 
-                CurvePointEventArgs eventArgs1 = new CurvePointEventArgs(segment_Curve.GetControlPoint());
+                CurvePointEventArgs eventArgs1 = new CurvePointEventArgs(segment_Curve.GetControlPointArray());
+                foreach (Curve_point curvepoint in eventArgs1.curvePointArray)
+                {
+                    pointArray.Add(curvepoint);
+                }
                 OnCurvePointAdded(this, eventArgs1);
-                pointArray.Add(eventArgs1.curvePoint);
 
                 AddSegment_to_viewport(segment_Curve);
             }
@@ -281,10 +449,7 @@ namespace Curves_editor.Core.Class
             base_pointArray.Add(curve_Point);
         }
 
-        private void OnSegmentLineAdded(object sender, LineEventArgs e)
-        {
-           
-        }
+
 
         public void UpdatePointPosition(Ellipse sender, Point e)
         {

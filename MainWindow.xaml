@@ -61,6 +61,24 @@
                                      Foreground="White"
                                      FontSize="30"
                              Style="{StaticResource MenuButtonTheme}" Click="Clear_Viewport"/>
+                <RadioButton x:Name="LineEventButtoxn" Content="Line"
+                                     Height="50"
+                                     Width="140"
+                                     Foreground="White"
+                                     FontSize="30"
+                             Style="{StaticResource MenuButtonTheme}" Click="LineEventButton"/>
+                <RadioButton x:Name="CubicEventButtoxn" Content="Cubic"
+                                     Height="50"
+                                     Width="140"
+                                     Foreground="White"
+                                     FontSize="30"
+                             Style="{StaticResource MenuButtonTheme}" Click="CubicEventButton"/>
+                <RadioButton x:Name="QuadraticEventButtonx" Content="Quadratic"
+                                     Height="50"
+                                     Width="200"
+                                     Foreground="White"
+                                     FontSize="30"
+                             Style="{StaticResource MenuButtonTheme}" Click="QuadraticEventButton"/>
             </StackPanel>
             <Canvas x:Name="SettingsWindow" Grid.Column="1" Margin="0,0,40,25" Grid.Row="1">
                 <DataGrid AutoGenerateColumns="False" x:Name="dataGrid" Height="372" Width="340" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="458">

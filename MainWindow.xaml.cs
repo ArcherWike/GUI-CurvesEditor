@@ -152,39 +152,52 @@ namespace UiDesign
 
                 curve.OnLineAdded += new Curve.LineHandler(CreateLine);
                 curve.UpdateLine += new Curve.LineHandler(UpdateLine);
-                curve.OnCurvePointAdded += new Curve.CurvePointHandler(CreateCotrolPoint);
+                curve.DestroyLine += new Curve.LineHandler(DestroyLine);
+
+                curve.OnCurvePointAdded += new Curve.CurvePointHandler(CreateCotrolPoints);
+                curve.DestroyCurvePoint += new Curve.CurvePointHandler(DestroyControlPoint);
             }
             if (activepoint == null) ///////////////##
             {
 
-                
-                
-/*                else
-                {
-                    curve.AddPoint((
-                e.GetPosition(this.CordSys)),
-                CreateControlPoint(e.GetPosition(this.CordSys)));
-                }*/
 
             }
+
             curve.AddPoint((
                     e.GetPosition(this.CordSys)),
                     CreatePoint(e.GetPosition(this.CordSys)));
         }
 
-        private void CreateCotrolPoint(object sender, CurvePointEventArgs e)
+        private void DestroyControlPoint(object sender, CurvePointEventArgs e)
         {
+            foreach (Curve_point point in e.curvePointArray)
+            {
+                CordSys.Children.Remove(point.ellipseID);
+            }
+        }
 
-            e.curvePoint.ellipseID.Width = 20;
-            e.curvePoint.ellipseID.Height = 20;
-            e.curvePoint.ellipseID.Fill = System.Windows.Media.Brushes.SpringGreen;
-            CordSys.Children.Add(e.curvePoint.ellipseID);
-            SetControlPointPosition(e.curvePoint.ellipseID, (e.curvePoint.ellipse_positionID));
-            e.curvePoint.ellipseID.MouseEnter += Ellipse_mouseEnter;
-            e.curvePoint.ellipseID.MouseLeave += Ellipse_mouseLeave;
-            e.curvePoint.ellipseID.MouseLeftButtonDown += MyEllipse_MouseLeftButtonDown;
-            e.curvePoint.ellipseID.MouseLeftButtonUp += MyEllipse_MouseLeftButtonUp;
+        private void DestroyLine(object sender, LineEventArgs e)
+        {
+            foreach (Line line in e.linesArray)
+            {
+                CordSys.Children.Remove(line);
+            }
+        }
 
+        private void CreateCotrolPoints(object sender, CurvePointEventArgs e)
+        {
+            foreach (Curve_point point in e.curvePointArray)
+            {
+                point.ellipseID.Width = 20;
+                point.ellipseID.Height = 20;
+                point.ellipseID.Fill = System.Windows.Media.Brushes.SpringGreen;
+                CordSys.Children.Add(point.ellipseID);
+                SetControlPointPosition(point.ellipseID, (point.ellipse_positionID));
+                point.ellipseID.MouseEnter += Ellipse_mouseEnter;
+                point.ellipseID.MouseLeave += Ellipse_mouseLeave;
+                point.ellipseID.MouseLeftButtonDown += MyEllipse_MouseLeftButtonDown;
+                point.ellipseID.MouseLeftButtonUp += MyEllipse_MouseLeftButtonUp;
+            }        
         }
 
         private void UpdateLine(object sender, LineEventArgs e)
@@ -196,7 +209,8 @@ namespace UiDesign
         {
             foreach (Line line in e.linesArray)
             {
-                line.Stroke = System.Windows.Media.Brushes.LightSteelBlue;
+                line.Stroke = System.Windows.Media.Brushes.Black;
+                line.StrokeThickness = 1;
                 CordSys.Children.Add(line);
             }
         }
@@ -212,8 +226,8 @@ namespace UiDesign
             myPath.StrokeThickness = 1;
             myPath.Data = e.pathGeometry;*/
 
-            e.pathGeometry.MouseLeftButtonDown += MypathGeometry_MouseLeftButtonDown;
-            e.pathGeometry.MouseLeftButtonUp += MypathGeometryLeftButtonUp;
+           /* e.pathGeometry.MouseLeftButtonDown += MypathGeometry_MouseLeftButtonDown;
+            e.pathGeometry.MouseLeftButtonUp += MypathGeometryLeftButtonUp;*/
 
             CordSys.Children.Add(e.pathGeometry);
 
@@ -246,6 +260,30 @@ namespace UiDesign
             dataGrid.ItemsSource = null;
             dataGrid.Items.Refresh();
             
+        }
+
+        private void LineEventButton(object sender, RoutedEventArgs e)
+        {
+            if (curve != null)
+            {
+                curve.ChangeSegmentBezierType(BezierType.Line);
+            }
+        }
+
+        private void CubicEventButton(object sender, RoutedEventArgs e)
+        {
+            if (curve != null)
+            {
+                curve.ChangeSegmentBezierType(BezierType.Cubic);
+            }
+        }
+
+        private void QuadraticEventButton(object sender, RoutedEventArgs e)
+        {
+            if (curve != null)
+            {
+                curve.ChangeSegmentBezierType(BezierType.Quadratic);
+            }
         }
     }
 }
