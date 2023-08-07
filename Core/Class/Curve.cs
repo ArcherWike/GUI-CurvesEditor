@@ -22,9 +22,6 @@ namespace Curves_editor.Core.Class
         Quadratic,
     }
 
-
-
-
     public class Curve_point
     {
         public Point ellipse_positionID { get; set; }
@@ -155,7 +152,6 @@ namespace Curves_editor.Core.Class
             }
         }
 
-
         public Path SegmentGet_pathGeometry()
         {          
             segmentPath.Stroke = Brushes.Red;
@@ -169,9 +165,9 @@ namespace Curves_editor.Core.Class
                     true);/////////////
 
 
-            PathFigure pathFigure = new PathFigure();
 
             myPathGeometry.Clear();
+            PathFigure pathFigure = new PathFigure();
             pathFigure.StartPoint = points[0].ellipse_positionID;
 
             switch (cuveType)
@@ -193,24 +189,41 @@ namespace Curves_editor.Core.Class
                         points[1].ellipse_positionID,
                         points[2].ellipse_positionID,
                         true);
-
+                    pathFigure.Segments.Add(new_segment);
+                    myPathGeometry.Figures.Add(pathFigure);
                     break;
 
                 case BezierType.Cubic:
-                    PolyBezierSegment myBezierSegment = new PolyBezierSegment();
                     //myBezierSegment.Points = myPointCollection;
+                    
                     PointCollection myPointCollection = new PointCollection();
-                    foreach (Curve_point point in points)
+
+
+                    myPointCollection.Add(points[1].ellipse_positionID);
+                    myPointCollection.Add(points[2].ellipse_positionID);
+                    myPointCollection.Add(points[3].ellipse_positionID);
+                    /*foreach (Curve_point point in points)
                     {
                         myPointCollection.Add(point.ellipse_positionID);
-                    }
+                    }*/
 
+                    PolyBezierSegment myBezierSegment = new PolyBezierSegment();
                     myBezierSegment.Points = myPointCollection;
 
+                    PathSegmentCollection myPathSegmentCollection = new PathSegmentCollection();
+                    myPathSegmentCollection.Add(myBezierSegment);
+
+                    pathFigure.Segments = myPathSegmentCollection;
+
+                    PathFigureCollection myPathFigureCollection = new PathFigureCollection();
+                    myPathFigureCollection.Add(pathFigure);
+
+
+                    myPathGeometry.Figures = myPathFigureCollection;
                     /*PathSegmentCollection myPathSegmentCollection = new PathSegmentCollection();
                     myPathSegmentCollection.Add(myBezierSegment);*/
 
-                    pathFigure.Segments.Add(myBezierSegment);
+                    //pathFigure.Segments.Add(myBezierSegment);
 
                     break;
 
@@ -220,11 +233,12 @@ namespace Curves_editor.Core.Class
                     points[1].ellipse_positionID,
                     points[2].ellipse_positionID,
                     true);
-
+                    pathFigure.Segments.Add(new_segment);
+                    myPathGeometry.Figures.Add(pathFigure);
                     break;             
             }
-            pathFigure.Segments.Add(new_segment);
-            myPathGeometry.Figures.Add(pathFigure);
+            
+            
 
             segmentPath.Data = myPathGeometry;
             return segmentPath;
@@ -286,9 +300,6 @@ namespace Curves_editor.Core.Class
                     lines[1].Y2 = points[2].ellipse_positionID.Y;
                     break;
             }
-
-            
-
             return lines;
         }   
     }
@@ -323,8 +334,6 @@ namespace Curves_editor.Core.Class
     internal class Curve
     {
         BezierType globalCuveType = BezierType.Quadratic;
-
-
 
         public List<Curve_point> base_pointArray = new List<Curve_point>();
         public List<Curve_point> pointArray = new List<Curve_point>();
@@ -383,13 +392,11 @@ namespace Curves_editor.Core.Class
             return result;
         }
         
-
         void AddSegment_to_viewport(Segment_curve segment)
         {
             PathEventArgs eventArgs = new PathEventArgs(segment.SegmentGet_pathGeometry());
             PathGeomertyAddToViewport(this, eventArgs);
         }
-
         public void ChangeSegmentBezierType(BezierType bezierType)
         {
             globalCuveType = bezierType;
@@ -418,9 +425,7 @@ namespace Curves_editor.Core.Class
 
                     AddSegment_to_viewport(segment);
                 }
-            
         }
-
 
         public void AddPoint(Point point, Ellipse ellipse)
         {
@@ -445,12 +450,8 @@ namespace Curves_editor.Core.Class
 
                 AddSegment_to_viewport(segment_Curve);
             }
-
             base_pointArray.Add(curve_Point);
         }
-
-
-
         public void UpdatePointPosition(Ellipse sender, Point e)
         {
             foreach (Curve_point curve_Point in pointArray)
@@ -476,7 +477,6 @@ namespace Curves_editor.Core.Class
                     }
                 }
             }
-
         }
     }
 }

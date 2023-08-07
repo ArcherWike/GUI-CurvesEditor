@@ -22,14 +22,14 @@ namespace UiDesign
 {
     public partial class MainWindow : Window
     {
-        Path myPath = new Path();
         Ellipse activepoint = null;
+        Curve curve = null;
 
+        //movable point
         Ellipse circle_point = new Ellipse();
         Point CirclePoint = new Point(190, 120);
         MovableCirclePoint movablePoint;
 
-        Curve curve = null;
 
         public MainWindow()
         {
@@ -37,6 +37,7 @@ namespace UiDesign
 
             Create_circle_point();
             movablePoint = new MovableCirclePoint(CirclePoint, circle_point, this);
+            
         }
 
         private void Create_circle_point()
@@ -48,25 +49,6 @@ namespace UiDesign
             circle_point.Height = 30;
             SettingsWindow.Children.Add(circle_point);
         }
-
-        private Ellipse CreatePoint(Point mousePosition)
-        {
-            Ellipse myEllipse = new Ellipse();
-
-            myEllipse.Width = 30;
-            myEllipse.Height = 30;
-            myEllipse.Fill = System.Windows.Media.Brushes.White;
-            CordSys.Children.Add(myEllipse);
-            SetPointPosition(myEllipse, mousePosition);
-            myEllipse.MouseEnter += Ellipse_mouseEnter;
-            myEllipse.MouseLeave += Ellipse_mouseLeave;
-            myEllipse.MouseLeftButtonDown += MyEllipse_MouseLeftButtonDown;
-            myEllipse.MouseLeftButtonUp += MyEllipse_MouseLeftButtonUp;
-
-            return myEllipse;
-        }
-
-
 
         public void SetPointPosition(Ellipse myEllipse, Point mousePoint)
         {
@@ -83,45 +65,39 @@ namespace UiDesign
             Canvas.SetTop(myEllipse, mousePoint.Y - 15);
         }
 
-        public void SetControlPointPosition(Ellipse myEllipse, Point mousePoint)
+        //###################### Point function ###########################
+        private Ellipse CreatePoint(Point mousePosition)
         {
-            if (curve != null)
+            Ellipse myEllipse = new Ellipse();
+
+            myEllipse.Width = 30;
+            myEllipse.Height = 30;
+            myEllipse.Fill = System.Windows.Media.Brushes.White;
+            CordSys.Children.Add(myEllipse);
+            SetPointPosition(myEllipse, mousePosition);
+            myEllipse.MouseEnter += Ellipse_mouseEnter;
+            myEllipse.MouseLeave += Ellipse_mouseLeave;
+            myEllipse.MouseLeftButtonDown += MyEllipse_MouseLeftButtonDown;
+            myEllipse.MouseLeftButtonUp += MyEllipse_MouseLeftButtonUp;
+
+            return myEllipse;
+        }
+        private void MypathGeometryLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            (sender as Path).Stroke = Brushes.Black;
+        }
+        private void MypathGeometry_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            (sender as Path).Stroke = Brushes.Yellow;
+        }  
+        private void CordSys_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (activepoint != null)
             {
-                Point delta = new Point((mousePoint.X - 10 - Canvas.GetLeft(myEllipse)) / 200,
-                     (Canvas.GetTop(myEllipse) - mousePoint.Y + 10) / 200);
-
-                Point new_pos = GetCanvastToCoord(mousePoint);
-                curve.UpdatePointPosition(myEllipse, new_pos);
+                SetPointPosition(activepoint, e.GetPosition(this.CordSys));
+                dataGrid.Items.Refresh();
             }
-
-            Canvas.SetLeft(myEllipse, mousePoint.X - 15);
-            Canvas.SetTop(myEllipse, mousePoint.Y - 15);
         }
-
-        private void MyEllipse_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            activepoint = null;
-            e.Handled = true;
-        }
-
-        private void MyEllipse_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            activepoint = (sender as Ellipse);
-        }
-
-        public static Point GetCanvastToCoord(Point mousePosition)
-        {
-            Point result = new Point((mousePosition.X - 40) / 200, 4 - (mousePosition.Y / 200));
-
-            return result;
-        }
-        public static Point GetCoordToCanvast(Point pointPosition)
-        {
-            Point result = new Point((pointPosition.X * 200) + 40, 800 - pointPosition.Y * 200);
-
-            return result;
-        }
-
         private void Ellipse_mouseEnter(object sender, MouseEventArgs e)
         {
             (sender as Ellipse).Fill = System.Windows.Media.Brushes.Red;
@@ -137,17 +113,23 @@ namespace UiDesign
                 (sender as Ellipse).Fill = System.Windows.Media.Brushes.White;
             }
         }
-
+        private void MyEllipse_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            activepoint = null;
+            
+        }
+        private void MyEllipse_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            activepoint = (sender as Ellipse);
+            e.Handled = true;
+        }
         private void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-
-
             if (curve == null)
             {
                 curve = new Curve();
                 dataGrid.ItemsSource = curve.base_pointArray;
 
-                //curve.UpdateSegment += new Curve.SegmentHandler(SegmentViewUpdate);
                 curve.PathGeomertyAddToViewport += new Curve.PathHandler(UpdateSegmentViewport);
 
                 curve.OnLineAdded += new Curve.LineHandler(CreateLine);
@@ -168,12 +150,36 @@ namespace UiDesign
                     CreatePoint(e.GetPosition(this.CordSys)));
         }
 
-        private void DestroyControlPoint(object sender, CurvePointEventArgs e)
+        //############### General static function ##################
+        public static Point GetCanvastToCoord(Point mousePosition)
         {
-            foreach (Curve_point point in e.curvePointArray)
+            Point result = new Point((mousePosition.X - 40) / 200, 4 - (mousePosition.Y / 200));
+
+            return result;
+        }
+        public static Point GetCoordToCanvast(Point pointPosition)
+        {
+            Point result = new Point((pointPosition.X * 200) + 40, 800 - pointPosition.Y * 200);
+
+            return result;
+        }
+
+        
+
+
+        ///############################## Line - Control Point Function ###############################
+        private void CreateLine(object sender, LineEventArgs e)
+        {
+            foreach (Line line in e.linesArray)
             {
-                CordSys.Children.Remove(point.ellipseID);
+                line.Stroke = System.Windows.Media.Brushes.Black;
+                line.StrokeThickness = 1;
+                CordSys.Children.Add(line);
             }
+        }
+        private void UpdateLine(object sender, LineEventArgs e)
+        {
+
         }
 
         private void DestroyLine(object sender, LineEventArgs e)
@@ -184,6 +190,7 @@ namespace UiDesign
             }
         }
 
+        ///############################## Control Point Function ###############################
         private void CreateCotrolPoints(object sender, CurvePointEventArgs e)
         {
             foreach (Curve_point point in e.curvePointArray)
@@ -199,27 +206,32 @@ namespace UiDesign
                 point.ellipseID.MouseLeftButtonUp += MyEllipse_MouseLeftButtonUp;
             }        
         }
-
-        private void UpdateLine(object sender, LineEventArgs e)
+        public void SetControlPointPosition(Ellipse myEllipse, Point mousePoint)
         {
-            
-        }
-
-        private void CreateLine(object sender, LineEventArgs e)
-        {
-            foreach (Line line in e.linesArray)
+            if (curve != null)
             {
-                line.Stroke = System.Windows.Media.Brushes.Black;
-                line.StrokeThickness = 1;
-                CordSys.Children.Add(line);
+                Point delta = new Point((mousePoint.X - 10 - Canvas.GetLeft(myEllipse)) / 200,
+                     (Canvas.GetTop(myEllipse) - mousePoint.Y + 10) / 200);
+
+                Point new_pos = GetCanvastToCoord(mousePoint);
+                curve.UpdatePointPosition(myEllipse, new_pos);
+            }
+
+            Canvas.SetLeft(myEllipse, mousePoint.X - 15);
+            Canvas.SetTop(myEllipse, mousePoint.Y - 15);
+        }
+        private void DestroyControlPoint(object sender, CurvePointEventArgs e)
+        {
+            foreach (Curve_point point in e.curvePointArray)
+            {
+                CordSys.Children.Remove(point.ellipseID);
             }
         }
 
+
+        ///############################## Segment- Curve Function ###############################
         private void UpdateSegmentViewport(object sender, PathEventArgs e)
         {
-
-            
-
             CordSys.Children.Remove(e.pathGeometry);
             /*myPath = new Path();
             myPath.Stroke = Brushes.Black;
@@ -230,38 +242,7 @@ namespace UiDesign
             e.pathGeometry.MouseLeftButtonUp += MypathGeometryLeftButtonUp;*/
 
             CordSys.Children.Add(e.pathGeometry);
-
         }
-
-        private void MypathGeometryLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            (sender as Path).Stroke = Brushes.Black;
-        }
-
-        private void MypathGeometry_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            (sender as Path).Stroke = Brushes.Yellow;
-        }
-
-        private void CordSys_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (activepoint != null)
-            {
-                SetPointPosition(activepoint, e.GetPosition(this.CordSys));
-                dataGrid.Items.Refresh();
-            }
-        }
-
-
-        private void Clear_Viewport(object sender, RoutedEventArgs e)
-        {
-            curve = null;
-            CordSys.Children.Clear();
-            dataGrid.ItemsSource = null;
-            dataGrid.Items.Refresh();
-            
-        }
-
         private void LineEventButton(object sender, RoutedEventArgs e)
         {
             if (curve != null)
@@ -284,6 +265,20 @@ namespace UiDesign
             {
                 curve.ChangeSegmentBezierType(BezierType.Quadratic);
             }
+        }
+
+
+
+        private void Clear_Viewport(object sender, RoutedEventArgs e)
+        {
+            curve = null;
+            CordSys.Children.Clear();
+            dataGrid.ItemsSource = null;
+            dataGrid.Items.Refresh();
+        }
+
+        private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
         }
     }
 }

@@ -43,7 +43,7 @@
                     <Canvas Height="840" Width="1240" Background="{StaticResource SmallGridBrush}" Margin="0,80,0,0">
                         <Canvas Height="840" Width="1240" Background="{StaticResource LargeGridBrush}" x:Name="CordSys"
                             MouseLeftButtonUp="Canvas_MouseLeftButtonUp"
-                            MouseMove="CordSys_MouseMove" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Top="-3">
+                            MouseMove="CordSys_MouseMove" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Top="-3" MouseLeftButtonDown="Canvas_MouseLeftButtonDown">
 
                             <Line X1="40" Y1="0" X2="40" Y2="800" Stroke="Green" StrokeThickness="5"/>
                             <Line X1="10" Y1="800" X2="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type Canvas}}}" Y2="800" Stroke="Red" StrokeThickness="5"/>
