@@ -81,12 +81,6 @@
                              Style="{StaticResource MenuButtonTheme}" Click="QuadraticEventButton"/>
             </StackPanel>
             <Canvas x:Name="SettingsWindow" Grid.Column="1" Margin="0,0,40,25" Grid.Row="1">
-                <DataGrid AutoGenerateColumns="False" x:Name="dataGrid" Height="372" Width="340" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="458">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Binding="{Binding ellipse_positionID}" FontSize="24"/>
-                        <DataGridTextColumn Binding="{Binding ellipseID}" FontSize="24"/>
-                    </DataGrid.Columns>
-                </DataGrid>
             </Canvas>
         </Grid>
 

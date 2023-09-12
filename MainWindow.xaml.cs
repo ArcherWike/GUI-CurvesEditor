@@ -95,7 +95,6 @@ namespace UiDesign
             if (activepoint != null)
             {
                 SetPointPosition(activepoint, e.GetPosition(this.CordSys));
-                dataGrid.Items.Refresh();
             }
         }
         private void Ellipse_mouseEnter(object sender, MouseEventArgs e)
@@ -128,7 +127,6 @@ namespace UiDesign
             if (curve == null)
             {
                 curve = new Curve();
-                dataGrid.ItemsSource = curve.base_pointArray;
 
                 curve.PathGeomertyAddToViewport += new Curve.PathHandler(UpdateSegmentViewport);
 
@@ -197,7 +195,7 @@ namespace UiDesign
             {
                 point.ellipseID.Width = 20;
                 point.ellipseID.Height = 20;
-                point.ellipseID.Fill = System.Windows.Media.Brushes.SpringGreen;
+                point.ellipseID.Fill = System.Windows.Media.Brushes.Blue;
                 CordSys.Children.Add(point.ellipseID);
                 SetControlPointPosition(point.ellipseID, (point.ellipse_positionID));
                 point.ellipseID.MouseEnter += Ellipse_mouseEnter;
@@ -273,8 +271,6 @@ namespace UiDesign
         {
             curve = null;
             CordSys.Children.Clear();
-            dataGrid.ItemsSource = null;
-            dataGrid.Items.Refresh();
         }
 
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
