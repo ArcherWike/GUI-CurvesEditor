@@ -23,13 +23,13 @@ namespace UiDesign
     public partial class MainWindow : Window
     {
         Ellipse activepoint = null;
+        Ellipse hoverpoint = null;
         Curve curve = null;
 
         //movable point
         Ellipse circle_point = new Ellipse();
         Point CirclePoint = new Point(190, 120);
         MovableCirclePoint movablePoint;
-
 
         public MainWindow()
         {
@@ -73,6 +73,8 @@ namespace UiDesign
             myEllipse.Width = 30;
             myEllipse.Height = 30;
             myEllipse.Fill = System.Windows.Media.Brushes.White;
+            //myEllipse.
+            Canvas.SetZIndex(myEllipse,7);
             CordSys.Children.Add(myEllipse);
             SetPointPosition(myEllipse, mousePosition);
             myEllipse.MouseEnter += Ellipse_mouseEnter;
@@ -82,7 +84,7 @@ namespace UiDesign
 
             return myEllipse;
         }
-        private void MypathGeometryLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void MypathGeometryLeftButtonUp(object sender, MouseButtonEventArgs e)/////////////////
         {
             (sender as Path).Stroke = Brushes.Black;
         }
@@ -99,7 +101,8 @@ namespace UiDesign
         }
         private void Ellipse_mouseEnter(object sender, MouseEventArgs e)
         {
-            (sender as Ellipse).Fill = System.Windows.Media.Brushes.Red;
+            hoverpoint = (sender as Ellipse);
+            hoverpoint.Fill = System.Windows.Media.Brushes.Red;
         }
         private void Ellipse_mouseLeave(object sender, MouseEventArgs e)
         {
@@ -111,19 +114,29 @@ namespace UiDesign
             {
                 (sender as Ellipse).Fill = System.Windows.Media.Brushes.White;
             }
+            hoverpoint = null;
         }
         private void MyEllipse_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            activepoint = null;
-            
+            if (activepoint != null)
+            {
+                activepoint.ReleaseMouseCapture();
+                activepoint = null;
+                e.Handled = true;
+            }
         }
         private void MyEllipse_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             activepoint = (sender as Ellipse);
+            activepoint.CaptureMouse();
             e.Handled = true;
         }
         private void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+            if (activepoint != null || hoverpoint != null)
+            {
+                return;
+            }
             if (curve == null)
             {
                 curve = new Curve();
@@ -137,12 +150,6 @@ namespace UiDesign
                 curve.OnCurvePointAdded += new Curve.CurvePointHandler(CreateCotrolPoints);
                 curve.DestroyCurvePoint += new Curve.CurvePointHandler(DestroyControlPoint);
             }
-            if (activepoint == null) ///////////////##
-            {
-
-
-            }
-
             curve.AddPoint((
                     e.GetPosition(this.CordSys)),
                     CreatePoint(e.GetPosition(this.CordSys)));
@@ -196,6 +203,7 @@ namespace UiDesign
                 point.ellipseID.Width = 20;
                 point.ellipseID.Height = 20;
                 point.ellipseID.Fill = System.Windows.Media.Brushes.Blue;
+                Canvas.SetZIndex(point.ellipseID, 10);
                 CordSys.Children.Add(point.ellipseID);
                 SetControlPointPosition(point.ellipseID, (point.ellipse_positionID));
                 point.ellipseID.MouseEnter += Ellipse_mouseEnter;
@@ -238,7 +246,7 @@ namespace UiDesign
 
            /* e.pathGeometry.MouseLeftButtonDown += MypathGeometry_MouseLeftButtonDown;
             e.pathGeometry.MouseLeftButtonUp += MypathGeometryLeftButtonUp;*/
-
+           //CordSys.Children.
             CordSys.Children.Add(e.pathGeometry);
         }
         private void LineEventButton(object sender, RoutedEventArgs e)

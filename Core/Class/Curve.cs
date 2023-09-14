@@ -383,8 +383,6 @@ namespace Curves_editor.Core.Class
             return array;
         }
         
-
-
         public static Point GetCoordToCanvast(Point pointPosition)
         {
             Point result = new Point((pointPosition.X * 200) + 40, 800 - pointPosition.Y * 200);
