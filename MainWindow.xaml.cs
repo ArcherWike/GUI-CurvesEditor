@@ -84,14 +84,6 @@ namespace UiDesign
 
             return myEllipse;
         }
-        private void MypathGeometryLeftButtonUp(object sender, MouseButtonEventArgs e)/////////////////
-        {
-            (sender as Path).Stroke = Brushes.Black;
-        }
-        private void MypathGeometry_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            (sender as Path).Stroke = Brushes.Yellow;
-        }  
         private void CordSys_MouseMove(object sender, MouseEventArgs e)
         {
             if (activepoint != null)
@@ -169,9 +161,6 @@ namespace UiDesign
             return result;
         }
 
-        
-
-
         ///############################## Line - Control Point Function ###############################
         private void CreateLine(object sender, LineEventArgs e)
         {
@@ -234,19 +223,10 @@ namespace UiDesign
             }
         }
 
-
         ///############################## Segment- Curve Function ###############################
         private void UpdateSegmentViewport(object sender, PathEventArgs e)
         {
             CordSys.Children.Remove(e.pathGeometry);
-            /*myPath = new Path();
-            myPath.Stroke = Brushes.Black;
-            myPath.StrokeThickness = 1;
-            myPath.Data = e.pathGeometry;*/
-
-           /* e.pathGeometry.MouseLeftButtonDown += MypathGeometry_MouseLeftButtonDown;
-            e.pathGeometry.MouseLeftButtonUp += MypathGeometryLeftButtonUp;*/
-           //CordSys.Children.
             CordSys.Children.Add(e.pathGeometry);
         }
         private void LineEventButton(object sender, RoutedEventArgs e)
@@ -283,6 +263,7 @@ namespace UiDesign
 
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            
         }
     }
 }
