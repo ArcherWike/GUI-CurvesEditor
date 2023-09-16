@@ -265,5 +265,43 @@ namespace UiDesign
         {
             
         }
+
+        private void btnMinimalize_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+
+        private void bar_settings_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            this.DragMove();
+        }
+
+        private void bar_settings_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void bar_settings_MouseMove(object sender, MouseEventArgs e)
+        {
+            
+        }
+
+        private void btnMaximalize_Click(object sender, RoutedEventArgs e)
+        {
+            switch (this.WindowState) 
+            {
+                case WindowState.Normal:
+                    this.WindowState = WindowState.Maximized; break;
+                case WindowState.Maximized:
+                    this.WindowState = WindowState.Normal; break;
+                default: break;
+
+            }
+        }
+
+        private void btnClose_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }

@@ -30,6 +30,27 @@
                    Foreground="White"
                    FontSize="40" Height="88" Width="296"/>
 
+            <StackPanel x:Name="bar_settings" Grid.Row="0" Background="LightGray"  MouseLeftButtonDown="bar_settings_MouseLeftButtonDown" MouseLeftButtonUp="bar_settings_MouseLeftButtonUp" MouseMove="bar_settings_MouseMove">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30">
+                        </RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid HorizontalAlignment="Right">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30">
+
+                            </ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        
+                        <Button x:Name="btnMinimalize" Click="btnMinimalize_Click"/>
+                        
+                        <Button x:Name="btnMaximalize" Content="Ma" Click="btnMaximalize_Click" Margin="-37,0,37,0" Background="{x:Null}"/>
+
+                        <Button x:Name="btnClose" Content="Cl" Click="btnClose_Click" Margin="-73,0,73,0"/>
+                    </Grid>
+                </Grid>
+            </StackPanel>
             <StackPanel Grid.Row="1" Background="#5e9b8e">
                 <Grid>
                     <Grid.Resources>
@@ -52,8 +73,8 @@
                 </Grid>
             </StackPanel>
 
-            
-            
+
+
             <StackPanel Grid.Row="1" Grid.Column="1">
                 <RadioButton x:Name="ClearEvent_Button" Content="Clear"
                                      Height="50"
