@@ -61,8 +61,8 @@ namespace UiDesign
                 curve.UpdatePointPosition(myEllipse, new_pos);
             }
 
-            Canvas.SetLeft(myEllipse, mousePoint.X - 15);
-            Canvas.SetTop(myEllipse, mousePoint.Y - 15);
+            //Canvas.SetLeft(myEllipse, mousePoint.X - 15);
+            //Canvas.SetTop(myEllipse, mousePoint.Y - 15);
         }
 
         //###################### Point function ###########################
@@ -77,6 +77,11 @@ namespace UiDesign
             Canvas.SetZIndex(myEllipse,7);
             CordSys.Children.Add(myEllipse);
             SetPointPosition(myEllipse, mousePosition);
+
+            Canvas.SetLeft(myEllipse, mousePosition.X - 15);
+            Canvas.SetTop(myEllipse, mousePosition.Y - 15);
+
+
             myEllipse.MouseEnter += Ellipse_mouseEnter;
             myEllipse.MouseLeave += Ellipse_mouseLeave;
             myEllipse.MouseLeftButtonDown += MyEllipse_MouseLeftButtonDown;
@@ -139,12 +144,23 @@ namespace UiDesign
                 curve.UpdateLine += new Curve.LineHandler(UpdateLine);
                 curve.DestroyLine += new Curve.LineHandler(DestroyLine);
 
-                curve.OnCurvePointAdded += new Curve.CurvePointHandler(CreateCotrolPoints);
-                curve.DestroyCurvePoint += new Curve.CurvePointHandler(DestroyControlPoint);
+                curve.OnCurvePointAdded += new Curve.CurvePointsListHandler(CreateCotrolPoints);
+                curve.DestroyCurvePoint += new Curve.CurvePointsListHandler(DestroyControlPoint);
+
+                curve.CurvePointMove += new Curve.CurvePointHandler(UpdatePointPosition);
             }
             curve.AddPoint((
                     e.GetPosition(this.CordSys)),
                     CreatePoint(e.GetPosition(this.CordSys)));
+        }
+
+        private void UpdatePointPosition(object sender, CurvePointEventArgs e)
+        {
+
+                //SetPointPosition(e.curvePoint.ellipseID, GetCoordToCanvast(e.curvePoint.ellipse_positionID));
+                Canvas.SetLeft(e.curvePoint.ellipseID, e.curvePoint.ellipse_positionID.X - 15);
+                Canvas.SetTop(e.curvePoint.ellipseID, e.curvePoint.ellipse_positionID.Y - 15);
+            
         }
 
         //############### General static function ##################
@@ -185,7 +201,7 @@ namespace UiDesign
         }
 
         ///############################## Control Point Function ###############################
-        private void CreateCotrolPoints(object sender, CurvePointEventArgs e)
+        private void CreateCotrolPoints(object sender, CurvePointsListEventArgs e)
         {
             foreach (Curve_point point in e.curvePointArray)
             {
@@ -215,7 +231,7 @@ namespace UiDesign
             Canvas.SetLeft(myEllipse, mousePoint.X - 15);
             Canvas.SetTop(myEllipse, mousePoint.Y - 15);
         }
-        private void DestroyControlPoint(object sender, CurvePointEventArgs e)
+        private void DestroyControlPoint(object sender, CurvePointsListEventArgs e)
         {
             foreach (Curve_point point in e.curvePointArray)
             {
@@ -226,8 +242,12 @@ namespace UiDesign
         ///############################## Segment- Curve Function ###############################
         private void UpdateSegmentViewport(object sender, PathEventArgs e)
         {
-            CordSys.Children.Remove(e.pathGeometry);
-            CordSys.Children.Add(e.pathGeometry);
+            //CordSys.Children.Remove(e.pathGeometry);
+            if (!CordSys.Children.Contains(e.pathGeometry))
+            {
+
+                CordSys.Children.Add(e.pathGeometry);
+            }
         }
         private void LineEventButton(object sender, RoutedEventArgs e)
         {
