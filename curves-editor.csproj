@@ -86,6 +86,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Core\Class\Curve.cs" />
+    <Compile Include="Core\Class\Interpolator.cs" />
     <Compile Include="Core\Class\MovableCirclePoint.cs" />
     <Compile Include="Core\ObservableObject.cs" />
     <Compile Include="Core\RelayCommand.cs" />
