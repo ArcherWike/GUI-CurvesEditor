@@ -12,8 +12,8 @@ namespace Curves_editor.Core.Class
     static internal class Interpolator
     {
         public static double Linear( double src, double dst, double t )
-	    {
-		    return src * ( 1.0 - t ) + dst * t;
+	{
+	    return src * ( 1.0 - t ) + dst * t;
         }
 
         public static double QuadraticBezier( double p0, double c0, double p1, double t )
