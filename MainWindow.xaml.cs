@@ -61,8 +61,8 @@ namespace UiDesign
                 curve.UpdatePointPosition(myEllipse, new_pos);
             }
 
-            Canvas.SetLeft(myEllipse, mousePoint.X - 15);
-            Canvas.SetTop(myEllipse, mousePoint.Y - 15);
+            //Canvas.SetLeft(myEllipse, mousePoint.X - 15);
+            //Canvas.SetTop(myEllipse, mousePoint.Y - 15);
         }
 
         //###################### Point function ###########################
@@ -77,6 +77,11 @@ namespace UiDesign
             Canvas.SetZIndex(myEllipse,7);
             CordSys.Children.Add(myEllipse);
             SetPointPosition(myEllipse, mousePosition);
+
+            Canvas.SetLeft(myEllipse, mousePosition.X - 15);
+            Canvas.SetTop(myEllipse, mousePosition.Y - 15);
+
+
             myEllipse.MouseEnter += Ellipse_mouseEnter;
             myEllipse.MouseLeave += Ellipse_mouseLeave;
             myEllipse.MouseLeftButtonDown += MyEllipse_MouseLeftButtonDown;
@@ -84,14 +89,6 @@ namespace UiDesign
 
             return myEllipse;
         }
-        private void MypathGeometryLeftButtonUp(object sender, MouseButtonEventArgs e)/////////////////
-        {
-            (sender as Path).Stroke = Brushes.Black;
-        }
-        private void MypathGeometry_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            (sender as Path).Stroke = Brushes.Yellow;
-        }  
         private void CordSys_MouseMove(object sender, MouseEventArgs e)
         {
             if (activepoint != null)
@@ -144,15 +141,25 @@ namespace UiDesign
                 curve.PathGeomertyAddToViewport += new Curve.PathHandler(UpdateSegmentViewport);
 
                 curve.OnLineAdded += new Curve.LineHandler(CreateLine);
-                curve.UpdateLine += new Curve.LineHandler(UpdateLine);
                 curve.DestroyLine += new Curve.LineHandler(DestroyLine);
 
-                curve.OnCurvePointAdded += new Curve.CurvePointHandler(CreateCotrolPoints);
-                curve.DestroyCurvePoint += new Curve.CurvePointHandler(DestroyControlPoint);
+                curve.OnCurvePointAdded += new Curve.CurvePointsListHandler(CreateCotrolPoints);
+                curve.DestroyCurvePoint += new Curve.CurvePointsListHandler(DestroyControlPoint);
+
+                curve.CurvePointMove += new Curve.CurvePointHandler(UpdatePointPosition);
             }
             curve.AddPoint((
                     e.GetPosition(this.CordSys)),
                     CreatePoint(e.GetPosition(this.CordSys)));
+        }
+
+        private void UpdatePointPosition(object sender, CurvePointEventArgs e)
+        {
+
+                //SetPointPosition(e.curvePoint.ellipseID, GetCoordToCanvast(e.curvePoint.ellipse_positionID));
+                Canvas.SetLeft(e.curvePoint.ellipseID, e.curvePoint.ellipse_positionID.X - 15);
+                Canvas.SetTop(e.curvePoint.ellipseID, e.curvePoint.ellipse_positionID.Y - 15);
+            
         }
 
         //############### General static function ##################
@@ -169,9 +176,6 @@ namespace UiDesign
             return result;
         }
 
-        
-
-
         ///############################## Line - Control Point Function ###############################
         private void CreateLine(object sender, LineEventArgs e)
         {
@@ -181,10 +185,6 @@ namespace UiDesign
                 line.StrokeThickness = 1;
                 CordSys.Children.Add(line);
             }
-        }
-        private void UpdateLine(object sender, LineEventArgs e)
-        {
-
         }
 
         private void DestroyLine(object sender, LineEventArgs e)
@@ -196,7 +196,7 @@ namespace UiDesign
         }
 
         ///############################## Control Point Function ###############################
-        private void CreateCotrolPoints(object sender, CurvePointEventArgs e)
+        private void CreateCotrolPoints(object sender, CurvePointsListEventArgs e)
         {
             foreach (Curve_point point in e.curvePointArray)
             {
@@ -226,7 +226,7 @@ namespace UiDesign
             Canvas.SetLeft(myEllipse, mousePoint.X - 15);
             Canvas.SetTop(myEllipse, mousePoint.Y - 15);
         }
-        private void DestroyControlPoint(object sender, CurvePointEventArgs e)
+        private void DestroyControlPoint(object sender, CurvePointsListEventArgs e)
         {
             foreach (Curve_point point in e.curvePointArray)
             {
@@ -234,20 +234,15 @@ namespace UiDesign
             }
         }
 
-
         ///############################## Segment- Curve Function ###############################
         private void UpdateSegmentViewport(object sender, PathEventArgs e)
         {
-            CordSys.Children.Remove(e.pathGeometry);
-            /*myPath = new Path();
-            myPath.Stroke = Brushes.Black;
-            myPath.StrokeThickness = 1;
-            myPath.Data = e.pathGeometry;*/
+            //CordSys.Children.Remove(e.pathGeometry);
+            if (!CordSys.Children.Contains(e.pathGeometry))
+            {
 
-           /* e.pathGeometry.MouseLeftButtonDown += MypathGeometry_MouseLeftButtonDown;
-            e.pathGeometry.MouseLeftButtonUp += MypathGeometryLeftButtonUp;*/
-           //CordSys.Children.
-            CordSys.Children.Add(e.pathGeometry);
+                CordSys.Children.Add(e.pathGeometry);
+            }
         }
         private void LineEventButton(object sender, RoutedEventArgs e)
         {
@@ -283,6 +278,45 @@ namespace UiDesign
 
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            
+        }
+
+        private void btnMinimalize_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+
+        private void bar_settings_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            this.DragMove();
+        }
+
+        private void bar_settings_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void bar_settings_MouseMove(object sender, MouseEventArgs e)
+        {
+            
+        }
+
+        private void btnMaximalize_Click(object sender, RoutedEventArgs e)
+        {
+            switch (this.WindowState) 
+            {
+                case WindowState.Normal:
+                    this.WindowState = WindowState.Maximized; break;
+                case WindowState.Maximized:
+                    this.WindowState = WindowState.Normal; break;
+                default: break;
+
+            }
+        }
+
+        private void btnClose_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }
