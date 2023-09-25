@@ -141,7 +141,6 @@ namespace UiDesign
                 curve.PathGeomertyAddToViewport += new Curve.PathHandler(UpdateSegmentViewport);
 
                 curve.OnLineAdded += new Curve.LineHandler(CreateLine);
-                curve.UpdateLine += new Curve.LineHandler(UpdateLine);
                 curve.DestroyLine += new Curve.LineHandler(DestroyLine);
 
                 curve.OnCurvePointAdded += new Curve.CurvePointsListHandler(CreateCotrolPoints);
@@ -186,10 +185,6 @@ namespace UiDesign
                 line.StrokeThickness = 1;
                 CordSys.Children.Add(line);
             }
-        }
-        private void UpdateLine(object sender, LineEventArgs e)
-        {
-
         }
 
         private void DestroyLine(object sender, LineEventArgs e)

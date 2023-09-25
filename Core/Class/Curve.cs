@@ -1,6 +1,7 @@
 ﻿using Curves_editor.Properties;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Net;
@@ -28,6 +29,8 @@ namespace Curves_editor.Core.Class
         public Point ellipse_positionID { get; set; }
         public Ellipse ellipseID { get; set; }
 
+        public int default_segment_index { get; set; }
+
         public Curve_point(Point position, Ellipse ellipse)
         {
             ellipse_positionID = position;
@@ -43,9 +46,11 @@ namespace Curves_editor.Core.Class
         PathGeometry myPathGeometry = new PathGeometry();
         Path segmentPath = new Path();
 
-        public List<Curve_point> points = new List<Curve_point>();
-        public List<Line> lines = new List<Line>();
+        public List<Curve_point> points = new List<Curve_point>();  //this check m-
+        List<Line> m_lines = new List<Line>();
 
+        int m_controlP_margin = 0;
+        public bool visualadded = false;
         
         static Point GetCanvastToCoord(Point mousePosition)
         {
@@ -69,9 +74,9 @@ namespace Curves_editor.Core.Class
     
         public void SetBezierType(BezierType bezierType = BezierType.Quadratic)
         {
-            //Setting up value of lines and control points for Bezier curve
+            //Setting up value of m_lines and control points for Bezier curve
             cuveType = bezierType;
-            lines.Clear();
+            m_lines.Clear();
 
             switch (cuveType)
             {
@@ -131,11 +136,11 @@ namespace Curves_editor.Core.Class
 
                     points = newPoints2;
 
-                    //create lines conecting control and base points
-                    lines.Add(CreateLine(
+                    //create m_lines conecting control and base points
+                    m_lines.Add(CreateLine(
                         points[0].ellipse_positionID,
                         control_point_1.ellipse_positionID));
-                    lines.Add(CreateLine(
+                    m_lines.Add(CreateLine(
                         points[points.Count() - 1].ellipse_positionID,
                         control_point_2.ellipse_positionID));
 
@@ -161,11 +166,11 @@ namespace Curves_editor.Core.Class
 
                     points = newPoints1;
 
-                    //create lines conecting control and base points
-                    lines.Add(CreateLine(
+                    //create m_lines conecting control and base points
+                    m_lines.Add(CreateLine(
                         points[0].ellipse_positionID,
                         control_point1.ellipse_positionID));
-                    lines.Add(CreateLine(
+                    m_lines.Add(CreateLine(
                         control_point1.ellipse_positionID,
                         points[points.Count() - 1].ellipse_positionID));
 
@@ -177,19 +182,19 @@ namespace Curves_editor.Core.Class
         {
             for (int i = 1; i < points.Count() - 1; i++) 
             { 
-                if (points[i].ellipse_positionID.X < points[0].ellipse_positionID.X)
+                if (points[i].ellipse_positionID.X - m_controlP_margin < points[0].ellipse_positionID.X)
                 {
                     points[i].ellipse_positionID = new Point(
-                        points[0].ellipse_positionID.X, 
+                        points[0].ellipse_positionID.X + m_controlP_margin, 
                         points[i].ellipse_positionID.Y);
 
                     return points[i];
 
                 }
-                else if (points[i].ellipse_positionID.X > points[points.Count() - 1].ellipse_positionID.X)
+                else if (points[i].ellipse_positionID.X + m_controlP_margin > points[points.Count() - 1].ellipse_positionID.X)
                 {
                     points[i].ellipse_positionID = new Point(
-                        points[points.Count() - 1].ellipse_positionID.X,
+                        points[points.Count() - 1].ellipse_positionID.X - m_controlP_margin,
                         points[i].ellipse_positionID.Y);
                     return points[i];
                 }
@@ -197,7 +202,7 @@ namespace Curves_editor.Core.Class
             return null;
         }
 
-        public Path SegmentGet_pathGeometry() //chech breakpoint
+        public Path SegmentGet_pathGeometry() //chech breakpoint //dla kazdego segmentu
         {          
             segmentPath.Stroke = Brushes.Red;
             segmentPath.StrokeThickness = 3;
@@ -319,30 +324,35 @@ namespace Curves_editor.Core.Class
                 case BezierType.Line:
                     break;
                 case BezierType.Cubic:
-                    lines[0].X1 = points[0].ellipse_positionID.X;
-                    lines[0].Y1 = points[0].ellipse_positionID.Y;
-                    lines[0].X2 = points[1].ellipse_positionID.X - 5;
-                    lines[0].Y2 = points[1].ellipse_positionID.Y - 5;
+                    m_lines[0].X1 = points[0].ellipse_positionID.X;
+                    m_lines[0].Y1 = points[0].ellipse_positionID.Y;
+                    m_lines[0].X2 = points[1].ellipse_positionID.X - 5;
+                    m_lines[0].Y2 = points[1].ellipse_positionID.Y - 5;
 
-                    lines[1].X1 = points[2].ellipse_positionID.X - 5;
-                    lines[1].Y1 = points[2].ellipse_positionID.Y - 5;
-                    lines[1].X2 = points[3].ellipse_positionID.X;
-                    lines[1].Y2 = points[3].ellipse_positionID.Y;
+                    m_lines[1].X1 = points[2].ellipse_positionID.X - 5;
+                    m_lines[1].Y1 = points[2].ellipse_positionID.Y - 5;
+                    m_lines[1].X2 = points[3].ellipse_positionID.X;
+                    m_lines[1].Y2 = points[3].ellipse_positionID.Y;
                     break;
                 case BezierType.Quadratic:
-                    lines[0].X1 = points[0].ellipse_positionID.X;
-                    lines[0].Y1 = points[0].ellipse_positionID.Y;
-                    lines[0].X2 = points[1].ellipse_positionID.X - 5;
-                    lines[0].Y2 = points[1].ellipse_positionID.Y - 5;
+                    m_lines[0].X1 = points[0].ellipse_positionID.X;
+                    m_lines[0].Y1 = points[0].ellipse_positionID.Y;
+                    m_lines[0].X2 = points[1].ellipse_positionID.X - 5;
+                    m_lines[0].Y2 = points[1].ellipse_positionID.Y - 5;
 
-                    lines[1].X1 = points[1].ellipse_positionID.X - 5;
-                    lines[1].Y1 = points[1].ellipse_positionID.Y - 5;
-                    lines[1].X2 = points[2].ellipse_positionID.X;
-                    lines[1].Y2 = points[2].ellipse_positionID.Y;
+                    m_lines[1].X1 = points[1].ellipse_positionID.X - 5;
+                    m_lines[1].Y1 = points[1].ellipse_positionID.Y - 5;
+                    m_lines[1].X2 = points[2].ellipse_positionID.X;
+                    m_lines[1].Y2 = points[2].ellipse_positionID.Y;
                     break;
             }
-            return lines;
+            return m_lines;
         }   
+
+        public void SetControlPMargin(int value = 0)
+        {
+            m_controlP_margin = value;
+        }
     }
 
     public class PathEventArgs : EventArgs
@@ -386,19 +396,22 @@ namespace Curves_editor.Core.Class
     {
         BezierType globalCuveType = BezierType.Quadratic;
 
-        public List<Curve_point> pointArray = new List<Curve_point>();
-        public List<Curve_point> m_base_pointArray = new List<Curve_point>();
-        public List<Curve_point> control_pointArray = new List<Curve_point>();
-        public List<Segment_curve> segmentsArray = new List<Segment_curve>();
+        //----------------------------------------Arrays keeping points
+        List<Curve_point> m_pointArray = new List<Curve_point>();
+        List<Curve_point> m_base_pointArray = new List<Curve_point>();
+        List<Curve_point> m_control_pointArray = new List<Curve_point>();
 
-        int point_margin = 30;
+        //----------------------------------------Arrays keeping segments
+        List<Segment_curve> m_segmentsArray = new List<Segment_curve>();
 
+        int m_point_margin = 30; //distance of minimum gap between points
+
+        //----------------------------------------Events
         public delegate void PathHandler(object sender, PathEventArgs e);
         public event PathHandler PathGeomertyAddToViewport;
 
         public delegate void LineHandler(object sender, LineEventArgs e);
         public event LineHandler OnLineAdded;
-        public event LineHandler UpdateLine;
         public event LineHandler DestroyLine;
 
         public delegate void CurvePointsListHandler(object sender, CurvePointsListEventArgs e);
@@ -407,7 +420,7 @@ namespace Curves_editor.Core.Class
 
         public delegate void CurvePointHandler(object sender, CurvePointEventArgs e);
         public event CurvePointHandler CurvePointMove;
-
+        //----------------------------------------
         public List<Curve_point> SortPoints(List<Curve_point> array)
         {
             for (int step = 1; step < array.Count; step++)
@@ -453,9 +466,39 @@ namespace Curves_editor.Core.Class
 
             return result;
         }
-        
-        void AddSegment_to_viewport(Segment_curve segment)
+
+        void UpdateSegment(Segment_curve segment)
         {
+            Curve_point point_to_update = segment.UpdateControlPointPosition();
+            if (point_to_update != null)
+            {
+                CurvePointEventArgs eventArgs = new CurvePointEventArgs(point_to_update);
+                CurvePointMove(this, eventArgs);
+            }
+            if (!segment.visualadded)
+            {
+                PathEventArgs eventArgs = new PathEventArgs(segment.SegmentGet_pathGeometry());
+                PathGeomertyAddToViewport(this, eventArgs);
+                //AddSegment_to_viewport(segment);
+
+                segment.visualadded = true;
+            }
+            else
+            {
+                segment.SegmentGet_pathGeometry();
+                segment.GetUpdatedLinesArray();
+            }
+        }
+
+        void ChangePointPosition(Point point, Curve_point curve_point)
+        {
+            curve_point.ellipse_positionID = point;
+            CurvePointEventArgs eventArgs = new CurvePointEventArgs(curve_point);
+            CurvePointMove(this, eventArgs);
+        }
+
+        void AddSegment_to_viewport(Segment_curve segment)
+        {   //updating segments 
             PathEventArgs eventArgs = new PathEventArgs(segment.SegmentGet_pathGeometry());
             PathGeomertyAddToViewport(this, eventArgs);
         }
@@ -463,8 +506,8 @@ namespace Curves_editor.Core.Class
         {
             globalCuveType = bezierType;
 
-            foreach (Segment_curve segment in segmentsArray)
-            {
+            foreach (Segment_curve segment in m_segmentsArray)
+            {   //destroy old points, m_lines from editor
                 LineEventArgs eventArgs = new LineEventArgs(segment.GetUpdatedLinesArray());
                 DestroyLine(this, eventArgs);
 
@@ -472,6 +515,7 @@ namespace Curves_editor.Core.Class
                     segment.GetControlPointArray());
                 DestroyCurvePoint(this, eventArgs1);
 
+                //update and create new segment
                 segment.SetBezierType(bezierType);
 
                 eventArgs = new LineEventArgs(segment.GetUpdatedLinesArray());
@@ -480,39 +524,52 @@ namespace Curves_editor.Core.Class
                 eventArgs1 = new CurvePointsListEventArgs(segment.GetControlPointArray());
                 foreach (Curve_point curvepoint in eventArgs1.curvePointArray)
                 {
-                    pointArray.Add(curvepoint);
+                    m_pointArray.Add(curvepoint);
                 }
                 OnCurvePointAdded(this, eventArgs1);
 
-                AddSegment_to_viewport(segment);
+                segment.SegmentGet_pathGeometry();
             }
         }
 
         public void AddPoint(Point point, Ellipse ellipse)
         {
             Curve_point curve_Point = new Curve_point(point, ellipse);
-            pointArray.Add(curve_Point);
+            m_pointArray.Add(curve_Point);
 
             if (m_base_pointArray.Count() > 0)
             {
                 Segment_curve segment_Curve = new Segment_curve(
                     m_base_pointArray[m_base_pointArray.Count() - 1], 
                     curve_Point, globalCuveType);
-                segmentsArray.Add(segment_Curve);
+                m_segmentsArray.Add(segment_Curve);
+                segment_Curve.SetControlPMargin(m_point_margin + 20);
       
                 LineEventArgs eventArgs = new LineEventArgs(segment_Curve.GetUpdatedLinesArray());
                 OnLineAdded(this, eventArgs);
 
+                curve_Point.default_segment_index = m_segmentsArray.Count();
+
                 CurvePointsListEventArgs eventArgs1 = new CurvePointsListEventArgs(segment_Curve.GetControlPointArray());
                 foreach (Curve_point curvepoint in eventArgs1.curvePointArray)
                 {
-                    pointArray.Add(curvepoint);
-                    control_pointArray.Add(curvepoint);
+                    curvepoint.default_segment_index = curve_Point.default_segment_index;
+                    m_pointArray.Add(curvepoint);
+                    m_control_pointArray.Add(curvepoint);
                 }
                 OnCurvePointAdded(this, eventArgs1);
 
-                AddSegment_to_viewport(segment_Curve);
+                //AddSegment_to_viewport(segment_Curve);
+
+                /*if (m_base_pointArray[m_base_pointArray.Count() - 1].default_segment == null)
+                {
+
+                    m_base_pointArray[m_base_pointArray.Count() - 1].default_segment = segment_Curve;
+                    
+                }*/
+
             }
+            
             m_base_pointArray.Add(curve_Point);
         }
         public void UpdatePointPosition(Ellipse sender, Point e)
@@ -520,32 +577,47 @@ namespace Curves_editor.Core.Class
             bool executed = false;
             int index_pointArray = 0;
 
+
+            //Curve_point moved_point = null;
+
+            int activeSegmentIndex = 0;
+
             //change the position of moved point
             foreach (Curve_point curve_Point in m_base_pointArray)
             {
+                //Find the displaced point
                 if (sender == curve_Point.ellipseID)
                 {
+                    activeSegmentIndex = curve_Point.default_segment_index;
                     //first point - move
                     if (index_pointArray == 0)
                     {
-                        if (GetCoordToCanvast(e).X + point_margin <= m_base_pointArray[index_pointArray + 1].ellipse_positionID.X)
+                        if (m_pointArray.Count >= 2) 
+                        { 
+                            if (GetCoordToCanvast(e).X + m_point_margin <= 
+                                m_base_pointArray[index_pointArray + 1].ellipse_positionID.X)
+                            {
+                                ChangePointPosition(GetCoordToCanvast(e), curve_Point);
+                            }
+                            else
+                            {
+                                ChangePointPosition(new Point(
+                                    (curve_Point.ellipse_positionID.X),
+                                    GetCoordToCanvast(e).Y),
+                                    curve_Point);
+                            }
+                        }
+                        else
                         {
                             curve_Point.ellipse_positionID = GetCoordToCanvast(e);
                             CurvePointEventArgs eventArgs = new CurvePointEventArgs(curve_Point);
                             CurvePointMove(this, eventArgs);
                         }
-                        else
-                        {
-                            curve_Point.ellipse_positionID = new Point(
-                                (curve_Point.ellipse_positionID.X),
-                                GetCoordToCanvast(e).Y);
-                            CurvePointEventArgs eventArgs = new CurvePointEventArgs(curve_Point);
-                            CurvePointMove(this, eventArgs);      
-                        }
-                    }//last
+                    }
+                    //last point
                     else if (index_pointArray == (m_base_pointArray.Count() - 1))
                     {
-                        if (GetCoordToCanvast(e).X - point_margin >= m_base_pointArray[index_pointArray - 1].ellipse_positionID.X)
+                        if (GetCoordToCanvast(e).X - m_point_margin >= m_base_pointArray[index_pointArray - 1].ellipse_positionID.X)
                         {
                             curve_Point.ellipse_positionID = GetCoordToCanvast(e);
                             CurvePointEventArgs eventArgs = new CurvePointEventArgs(curve_Point);
@@ -560,18 +632,19 @@ namespace Curves_editor.Core.Class
                             CurvePointMove(this, eventArgs);
                         }
                     }
+                    //point in the middle
                     else
                     {
-                        if (GetCoordToCanvast(e).X - point_margin >= m_base_pointArray[index_pointArray - 1].ellipse_positionID.X
-                            && GetCoordToCanvast(e).X + point_margin <= m_base_pointArray[index_pointArray + 1].ellipse_positionID.X)
+                        if (GetCoordToCanvast(e).X - m_point_margin >= m_base_pointArray[index_pointArray - 1].ellipse_positionID.X
+                            && GetCoordToCanvast(e).X + m_point_margin <= m_base_pointArray[index_pointArray + 1].ellipse_positionID.X)
                         {
-                            //between
+                            //between points - in are
                             curve_Point.ellipse_positionID = GetCoordToCanvast(e);
                             CurvePointEventArgs eventArgs = new CurvePointEventArgs(curve_Point);
                             CurvePointMove(this, eventArgs);
                         }
                         else
-                        {
+                        {//outside the possible area
                             curve_Point.ellipse_positionID = new Point(
                                 curve_Point.ellipse_positionID.X,
                                 GetCoordToCanvast(e).Y);
@@ -588,41 +661,27 @@ namespace Curves_editor.Core.Class
             //find and update control point
             if (!executed)
             {
-                for (int i = 0; i < control_pointArray.Count() - 1; i++)
+                for (int i = 0; i < m_control_pointArray.Count(); i++)
                 {
-                    if (control_pointArray[i].ellipseID == sender)
+                    if (m_control_pointArray[i].ellipseID == sender)
                     {
-                        control_pointArray[i].ellipse_positionID = GetCoordToCanvast(e);
-                        CurvePointEventArgs eventArgs = new CurvePointEventArgs(control_pointArray[i]);
+                        m_control_pointArray[i].ellipse_positionID = GetCoordToCanvast(e);
+                        CurvePointEventArgs eventArgs = new CurvePointEventArgs(m_control_pointArray[i]);
                         CurvePointMove(this, eventArgs);
+                        activeSegmentIndex = m_control_pointArray[i].default_segment_index;
+
                         break;
-                    }                  
+                    }
                 }
             }
 
-            foreach (Segment_curve segment in segmentsArray)
+            if (activeSegmentIndex < m_segmentsArray.Count())
             {
-                for (int i = 0; i < segment.points.Count() - 1; i++)
+                if (activeSegmentIndex > 0)
                 {
-                    /*if (segment.points[i].ellipseID == sender)
-                    {*/
-                        Curve_point point_to_update = segment.UpdateControlPointPosition();
-                        if (point_to_update != null)
-                        {
-                            CurvePointEventArgs eventArgs = new CurvePointEventArgs(point_to_update);
-                            CurvePointMove(this, eventArgs);
-                        }
-                    /*}*/
+                    UpdateSegment(m_segmentsArray[activeSegmentIndex - 1]);
                 }
-            }
-                /*SortPoints(m_base_pointArray);*/
-
-                //update segments
-                foreach (Segment_curve segment in segmentsArray)
-            {
-                AddSegment_to_viewport(segment);
-                LineEventArgs eventArgs = new LineEventArgs(segment.GetUpdatedLinesArray());
-                //OnLineAdded(this, eventArgs);
+                UpdateSegment(m_segmentsArray[activeSegmentIndex]);         
             }
         }
     }
