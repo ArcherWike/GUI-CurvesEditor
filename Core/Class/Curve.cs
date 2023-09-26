@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using UiDesign;
@@ -426,37 +427,31 @@ namespace Curves_editor.Core.Class
         {
             for (int step = 1; step < array.Count; step++)
             {
-                Curve_point key = new Curve_point(
-                    array[step].ellipse_positionID, 
-                    array[step].ellipseID);
                 int j = step - 1;
 
-                Point swapPoint = new Point(0, 0);
-                Ellipse swapEllipse = new Ellipse();
-
-                while (j >= 0 && key.ellipse_positionID.X < array[j].ellipse_positionID.X)
+                if (array[step].ellipse_positionID.X < array[j].ellipse_positionID.X)
                 {
-                    swapPoint = new Point(
-                        array[j].ellipse_positionID.X,
-                        array[j].ellipse_positionID.Y);
+                    /*Curve_point temp = array[j];
+                    array[j] = array[step]; 
+                    array[step] = temp;*/
 
-                    swapEllipse = array[j].ellipseID;
+                    Curve_point key = new Curve_point(
+                        array[j].ellipse_positionID,
+                        array[j].ellipseID);
+                    key.default_segment_index = array[j].default_segment_index;
 
-                    array[j + 1].ellipse_positionID = swapPoint;
-                    array[j + 1].ellipseID = swapEllipse;
+                    //Curve_point temp = array[j];
+                    array[j].ellipseID = array[step].ellipseID;
+                    array[j].ellipse_positionID = array[step].ellipse_positionID;
+                    array[j].default_segment_index = array[step].default_segment_index;
 
-                    j--;
+                    array[step].ellipseID = key.ellipseID;
+                    array[step].ellipse_positionID = key.ellipse_positionID;
+                    array[step].default_segment_index = key.default_segment_index;
+                    break;
+
 
                 }
-
-                swapPoint = new Point(
-                            key.ellipse_positionID.X,
-                            key.ellipse_positionID.Y);
-
-                swapEllipse = key.ellipseID;
-
-                array[j + 1].ellipse_positionID = swapPoint;
-                array[j + 1].ellipseID = swapEllipse;
             }
             return array;
         }
@@ -534,11 +529,12 @@ namespace Curves_editor.Core.Class
                     curve_Point, globalCuveType);
                 m_segmentsArray.Add(segment_Curve);
                 segment_Curve.SetControlPMargin(m_point_margin);
-      
+
+                curve_Point.default_segment_index = m_segmentsArray.Count();
+
                 LineEventArgs eventArgs = new LineEventArgs(segment_Curve.GetUpdatedLinesArray());
                 OnLineAdded(this, eventArgs);
 
-                curve_Point.default_segment_index = m_segmentsArray.Count();
 
                 CurvePointsListEventArgs eventArgs1 = new CurvePointsListEventArgs(segment_Curve.GetControlPointArray());
                 foreach (Curve_point curvepoint in eventArgs1.curvePointArray)
@@ -552,6 +548,13 @@ namespace Curves_editor.Core.Class
                 AddSegment_to_viewport(segment_Curve);
             }           
             m_base_pointArray.Add(curve_Point);
+
+            /*m_base_pointArray = SortPoints(m_base_pointArray);
+            foreach (Segment_curve ssegment in m_segmentsArray)
+            {
+                UpdateSegment(ssegment);
+            }*/
+            
         }
         public void UpdatePointPosition(Ellipse sender, Point e)
         {
@@ -652,6 +655,10 @@ namespace Curves_editor.Core.Class
                     UpdateSegment(m_segmentsArray[activeSegmentIndex - 1]);
                 }
                 UpdateSegment(m_segmentsArray[activeSegmentIndex]);         
+            }
+            else if (activeSegmentIndex > 0) 
+            {
+                UpdateSegment(m_segmentsArray[m_segmentsArray.Count() - 1]);
             }
         }
     }
