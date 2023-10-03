@@ -49,7 +49,9 @@ namespace Curves_editor.Core.Class
         private Polyline curveGeometry = new Polyline();
 
         int m_controlP_margin = 0;
-        
+
+        PointCollection interpolator_points = new PointCollection();
+
         static Point GetCanvastToCoord(Point mousePosition)
         {
             Point result = new Point((mousePosition.X - 40) / 200, 4 - (mousePosition.Y / 200));
@@ -244,6 +246,8 @@ namespace Curves_editor.Core.Class
                     break;
             }
             curveGeometry.Points = curvePoints;
+
+            interpolator_points = curvePoints;
             return curveGeometry;
         }
 
@@ -312,6 +316,46 @@ namespace Curves_editor.Core.Class
         {
             m_controlP_margin = value;
         }
+
+        public float GetValueAt(float time)
+        {
+            if (interpolator_points[0].X == time)
+            {
+                return (float)interpolator_points[0].Y;
+            }
+
+            int midpoint_index = (interpolator_points.Count() / 2);
+            while (midpoint_index >= 0)
+            {
+                if (midpoint_index >= interpolator_points.Count())
+                {
+                    return 0;
+                }
+                if (interpolator_points[midpoint_index + 1].X >= time)
+                {
+                    if (interpolator_points[midpoint_index].X < time)
+                    {
+                        float factor = (float)(
+                            (time - interpolator_points[midpoint_index].X) /
+                            (interpolator_points[midpoint_index + 1].X - interpolator_points[midpoint_index].X));
+                        return (float)(factor *
+                            (interpolator_points[midpoint_index + 1].Y -
+                            interpolator_points[midpoint_index].Y));
+                    }
+                    else if (interpolator_points[midpoint_index].X > time)
+                    {
+                        midpoint_index = (midpoint_index / 2);
+                    }           
+                }
+                else
+                {
+                    midpoint_index = (midpoint_index * 3) / 2;
+                }
+
+            }
+            
+            return 0;
+        }
     }
 
     public class PathEventArgs : EventArgs
@@ -351,7 +395,7 @@ namespace Curves_editor.Core.Class
         }
     }
 
-    internal class Curve
+    public class Curve
     {
         BezierType globalCuveType = BezierType.Quadratic;
 
@@ -618,5 +662,24 @@ namespace Curves_editor.Core.Class
                 UpdateSegment(m_segmentsArray[m_segmentsArray.Count() - 1]);
             }
         }
+        public float GetValueAt(float time)
+        {
+            if (m_segmentsArray.Any())
+            {
+                if (time >= m_segmentsArray.First().points.First().ellipse_positionID.X &&
+                    time <= m_segmentsArray.Last().points.Last().ellipse_positionID.X)
+                {
+                    foreach (Segment_curve segment_ in m_segmentsArray)
+                    {
+                        if (segment_.points.Last().ellipse_positionID.X <= time)
+                        {
+                            return segment_.GetValueAt(time);
+                        }
+                    }
+                } 
+            }
+            return 0f;
+        }
+
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
@@ -13,6 +14,8 @@ namespace Curves_editor.Core.Class
     {
         float angle = 0.0f;
         float rad = 60f;
+        float time = 0.0f;
+
         UiDesign.MainWindow mainWindow_m;
 
         private Ellipse circle_point = null;
@@ -25,7 +28,15 @@ namespace Curves_editor.Core.Class
             CirclePoint = circlePoint;
             circle_point = circle_point_shape;
             createTimer();
+            
         }
+        private Point GetCoordToCanvastMovablePoint(Point pointPosition)
+        {
+            Point result = new Point((pointPosition.X * 100) + 40, 200 - pointPosition.Y * 100);
+
+            return result;
+        }
+
 
         void createTimer()
         {
@@ -37,9 +48,22 @@ namespace Curves_editor.Core.Class
 
         void timer_Tick(object sender, EventArgs e)
         {
-            Point transformed_point = GetCirclePoint(rad, angle, CirclePoint);
-            angle += 5;
-            //mainWindow_m.SetPointPosition(circle_point, transformed_point);
+            //Point transformed_point = GetCirclePoint(rad, angle, CirclePoint);
+            //angle += 5;
+            time += (sender as DispatcherTimer).Interval.Milliseconds;
+            if (time > 3000)
+            { 
+                time = 0; 
+            }
+
+            if (mainWindow_m.curve != null)
+            {
+                Point temp_point = new Point(time/500, 0);
+                Point time_in_canvas_cord = mainWindow_m.GetCoordToCanvast(temp_point);
+
+                Canvas.SetLeft(circle_point, time_in_canvas_cord.X);
+                Canvas.SetTop(circle_point, mainWindow_m.curve.GetValueAt((float)(time_in_canvas_cord.X)));
+            }
         }
 
         public Point GetCirclePoint(float radius, float angleInDegrees, Point origin)

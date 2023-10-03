@@ -24,7 +24,7 @@ namespace UiDesign
     {
         Ellipse activepoint = null;
         Ellipse hoverpoint = null;
-        Curve curve = null;
+        public Curve curve = null;
 
         //movable point
         Ellipse circle_point = new Ellipse();
@@ -47,7 +47,7 @@ namespace UiDesign
             circle_point.StrokeThickness = 10;
             circle_point.Width = 30;
             circle_point.Height = 30;
-            SettingsWindow.Children.Add(circle_point);
+            CordSys.Children.Add(circle_point);
         }
 
         public void SetPointPosition(Ellipse myEllipse, Point mousePoint)
@@ -169,7 +169,7 @@ namespace UiDesign
 
             return result;
         }
-        public static Point GetCoordToCanvast(Point pointPosition)
+        public Point GetCoordToCanvast(Point pointPosition)
         {
             Point result = new Point((pointPosition.X * 200) + 40, 800 - pointPosition.Y * 200);
 
