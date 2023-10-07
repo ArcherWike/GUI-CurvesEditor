@@ -324,34 +324,38 @@ namespace Curves_editor.Core.Class
                 return (float)interpolator_points[0].Y;
             }
 
-            int midpoint_index = (interpolator_points.Count() / 2);
-            while (midpoint_index >= 0)
+            int low_ix = 0;
+            int high_ix = interpolator_points.Count() -1;
+
+
+            while (low_ix <= high_ix)
             {
-                if (midpoint_index >= interpolator_points.Count())
+                int midpoint_ix = (int)(interpolator_points.Count() / 2);
+
+                double x = interpolator_points[midpoint_ix].X;
+                double y = interpolator_points[midpoint_ix - 1].X;
+
+                if (time <= y)
                 {
-                    return 0;
-                }
-                if (interpolator_points[midpoint_index + 1].X >= time)
-                {
-                    if (interpolator_points[midpoint_index].X < time)
+                    if (time > x)
                     {
+                        //between (x,y]
                         float factor = (float)(
-                            (time - interpolator_points[midpoint_index].X) /
-                            (interpolator_points[midpoint_index + 1].X - interpolator_points[midpoint_index].X));
+                            (time - interpolator_points[midpoint_ix].X) /
+                            (interpolator_points[midpoint_ix + 1].X - interpolator_points[midpoint_ix].X));
                         return (float)(factor *
-                            (interpolator_points[midpoint_index + 1].Y -
-                            interpolator_points[midpoint_index].Y));
+                            (interpolator_points[midpoint_ix + 1].Y -
+                            interpolator_points[midpoint_ix].Y));
                     }
-                    else if (interpolator_points[midpoint_index].X > time)
+                    else
                     {
-                        midpoint_index = (midpoint_index / 2);
+                        high_ix = midpoint_ix - 1;
                     }           
                 }
                 else
                 {
-                    midpoint_index = (midpoint_index * 3) / 2;
+                    low_ix = midpoint_ix + 1; 
                 }
-
             }
             
             return 0;
@@ -680,6 +684,5 @@ namespace Curves_editor.Core.Class
             }
             return 0f;
         }
-
     }
 }

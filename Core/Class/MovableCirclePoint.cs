@@ -27,8 +27,7 @@ namespace Curves_editor.Core.Class
             mainWindow_m = mainWindow;
             CirclePoint = circlePoint;
             circle_point = circle_point_shape;
-            createTimer();
-            
+            createTimer();          
         }
         private Point GetCoordToCanvastMovablePoint(Point pointPosition)
         {
@@ -41,24 +40,22 @@ namespace Curves_editor.Core.Class
         void createTimer()
         {
             DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(0.01);
+            timer.Interval = TimeSpan.FromSeconds(0.001);
             timer.Tick += timer_Tick;
             timer.Start();
         }
 
         void timer_Tick(object sender, EventArgs e)
         {
-            //Point transformed_point = GetCirclePoint(rad, angle, CirclePoint);
-            //angle += 5;
-            time += (sender as DispatcherTimer).Interval.Milliseconds;
-            if (time > 3000)
+            time += 10;
+            if (time > 6000)
             { 
                 time = 0; 
             }
 
             if (mainWindow_m.curve != null)
             {
-                Point temp_point = new Point(time/500, 0);
+                Point temp_point = new Point(time/1000, 0);
                 Point time_in_canvas_cord = mainWindow_m.GetCoordToCanvast(temp_point);
 
                 Canvas.SetLeft(circle_point, time_in_canvas_cord.X);
@@ -73,6 +70,5 @@ namespace Curves_editor.Core.Class
 
             return new Point(x, y);
         }
-    }
-    
+    }  
 }
