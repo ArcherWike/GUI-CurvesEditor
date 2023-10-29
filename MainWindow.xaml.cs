@@ -1,4 +1,4 @@
-﻿using Curves_editor.Core.Class;
+using Curves_editor.Core.Class;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
@@ -16,7 +16,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace UiDesign
 {
@@ -61,8 +60,8 @@ namespace UiDesign
                 curve.UpdatePointPosition(myEllipse, new_pos);
             }
 
-            //Canvas.SetLeft(myEllipse, mousePoint.X - 15);
-            //Canvas.SetTop(myEllipse, mousePoint.Y - 15);
+            Canvas.SetLeft(myEllipse, mousePoint.X - 15);
+            Canvas.SetTop(myEllipse, mousePoint.Y - 15);
         }
 
         //###################### Point function ###########################
