@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -58,8 +58,8 @@ namespace Curves_editor.Core.Class
                 Point temp_point = new Point(time/1000, 0);
                 Point time_in_canvas_cord = mainWindow_m.GetCoordToCanvast(temp_point);
 
-                Canvas.SetLeft(circle_point, time_in_canvas_cord.X);
-                Canvas.SetTop(circle_point, mainWindow_m.curve.GetValueAt((float)(time_in_canvas_cord.X)));
+                Canvas.SetLeft(circle_point, time_in_canvas_cord.X - 15);
+                Canvas.SetTop(circle_point, mainWindow_m.curve.GetValueAt((float)(time_in_canvas_cord.X)) - 15);
             }
         }
 
