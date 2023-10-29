@@ -1,4 +1,4 @@
-﻿using Curves_editor.Properties;
+using Curves_editor.Properties;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
@@ -325,40 +325,32 @@ namespace Curves_editor.Core.Class
             }
 
             int low_ix = 0;
-            int high_ix = interpolator_points.Count() -1;
+            int high_ix = interpolator_points.Count() - 1;
 
 
-            while (low_ix <= high_ix)
+            while (low_ix + 1 < high_ix)
             {
-                int midpoint_ix = (int)(interpolator_points.Count() / 2);
+                int midpoint_ix = (int)((high_ix + low_ix) / 2);
 
                 double x = interpolator_points[midpoint_ix].X;
-                double y = interpolator_points[midpoint_ix - 1].X;
 
-                if (time <= y)
+                if (time <= x)
                 {
-                    if (time > x)
-                    {
-                        //between (x,y]
-                        float factor = (float)(
-                            (time - interpolator_points[midpoint_ix].X) /
-                            (interpolator_points[midpoint_ix + 1].X - interpolator_points[midpoint_ix].X));
-                        return (float)(factor *
-                            (interpolator_points[midpoint_ix + 1].Y -
-                            interpolator_points[midpoint_ix].Y));
-                    }
-                    else
-                    {
-                        high_ix = midpoint_ix - 1;
-                    }           
+                    low_ix = midpoint_ix;
                 }
                 else
                 {
-                    low_ix = midpoint_ix + 1; 
+                    high_ix = midpoint_ix;
                 }
+
             }
-            
-            return 0;
+
+            float factor = (float)(
+                (time - interpolator_points[low_ix].X) /
+                (interpolator_points[high_ix].X - interpolator_points[low_ix].X));
+            return (float)(interpolator_points[low_ix].Y + factor *
+                (interpolator_points[high_ix].Y -
+                interpolator_points[low_ix].Y));
         }
     }
 
@@ -675,7 +667,7 @@ namespace Curves_editor.Core.Class
                 {
                     foreach (Segment_curve segment_ in m_segmentsArray)
                     {
-                        if (segment_.points.Last().ellipse_positionID.X <= time)
+                        if ( time <= segment_.points.Last().ellipse_positionID.X )
                         {
                             return segment_.GetValueAt(time);
                         }
