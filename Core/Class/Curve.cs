@@ -336,11 +336,11 @@ namespace Curves_editor.Core.Class
 
                 if (time <= x)
                 {
-                    low_ix = midpoint_ix;
+                    high_ix = midpoint_ix;
                 }
                 else
                 {
-                    high_ix = midpoint_ix;
+                    low_ix = midpoint_ix;
                 }
 
             }
@@ -351,6 +351,7 @@ namespace Curves_editor.Core.Class
             return (float)(interpolator_points[low_ix].Y + factor *
                 (interpolator_points[high_ix].Y -
                 interpolator_points[low_ix].Y));
+            return (float)(interpolator_points[low_ix].Y);
         }
     }
 
@@ -569,7 +570,7 @@ namespace Curves_editor.Core.Class
                     if (index_pointArray == 0)
                     {
                         if (m_pointArray.Count >= 2) 
-                        { 
+                        {
                             if (GetCoordToCanvast(e).X + m_point_margin <= 
                                 m_base_pointArray[index_pointArray + 1].ellipse_positionID.X)
                             {
