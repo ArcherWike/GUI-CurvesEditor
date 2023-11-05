@@ -404,7 +404,7 @@ namespace Curves_editor.Core.Class
         //----------------------------------------Arrays keeping segments
         List<Segment_curve> m_segmentsArray = new List<Segment_curve>();
 
-        int m_point_margin = 30; //distance of minimum gap between points
+        int m_point_margin = 40; //distance of minimum gap between points
 
         //----------------------------------------Events
         public delegate void PathHandler(object sender, PathEventArgs e);
@@ -526,7 +526,7 @@ namespace Curves_editor.Core.Class
                     m_base_pointArray[m_base_pointArray.Count() - 1], 
                     curve_Point, globalCuveType);
                 m_segmentsArray.Add(segment_Curve);
-                segment_Curve.SetControlPMargin(m_point_margin);
+                segment_Curve.SetControlPMargin(m_point_margin - 20);
 
                 curve_Point.default_segment_index = m_segmentsArray.Count();
 

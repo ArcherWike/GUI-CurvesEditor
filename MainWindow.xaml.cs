@@ -59,9 +59,6 @@ namespace UiDesign
                 Point new_pos = GetCanvastToCoord(mousePoint);
                 curve.UpdatePointPosition(myEllipse, new_pos);
             }
-
-            Canvas.SetLeft(myEllipse, mousePoint.X - 15);
-            Canvas.SetTop(myEllipse, mousePoint.Y - 15);
         }
 
         //###################### Point function ###########################
