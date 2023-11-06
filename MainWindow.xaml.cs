@@ -30,12 +30,17 @@ namespace UiDesign
         Point CirclePoint = new Point(190, 120);
         MovableCirclePoint movablePoint;
 
+        //chart marker
+        Ellipse chart_marker = new Ellipse();
+        Point ChartMarkerPoint = new Point(190, 120);
+
         public MainWindow()
         {
             InitializeComponent();
 
             Create_circle_point();
-            movablePoint = new MovableCirclePoint(CirclePoint, circle_point, this);
+            Create_chart_marker_point();
+            movablePoint = new MovableCirclePoint(CirclePoint, circle_point, chart_marker, this);
             
         }
 
@@ -48,6 +53,16 @@ namespace UiDesign
             circle_point.Height = 30;
             CordSys.Children.Add(circle_point);
         }
+        private void Create_chart_marker_point()
+        {
+            chart_marker.Stroke = Brushes.Red;
+            chart_marker.Fill = System.Windows.Media.Brushes.Red;
+            chart_marker.StrokeThickness = 10;
+            chart_marker.Width = 3;
+            chart_marker.Height = 30;
+            CordSys.Children.Add(chart_marker);
+        }
+
 
         public void SetPointPosition(Ellipse myEllipse, Point mousePoint)
         {
