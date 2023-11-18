@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:UiDesign"
         mc:Ignorable="d"
         Title="MainWindow" 
-        Height="1000" Width="1680"
+        Height="1080" Width="1920"
         WindowStyle="None"
         ResizeMode="NoResize"
         Background="#5f9186"
@@ -15,7 +15,7 @@
         CornerRadius="30" RenderTransformOrigin="0.5,0.5">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1296"/>
+                <ColumnDefinition Width="1500"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
@@ -30,6 +30,7 @@
                    Foreground="White"
                    FontSize="40" Height="88" Width="296"/>
 
+
             <StackPanel x:Name="bar_settings" Grid.Row="0" Background="LightGray"  MouseLeftButtonDown="bar_settings_MouseLeftButtonDown" MouseLeftButtonUp="bar_settings_MouseLeftButtonUp" MouseMove="bar_settings_MouseMove">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -42,9 +43,9 @@
 
                             </ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        
+
                         <Button x:Name="btnMinimalize" Click="btnMinimalize_Click"/>
-                        
+
                         <Button x:Name="btnMaximalize" Content="Ma" Click="btnMaximalize_Click" Margin="-37,0,37,0" Background="{x:Null}"/>
 
                         <Button x:Name="btnClose" Content="Cl" Click="btnClose_Click" Margin="-73,0,73,0"/>
@@ -52,6 +53,27 @@
                 </Grid>
             </StackPanel>
             <StackPanel Grid.Row="1" Background="#5e9b8e">
+                <Grid Width="84" RenderTransformOrigin="0,0.5" HorizontalAlignment="Left">
+                    <Grid.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform X="-12"/>
+                        </TransformGroup>
+                    </Grid.RenderTransform>
+                    <Line X1="40" Y1="0" X2="40" Y2="800" Stroke="Green" StrokeThickness="5" RenderTransformOrigin="0.875,0.52"/>
+                    <Line X1="10" Y1="800" X2="1300" Y2="800" Stroke="Red" StrokeThickness="5" RenderTransformOrigin="0.5,0.5" Margin="0,124,-1276,-124">
+                        <Line.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform X="96"/>
+                            </TransformGroup>
+                        </Line.RenderTransform>
+                    </Line>
+                </Grid>
                 <Grid>
                     <Grid.Resources>
                         <Pen x:Key="GrayPenKey" Brush="LightGoldenrodYellow" Thickness="2"/>
@@ -61,14 +83,14 @@
                         <DrawingBrush x:Key="LargeGridBrush" TileMode="Tile" Viewport="40 0 200 200" ViewportUnits="Absolute" Drawing="{StaticResource LargeGridDrawing}"/>
                     </Grid.Resources>
 
-                    <Canvas Height="840" Width="1240" Background="{StaticResource SmallGridBrush}" Margin="0,80,0,0">
-                        <Canvas Height="840" Width="1240" Background="{StaticResource LargeGridBrush}" x:Name="CordSys"
-                            MouseLeftButtonUp="Canvas_MouseLeftButtonUp"
-                            MouseMove="CordSys_MouseMove" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Top="-3" MouseLeftButtonDown="Canvas_MouseLeftButtonDown">
+                    <Canvas Height="840" Width="1240" Background="{DynamicResource LargeGridBrush}" Margin="118,-732,142,812">
+                    </Canvas>
+                    <Canvas Height="840" Width="1240" Background="{DynamicResource SmallGridBrush}" x:Name="CordSys"
+    MouseLeftButtonUp="Canvas_MouseLeftButtonUp"
+    MouseMove="CordSys_MouseMove" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="Canvas_MouseLeftButtonDown" Canvas.Top="-790" Canvas.Left="-10" Margin="118,-732,0,0">
 
-                            <Line X1="40" Y1="0" X2="40" Y2="800" Stroke="Green" StrokeThickness="5"/>
-                            <Line X1="10" Y1="800" X2="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type Canvas}}}" Y2="800" Stroke="Red" StrokeThickness="5"/>
-                        </Canvas>
+
+                        
                     </Canvas>
                 </Grid>
             </StackPanel>
@@ -108,3 +130,4 @@
 
     </Border>
 </Window>
+

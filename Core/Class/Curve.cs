@@ -556,108 +556,113 @@ namespace Curves_editor.Core.Class
         }
         public void UpdatePointPosition(Ellipse sender, Point e)
         {
-            bool executed = false;
-            int activeSegmentIndex = 0;
-            int index_pointArray = 0;
-            //change the position of moved point (if moved base P)
-            foreach (Curve_point curve_Point in m_base_pointArray)
+            Console.WriteLine(GetCoordToCanvast(e).X);
+            if ((GetCoordToCanvast(e).X > 0 && GetCoordToCanvast(e).X < 800) && (GetCoordToCanvast(e).Y > 0 && GetCoordToCanvast(e).Y < 800))
             {
-                //Find the displaced point
-                if (sender == curve_Point.ellipseID)
+                bool executed = false;
+                int activeSegmentIndex = 0;
+                int index_pointArray = 0;
+                //change the position of moved point (if moved base P)
+                foreach (Curve_point curve_Point in m_base_pointArray)
                 {
-                    activeSegmentIndex = curve_Point.default_segment_index;
-                    //first point - move
-                    if (index_pointArray == 0)
+                    //Find the displaced point
+                    if (sender == curve_Point.ellipseID)
                     {
-                        if (m_pointArray.Count >= 2) 
+                        activeSegmentIndex = curve_Point.default_segment_index;
+                        //first point - move
+                        if (index_pointArray == 0)
                         {
-                            if (GetCoordToCanvast(e).X + m_point_margin <= 
-                                m_base_pointArray[index_pointArray + 1].ellipse_positionID.X)
+                            if (m_pointArray.Count >= 2)
+                            {
+                                if (GetCoordToCanvast(e).X + m_point_margin <=
+                                    m_base_pointArray[index_pointArray + 1].ellipse_positionID.X)
+                                {
+                                    ChangePointPosition(GetCoordToCanvast(e), curve_Point);
+                                }
+                                else
+                                {
+                                    ChangePointPosition(new Point(
+                                        (curve_Point.ellipse_positionID.X),
+                                        GetCoordToCanvast(e).Y),
+                                        curve_Point);
+                                }
+                            }
+                            else
+                            //No points more, move freely
+                            {
+                                ChangePointPosition(GetCoordToCanvast(e), curve_Point);
+                            }
+                        }
+                        //last point
+                        else if (index_pointArray == (m_base_pointArray.Count() - 1))
+                        {
+                            if (GetCoordToCanvast(e).X - m_point_margin >= m_base_pointArray[index_pointArray - 1].ellipse_positionID.X)
                             {
                                 ChangePointPosition(GetCoordToCanvast(e), curve_Point);
                             }
                             else
                             {
                                 ChangePointPosition(new Point(
-                                    (curve_Point.ellipse_positionID.X),
-                                    GetCoordToCanvast(e).Y),
-                                    curve_Point);
+                                        (curve_Point.ellipse_positionID.X),
+                                        GetCoordToCanvast(e).Y),
+                                        curve_Point);
                             }
                         }
-                        else
-                        //No points more, move freely
-                        {
-                            ChangePointPosition(GetCoordToCanvast(e), curve_Point);
-                        }
-                    }
-                    //last point
-                    else if (index_pointArray == (m_base_pointArray.Count() - 1))
-                    {
-                        if (GetCoordToCanvast(e).X - m_point_margin >= m_base_pointArray[index_pointArray - 1].ellipse_positionID.X)
-                        {
-                            ChangePointPosition(GetCoordToCanvast(e), curve_Point);
-                        }
+                        //point in the middle
                         else
                         {
-                            ChangePointPosition(new Point(
-                                    (curve_Point.ellipse_positionID.X),
-                                    GetCoordToCanvast(e).Y),
-                                    curve_Point);
+                            if (GetCoordToCanvast(e).X - m_point_margin >=
+                                m_base_pointArray[index_pointArray - 1].ellipse_positionID.X
+                                &&
+                                GetCoordToCanvast(e).X + m_point_margin <=
+                                m_base_pointArray[index_pointArray + 1].ellipse_positionID.X)
+                            {
+                                //between points - in are
+                                ChangePointPosition(GetCoordToCanvast(e), curve_Point);
+                            }
+                            else
+                            {//outside the possible area
+                                ChangePointPosition(new Point(
+                                (curve_Point.ellipse_positionID.X),
+                                GetCoordToCanvast(e).Y),
+                                curve_Point);
+                            }
                         }
-                    }
-                    //point in the middle
-                    else
-                    {
-                        if (GetCoordToCanvast(e).X - m_point_margin >= 
-                            m_base_pointArray[index_pointArray - 1].ellipse_positionID.X
-                            && 
-                            GetCoordToCanvast(e).X + m_point_margin <= 
-                            m_base_pointArray[index_pointArray + 1].ellipse_positionID.X)
-                        {
-                            //between points - in are
-                            ChangePointPosition(GetCoordToCanvast(e), curve_Point);
-                        }
-                        else
-                        {//outside the possible area
-                            ChangePointPosition(new Point(
-                            (curve_Point.ellipse_positionID.X),
-                            GetCoordToCanvast(e).Y),
-                            curve_Point);
-                        }
-                    }
-                    executed = true;
-                    break;
-                }
-                index_pointArray++;
-            }
-
-            //find and update control point (if moved control P)
-            if (!executed)
-            {
-                for (int i = 0; i < m_control_pointArray.Count(); i++)
-                {
-                    if (m_control_pointArray[i].ellipseID == sender)
-                    {
-                        ChangePointPosition(GetCoordToCanvast(e), m_control_pointArray[i]);
-                        activeSegmentIndex = m_control_pointArray[i].default_segment_index;
+                        executed = true;
                         break;
                     }
+                    index_pointArray++;
                 }
-            }
 
-            //Update closest segments (points and curves - lines)
-            if (activeSegmentIndex < m_segmentsArray.Count())
-            {
-                if (activeSegmentIndex > 0)
+                //find and update control point (if moved control P)
+                if (!executed)
                 {
-                    UpdateSegment(m_segmentsArray[activeSegmentIndex - 1]);
+                    for (int i = 0; i < m_control_pointArray.Count(); i++)
+                    {
+                        if (m_control_pointArray[i].ellipseID == sender)
+                        {
+                            ChangePointPosition(GetCoordToCanvast(e), m_control_pointArray[i]);
+                            activeSegmentIndex = m_control_pointArray[i].default_segment_index;
+                            break;
+                        }
+                    }
                 }
-                UpdateSegment(m_segmentsArray[activeSegmentIndex]);         
+
+                //Update closest segments (points and curves - lines)
+                if (activeSegmentIndex < m_segmentsArray.Count())
+                {
+                    if (activeSegmentIndex > 0)
+                    {
+                        UpdateSegment(m_segmentsArray[activeSegmentIndex - 1]);
+                    }
+                    UpdateSegment(m_segmentsArray[activeSegmentIndex]);
+                }
+                else if (activeSegmentIndex > 0)
+                {
+                    UpdateSegment(m_segmentsArray[m_segmentsArray.Count() - 1]);
+                }
             }
-            else if (activeSegmentIndex > 0) 
-            {
-                UpdateSegment(m_segmentsArray[m_segmentsArray.Count() - 1]);
-            }
+            
         }
         public float GetValueAt(float time)
         {
