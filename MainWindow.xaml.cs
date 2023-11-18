@@ -41,7 +41,6 @@ namespace UiDesign
             Create_circle_point();
             Create_chart_marker_point();
             movablePoint = new MovableCirclePoint(CirclePoint, circle_point, chart_marker, this);
-            
         }
 
         private void Create_circle_point()
@@ -84,7 +83,7 @@ namespace UiDesign
             myEllipse.Width = 30;
             myEllipse.Height = 30;
             myEllipse.Fill = System.Windows.Media.Brushes.White;
-            //myEllipse.
+            circle_point.Opacity = 0.65;
             Canvas.SetZIndex(myEllipse,7);
             CordSys.Children.Add(myEllipse);
             SetPointPosition(myEllipse, mousePosition);
@@ -110,6 +109,7 @@ namespace UiDesign
         private void Ellipse_mouseEnter(object sender, MouseEventArgs e)
         {
             hoverpoint = (sender as Ellipse);
+            hoverpoint.Opacity = 1;
             hoverpoint.Fill = System.Windows.Media.Brushes.Red;
         }
         private void Ellipse_mouseLeave(object sender, MouseEventArgs e)
@@ -117,10 +117,12 @@ namespace UiDesign
             if ((sender as Ellipse).Width == 20)
             {
                 (sender as Ellipse).Fill = System.Windows.Media.Brushes.Blue;
+                (sender as Ellipse).Opacity = 0.65;
             }
             else
             {
                 (sender as Ellipse).Fill = System.Windows.Media.Brushes.White;
+                (sender as Ellipse).Opacity = 0.75;
             }
             hoverpoint = null;
         }
@@ -214,6 +216,7 @@ namespace UiDesign
                 point.ellipseID.Width = 20;
                 point.ellipseID.Height = 20;
                 point.ellipseID.Fill = System.Windows.Media.Brushes.Blue;
+                point.ellipseID.Opacity = 0.65;
                 Canvas.SetZIndex(point.ellipseID, 10);
                 CordSys.Children.Add(point.ellipseID);
                 SetControlPointPosition(point.ellipseID, (point.ellipse_positionID));

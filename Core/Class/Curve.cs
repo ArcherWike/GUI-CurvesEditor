@@ -186,7 +186,7 @@ namespace Curves_editor.Core.Class
 
         public Shape GetCurveGeometry()
         {
-            curveGeometry.Stroke = Brushes.Purple;
+            curveGeometry.Stroke = Brushes.Black;
             curveGeometry.StrokeThickness = 3;
 
             PointCollection curvePoints = new PointCollection();
