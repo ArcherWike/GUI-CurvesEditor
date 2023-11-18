@@ -522,32 +522,41 @@ namespace Curves_editor.Core.Class
 
             if (m_base_pointArray.Count() > 0)
             {
-                Segment_curve segment_Curve = new Segment_curve(
-                    m_base_pointArray[m_base_pointArray.Count() - 1], 
-                    curve_Point, globalCuveType);
-                m_segmentsArray.Add(segment_Curve);
-                segment_Curve.SetControlPMargin(m_point_margin - 20);
-
-                curve_Point.default_segment_index = m_segmentsArray.Count();
-
-                LineEventArgs eventArgs = new LineEventArgs(segment_Curve.GetUpdatedLinesArray());
-                OnLineAdded(this, eventArgs);
-
-
-                CurvePointsListEventArgs eventArgs1 = new CurvePointsListEventArgs(segment_Curve.GetControlPointArray());
-                foreach (Curve_point curvepoint in eventArgs1.curvePointArray)
+                if (m_base_pointArray[m_base_pointArray.Count() - 1].ellipse_positionID.X < point.X)
                 {
-                    curvepoint.default_segment_index = curve_Point.default_segment_index;
-                    m_pointArray.Add(curvepoint);
-                    m_control_pointArray.Add(curvepoint);
-                }
-                OnCurvePointAdded(this, eventArgs1);
+                    Segment_curve segment_Curve = new Segment_curve(
+                    m_base_pointArray[m_base_pointArray.Count() - 1],
+                    curve_Point, globalCuveType);
+                    m_segmentsArray.Add(segment_Curve);
+                    segment_Curve.SetControlPMargin(m_point_margin - 20);
 
-                AddSegment_to_viewport(segment_Curve);
-            }           
+                    curve_Point.default_segment_index = m_segmentsArray.Count();
+
+                    LineEventArgs eventArgs = new LineEventArgs(segment_Curve.GetUpdatedLinesArray());
+                    OnLineAdded(this, eventArgs);
+
+
+                    CurvePointsListEventArgs eventArgs1 = new CurvePointsListEventArgs(segment_Curve.GetControlPointArray());
+                    foreach (Curve_point curvepoint in eventArgs1.curvePointArray)
+                    {
+                        curvepoint.default_segment_index = curve_Point.default_segment_index;
+                        m_pointArray.Add(curvepoint);
+                        m_control_pointArray.Add(curvepoint);
+                    }
+                    OnCurvePointAdded(this, eventArgs1);
+
+                    AddSegment_to_viewport(segment_Curve);
+                }
+                
+            }
+            else
+            {
+                ChangePointPosition(new Point(0, point.Y), m_pointArray[m_pointArray.Count() - 1]);
+                //m_pointArray[m_pointArray.Count() - 1].ellipse_positionID = new Point(0,0);
+            }
             m_base_pointArray.Add(curve_Point);
 
-            /*m_base_pointArray = SortPoints(m_base_pointArray);
+           /* m_base_pointArray = SortPoints(m_base_pointArray);
             foreach (Segment_curve ssegment in m_segmentsArray)
             {
                 UpdateSegment(ssegment);
@@ -556,7 +565,7 @@ namespace Curves_editor.Core.Class
         }
         public void UpdatePointPosition(Ellipse sender, Point e)
         {
-            Console.WriteLine(GetCoordToCanvast(e).X);
+            //Console.WriteLine(GetCoordToCanvast(e).X);
             if ((GetCoordToCanvast(e).X > 0 && GetCoordToCanvast(e).X < 800) && (GetCoordToCanvast(e).Y > 0 && GetCoordToCanvast(e).Y < 800))
             {
                 bool executed = false;

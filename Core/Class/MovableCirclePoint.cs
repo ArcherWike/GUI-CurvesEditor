@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
@@ -12,9 +13,10 @@ namespace Curves_editor.Core.Class
 {
     internal class MovableCirclePoint
     {
-        float angle = 0.0f;
+        double angle = 0.0f;
         float rad = 180f;
         float time = 0.0f;
+        byte alpha = 0;
 
         UiDesign.MainWindow mainWindow_m;
 
@@ -69,10 +71,13 @@ namespace Curves_editor.Core.Class
                 Canvas.SetTop(m_chart_marker, mainWindow_m.curve.GetValueAt((float)(time_in_canvas_cord.X)) - 15);
             }
 
-            angle += 0.0014f * velocity;
-            CirclePoint = GetCirclePoint(rad, angle, new Point(400, 300));
-            Canvas.SetTop(m_circle_point, CirclePoint.Y - 30);
-            Canvas.SetLeft(m_circle_point, CirclePoint.X);
+            angle = velocity* 0.313725490196078;
+            //Console.WriteLine(angle+" "+alpha);
+            alpha = (byte)angle;
+            //CirclePoint = GetCirclePoint(rad, angle, new Point(400, 300));
+            m_circle_point.Fill = new SolidColorBrush(Color.FromArgb((byte)alpha,255, 255, 255));
+            //Canvas.SetTop(m_circle_point, CirclePoint.Y - 30);
+            //Canvas.SetLeft(m_circle_point, CirclePoint.X);
         }
 
         public Point GetCirclePoint(float radius, float angleInDegrees, Point origin)

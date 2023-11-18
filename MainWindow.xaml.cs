@@ -46,10 +46,11 @@ namespace UiDesign
         private void Create_circle_point()
         {
             circle_point.Stroke = Brushes.Red;
-            circle_point.Fill = System.Windows.Media.Brushes.Red;
-            circle_point.StrokeThickness = 10;
-            circle_point.Width = 30;
-            circle_point.Height = 30;
+            //circle_point.Fill = System.Windows.Media.Brushes.Red;
+            circle_point.Fill = new SolidColorBrush(Color.FromArgb(148, 98, 98, 0));
+            circle_point.StrokeThickness = 2;
+            circle_point.Width = 50;
+            circle_point.Height = 50;
             CordSys.Children.Add(circle_point);
         }
         private void Create_chart_marker_point()
@@ -82,7 +83,8 @@ namespace UiDesign
 
             myEllipse.Width = 30;
             myEllipse.Height = 30;
-            myEllipse.Fill = System.Windows.Media.Brushes.White;
+            // # myEllipse.Fill = System.Windows.Media.Brushes.White;
+            myEllipse.Fill = new SolidColorBrush(Color.FromArgb(148, 98, 98, 0));
             circle_point.Opacity = 0.65;
             Canvas.SetZIndex(myEllipse,7);
             CordSys.Children.Add(myEllipse);
