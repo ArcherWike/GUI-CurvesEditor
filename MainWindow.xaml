@@ -13,7 +13,7 @@
         AllowsTransparency="False">
     <Border
         CornerRadius="30" RenderTransformOrigin="0.5,0.5">
-        <Grid>
+        <Grid x:Name="Panel">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1500"/>
                 <ColumnDefinition/>
@@ -28,7 +28,7 @@
                    VerticalAlignment="Center"
                        HorizontalAlignment="Center"
                    Foreground="White"
-                   FontSize="40" Height="88" Width="296"/>
+                   FontSize="40" Height="88" Width="300"/>
 
 
             <StackPanel x:Name="bar_settings" Grid.Row="0" Background="LightGray"  MouseLeftButtonDown="bar_settings_MouseLeftButtonDown" MouseLeftButtonUp="bar_settings_MouseLeftButtonUp" MouseMove="bar_settings_MouseMove">
@@ -53,7 +53,7 @@
                 </Grid>
             </StackPanel>
             <StackPanel Grid.Row="1" Background="#5e9b8e">
-                <Grid Width="84" RenderTransformOrigin="0,0.5" HorizontalAlignment="Left">
+                <Grid Width="70" RenderTransformOrigin="0,0.5" HorizontalAlignment="Left">
                     <Grid.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -62,7 +62,7 @@
                             <TranslateTransform X="-12"/>
                         </TransformGroup>
                     </Grid.RenderTransform>
-                    <Line X1="40" Y1="0" X2="40" Y2="800" Stroke="Green" StrokeThickness="5" RenderTransformOrigin="0.875,0.52"/>
+                    <Line X1="40" Y1="0" X2="40" Y2="800" Stroke="Green" StrokeThickness="5" RenderTransformOrigin="0.875,0.52" Margin="0,62,0,-62"/>
                     <Line X1="10" Y1="800" X2="1300" Y2="800" Stroke="Red" StrokeThickness="5" RenderTransformOrigin="0.5,0.5" Margin="0,124,-1276,-124">
                         <Line.RenderTransform>
                             <TransformGroup>
@@ -83,10 +83,10 @@
                         <DrawingBrush x:Key="LargeGridBrush" TileMode="Tile" Viewport="40 0 200 200" ViewportUnits="Absolute" Drawing="{StaticResource LargeGridDrawing}"/>
                     </Grid.Resources>
 
-                    <Canvas Height="840" Width="1240" Background="{DynamicResource LargeGridBrush}" Margin="118,-732,182,812"/>
+                    <Canvas Height="840" Width="1240" Background="{DynamicResource LargeGridBrush}" Margin="20,-732,182,812"/>
                     <Canvas Height="840" Width="1240" Background="{DynamicResource SmallGridBrush}" x:Name="CordSys"
     MouseLeftButtonUp="Canvas_MouseLeftButtonUp"
-    MouseMove="CordSys_MouseMove" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="Canvas_MouseLeftButtonDown" Canvas.Top="-790" Canvas.Left="-10" Margin="118,-732,0,0">
+    MouseMove="CordSys_MouseMove" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="Canvas_MouseLeftButtonDown" Canvas.Top="-790" Canvas.Left="-10" Margin="20,-732,0,0">
 
 
 
@@ -96,7 +96,7 @@
 
 
 
-            <StackPanel Grid.Row="1" Grid.Column="1">
+            <StackPanel x:Name="ModeOptions" Grid.Row="1" Grid.Column="1" Width="298" HorizontalAlignment="Center" RenderTransformOrigin="0,0.5" AutomationProperties.IsOffscreenBehavior="Onscreen">
                 <RadioButton x:Name="ClearEvent_Button" Content="Clear"
                                      Height="50"
                                      Width="140"
@@ -122,8 +122,7 @@
                                      FontSize="30"
                              Style="{StaticResource MenuButtonTheme}" Click="QuadraticEventButton"/>
             </StackPanel>
-            <Canvas x:Name="SettingsWindow" Grid.Column="1" Margin="0,0,40,25" Grid.Row="1">
-            </Canvas>
+
         </Grid>
 
 
