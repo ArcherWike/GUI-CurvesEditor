@@ -83,14 +83,13 @@
                         <DrawingBrush x:Key="LargeGridBrush" TileMode="Tile" Viewport="40 0 200 200" ViewportUnits="Absolute" Drawing="{StaticResource LargeGridDrawing}"/>
                     </Grid.Resources>
 
-                    <Canvas Height="840" Width="1240" Background="{DynamicResource LargeGridBrush}" Margin="118,-732,142,812">
-                    </Canvas>
+                    <Canvas Height="840" Width="1240" Background="{DynamicResource LargeGridBrush}" Margin="118,-732,182,812"/>
                     <Canvas Height="840" Width="1240" Background="{DynamicResource SmallGridBrush}" x:Name="CordSys"
     MouseLeftButtonUp="Canvas_MouseLeftButtonUp"
     MouseMove="CordSys_MouseMove" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="Canvas_MouseLeftButtonDown" Canvas.Top="-790" Canvas.Left="-10" Margin="118,-732,0,0">
 
 
-                        
+
                     </Canvas>
                 </Grid>
             </StackPanel>
