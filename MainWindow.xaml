@@ -86,7 +86,7 @@
                     <Canvas Height="840" Width="1240" Background="{DynamicResource LargeGridBrush}" Margin="20,-732,182,812"/>
                     <Canvas Height="840" Width="1240" Background="{DynamicResource SmallGridBrush}" x:Name="CordSys"
     MouseLeftButtonUp="Canvas_MouseLeftButtonUp"
-    MouseMove="CordSys_MouseMove" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="Canvas_MouseLeftButtonDown" Canvas.Top="-790" Canvas.Left="-10" Margin="20,-732,0,0">
+    MouseMove="CordSys_MouseMove" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="Canvas_MouseLeftButtonDown" Canvas.Top="790" Canvas.Left="0" Margin="49,-732,0,0">
 
 
 
@@ -103,6 +103,31 @@
                                      Foreground="White"
                                      FontSize="30"
                              Style="{StaticResource MenuButtonTheme}" Click="Clear_Viewport"/>
+                <RadioButton x:Name="AlphaEvent_Button" Content="Alpha"
+                         Height="50"
+                         Width="140"
+                         Foreground="White"
+                         FontSize="30"
+                        Style="{StaticResource MenuButtonTheme}" Click="AlphaEvent_Button_Click"/>
+                <RadioButton x:Name="RedEvent_Button" Content="Red"
+         Height="50"
+         Width="140"
+         Foreground="Red"
+         FontSize="30"
+        Style="{StaticResource MenuButtonTheme}" Click="RedEvent_Button_Click"/>
+                <RadioButton x:Name="GreenEvent_Button" Content="Green"
+         Height="50"
+         Width="140"
+         Foreground="Green"
+         FontSize="30"
+        Style="{StaticResource MenuButtonTheme}" Click="GreenEvent_Button_Click"/>
+                <RadioButton x:Name="BluleEvent_Button" Content="Blule"
+         Height="50"
+         Width="140"
+         Foreground="BLue"
+         FontSize="30"
+        Style="{StaticResource MenuButtonTheme}" Click="BluleEvent_Button_Click"/>
+                
                 <RadioButton x:Name="LineEventButtoxn" Content="Line"
                                      Height="50"
                                      Width="140"

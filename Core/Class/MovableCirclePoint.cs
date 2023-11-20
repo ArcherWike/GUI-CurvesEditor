@@ -14,7 +14,7 @@ namespace Curves_editor.Core.Class
     internal class MovableCirclePoint
     {
         double angle = 0.0f;
-        float rad = 180f;
+        //float rad = 180f;
         float time = 0.0f;
         byte alpha = 0;
 
@@ -34,6 +34,13 @@ namespace Curves_editor.Core.Class
 
             createTimer();          
         }
+        enum ColorType
+        {
+            Alpha,
+            Red,
+            Green,
+            Blue,
+        }
         private Point GetCoordToCanvastMovablePoint(Point pointPosition)
         {
             Point result = new Point((pointPosition.X * 100) + 40, 200 - pointPosition.Y * 100);
@@ -52,30 +59,68 @@ namespace Curves_editor.Core.Class
 
         void timer_Tick(object sender, EventArgs e)
         {
-            time += 10;
-            if (time > 6000)
-            { 
-                time = 0; 
-            }
+           
 
-            float velocity = 0.0f;
+            float velocity_alpha = 255.0f;
+            float velocity_red = 0.0f;
+            float velocity_green = 0.0f;
+            float velocity_blue = 0.0f;
 
-            if (mainWindow_m.curve != null)
+            float multiply = 0.313225490196078f;
+
+            if (mainWindow_m.active_curve != null)
             {
-                Point temp_point = new Point(time/1000, 0);
-                Point time_in_canvas_cord = mainWindow_m.GetCoordToCanvast(temp_point);
+                time += 1;
+                if (time > 600.0f)
+                {
+                    time = 0.0f;
+                }
+                Point temp_point = new Point(time, 0);
+                Point time_in_canvas_cord = temp_point;//mainWindow_m.GetCoordToCanvast(temp_point);
+                Point time_in_cord = mainWindow_m.GetCanvastToCoord(temp_point);
+                Canvas.SetLeft(m_chart_marker, time_in_canvas_cord.X);
 
-                velocity = mainWindow_m.curve.GetValueAt((float)(time_in_canvas_cord.X));
+                foreach (Curve active_curve in mainWindow_m.curves)
+                {
+                    switch (active_curve.globalCurveColor)
+                    {
+                        case Class.ColorType.Alpha:
+                            velocity_alpha -= active_curve.GetValueAt((float)(time_in_canvas_cord.X));
+                            break;
+                        case Class.ColorType.Red:
+                            velocity_red = (active_curve.GetValueAt((float)(time_in_canvas_cord.X))*multiply);
+                            break;
+                        case Class.ColorType.Green:
+                            velocity_green = active_curve.GetValueAt((float)(time_in_canvas_cord.X)) * multiply;
+                            break;
+                        case Class.ColorType.Blue:
+                            velocity_blue = active_curve.GetValueAt((float)(time_in_canvas_cord.X)) * multiply;
+                            break;
+                    }
 
-                Canvas.SetLeft(m_chart_marker, time_in_canvas_cord.X - 15);
-                Canvas.SetTop(m_chart_marker, mainWindow_m.curve.GetValueAt((float)(time_in_canvas_cord.X)) - 15);
+                    Console.WriteLine(velocity_red + " " + velocity_green + " " + velocity_blue + " time: " + time_in_canvas_cord.X);
+                }
+                //Canvas.SetTop(m_chart_marker, mainWindow_m.curve.GetValueAt((float)(time_in_canvas_cord.X)) - 15);
             }
+            
 
-            angle = velocity* 0.313725490196078;
+            //
+            /*float multiply = 0.0f;
+
+            velocity_alpha += multiply;
+            velocity_red += multiply;
+            velocity_green += multiply;
+            velocity_blue += multiply;*/
+
+            //angle = velocity_alpha* ;
             //Console.WriteLine(angle+" "+alpha);
-            alpha = (byte)angle;
+            //alpha = (byte)angle;
             //CirclePoint = GetCirclePoint(rad, angle, new Point(400, 300));
-            m_circle_point.Fill = new SolidColorBrush(Color.FromArgb((byte)alpha,255, 255, 255));
+            m_circle_point.Fill = new SolidColorBrush(Color.FromArgb(
+                (byte)velocity_alpha, 
+                (byte)velocity_red, 
+                (byte)velocity_green, 
+                (byte)velocity_blue));
             //Canvas.SetTop(m_circle_point, CirclePoint.Y - 30);
             //Canvas.SetLeft(m_circle_point, CirclePoint.X);
         }
