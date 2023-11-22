@@ -125,26 +125,33 @@
 
                         </Grid.ColumnDefinitions>
 
-                        <RadioButton Grid.Row="0" Grid.Column="0" x:Name="LineEventButtoxn" 
-                                     Content="Line"
-                                     Foreground="White"
-                                     FontSize="20"
-                                     Style="{StaticResource MenuButtonTheme}" 
-                                     Click="LineEventButton"/>
-                        
-                        <RadioButton Grid.Row="0" Grid.Column="1" x:Name="CubicEventButtoxn" 
-                                     Content="Cubic"
-                                     Foreground="White"
-                                     FontSize="20"
-                                     Style="{StaticResource MenuButtonTheme}" 
-                                     Click="CubicEventButton"/>
-                        
-                        <RadioButton Grid.Row="0" Grid.Column="2" x:Name="QuadraticEventButtonx" 
-                                     Content="Quadratic"
-                                     Foreground="White"
-                                     FontSize="20"
-                                     Style="{StaticResource MenuButtonTheme}" 
-                                     Click="QuadraticEventButton"/>
+                        <Button Click="LineEventButton">
+                        <StackPanel Grid.Row="0" Grid.Column="0">
+                                <Image Source="/bezier_line.png" Stretch="None"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Grid.Row="0" Grid.Column="1" Click="CubicEventButton">
+                            <StackPanel>
+                                <Image Source="/bezier_cubic.png" Stretch="None"/>
+                            </StackPanel>
+                        </Button>
+
+
+                        <Button Grid.Row="0" Grid.Column="2" Click="QuadraticEventButton">
+                            <StackPanel>
+                                <Image Source="/bezier_quadratic.png" Stretch="None"/>
+                            </StackPanel>
+                        </Button>
+
+
+
+
+
+
+
+
+
                     </Grid>
 
                     <Grid Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center">
