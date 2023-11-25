@@ -29,10 +29,9 @@ namespace UiDesign
 
         ColorType active_color = ColorType.Alpha;
 
-        //movable point
-        Ellipse circle_point = new Ellipse();
-        Point CirclePoint = new Point(190, 120);
-        MovableCirclePoint movablePoint;
+        RectangleRGB rectangleRGB;
+
+        Rectangle rectangle_rgb = new Rectangle();
 
         //chart marker
         Ellipse chart_marker = new Ellipse();
@@ -42,21 +41,20 @@ namespace UiDesign
         {
             InitializeComponent();
 
-            Create_circle_point();
+            CreateRectangleRGB();
             Create_chart_marker_point();
-            movablePoint = new MovableCirclePoint(CirclePoint, circle_point, chart_marker, this);
+            rectangleRGB = new RectangleRGB(rectangle_rgb, chart_marker, this);
+        }
+        private void CreateRectangleRGB()
+        {
+            rectangle_rgb.Stroke = Brushes.Black;
+            rectangle_rgb.Fill = new SolidColorBrush(Color.FromArgb(255, 0, 0, 0));
+            rectangle_rgb.StrokeThickness = 2;
+            rectangle_rgb.Width = 100;
+            rectangle_rgb.Height = 100;
+            Colour_square.Children.Add(rectangle_rgb);
         }
 
-        private void Create_circle_point()
-        {
-            circle_point.Stroke = Brushes.Red;
-            //circle_point.Fill = System.Windows.Media.Brushes.Red;
-            circle_point.Fill = new SolidColorBrush(Color.FromArgb(148, 98, 98, 0));
-            circle_point.StrokeThickness = 2;
-            circle_point.Width = 50;
-            circle_point.Height = 50;
-            CordSys.Children.Add(circle_point);
-        }
         private void Create_chart_marker_point()
         {
             chart_marker.Stroke = Brushes.Red;
@@ -88,7 +86,6 @@ namespace UiDesign
             myEllipse.Height = 30;
             // # myEllipse.Fill = System.Windows.Media.Brushes.White;
             myEllipse.Fill = new SolidColorBrush(Color.FromArgb(148, 98, 98, 0));
-            circle_point.Opacity = 0.65;
             Canvas.SetZIndex(myEllipse,7);
             CordSys.Children.Add(myEllipse);
             SetPointPosition(myEllipse, mousePosition);
@@ -290,7 +287,6 @@ namespace UiDesign
             //CordSys.Children.Remove(e.pathGeometry);
             if (!CordSys.Children.Contains(e.pathGeometry))
             {
-
                 CordSys.Children.Add(e.pathGeometry);
             }
         }
@@ -328,7 +324,7 @@ namespace UiDesign
 
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            
+            //this.DragMove();
         }
 
         private void btnMinimalize_Click(object sender, RoutedEventArgs e)
@@ -407,7 +403,7 @@ namespace UiDesign
             ChangeColor(ColorType.Green);
         }
 
-        private void BluleEvent_Button_Click(object sender, RoutedEventArgs e)
+        private void BlueEvent_Button_Click(object sender, RoutedEventArgs e)
         {
             ChangeColor(ColorType.Blue);
         }

@@ -87,7 +87,7 @@
     </Compile>
     <Compile Include="Core\Class\Curve.cs" />
     <Compile Include="Core\Class\Interpolator.cs" />
-    <Compile Include="Core\Class\MovableCirclePoint.cs" />
+    <Compile Include="Core\Class\RectangleRGB.cs" />
     <Compile Include="Core\ObservableObject.cs" />
     <Compile Include="Core\RelayCommand.cs" />
     <Compile Include="MainWindow.xaml.cs">
@@ -145,6 +145,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="maximalize.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="bezier_line.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="bezier_cubic.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="bezier_quadratic.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
