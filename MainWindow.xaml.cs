@@ -1,21 +1,10 @@
 using Curves_editor.Core.Class;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics.Tracing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Ink;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Windows.Threading;
 
 namespace UiDesign
 {
@@ -23,7 +12,7 @@ namespace UiDesign
     {
         Ellipse activepoint = null;
         Ellipse hoverpoint = null;
-        
+
         public Curve active_curve = null;
         public List<Curve> curves = new List<Curve>();
 
@@ -86,7 +75,7 @@ namespace UiDesign
             myEllipse.Height = 30;
             // # myEllipse.Fill = System.Windows.Media.Brushes.White;
             myEllipse.Fill = new SolidColorBrush(Color.FromArgb(148, 98, 98, 0));
-            Canvas.SetZIndex(myEllipse,7);
+            Canvas.SetZIndex(myEllipse, 7);
             CordSys.Children.Add(myEllipse);
             SetPointPosition(myEllipse, mousePosition);
 
@@ -146,7 +135,7 @@ namespace UiDesign
 
         private bool IsCurveColor(ColorType curveColorType)
         {
-            foreach (Curve curve in curves) 
+            foreach (Curve curve in curves)
             {
                 if (curve.globalCurveColor == curveColorType)
                 {
@@ -192,7 +181,7 @@ namespace UiDesign
             }
             if (active_curve == null)
             {
-                CreateNewCurve();  
+                CreateNewCurve();
             }
             active_curve.AddPoint((
                     e.GetPosition(this.CordSys)),
@@ -202,10 +191,10 @@ namespace UiDesign
         private void UpdatePointPosition(object sender, CurvePointEventArgs e)
         {
 
-                //SetPointPosition(e.curvePoint.ellipseID, GetCoordToCanvast(e.curvePoint.ellipse_positionID));
-                Canvas.SetLeft(e.curvePoint.ellipseID, e.curvePoint.ellipse_positionID.X - 15);
-                Canvas.SetTop(e.curvePoint.ellipseID, e.curvePoint.ellipse_positionID.Y - 15);
-            
+            //SetPointPosition(e.curvePoint.ellipseID, GetCoordToCanvast(e.curvePoint.ellipse_positionID));
+            Canvas.SetLeft(e.curvePoint.ellipseID, e.curvePoint.ellipse_positionID.X - 15);
+            Canvas.SetTop(e.curvePoint.ellipseID, e.curvePoint.ellipse_positionID.Y - 15);
+
         }
 
         //############### General static function ##################
@@ -255,7 +244,7 @@ namespace UiDesign
                 point.ellipseID.MouseLeave += Ellipse_mouseLeave;
                 point.ellipseID.MouseLeftButtonDown += MyEllipse_MouseLeftButtonDown;
                 point.ellipseID.MouseLeftButtonUp += MyEllipse_MouseLeftButtonUp;
-            }        
+            }
         }
         public void SetControlPointPosition(Ellipse myEllipse, Point mousePoint)
         {
@@ -313,7 +302,7 @@ namespace UiDesign
         }
 
         private void Clear_Viewport(object sender, RoutedEventArgs e)
-        { 
+        {
             active_curve = null;
             CordSys.Children.Clear();
         }
@@ -340,12 +329,12 @@ namespace UiDesign
 
         private void bar_settings_MouseMove(object sender, MouseEventArgs e)
         {
-            
+
         }
 
         private void btnMaximalize_Click(object sender, RoutedEventArgs e)
         {
-            switch (this.WindowState) 
+            switch (this.WindowState)
             {
                 case WindowState.Normal:
                     this.WindowState = WindowState.Maximized; break;

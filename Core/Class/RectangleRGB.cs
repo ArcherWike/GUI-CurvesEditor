@@ -1,8 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -26,7 +22,7 @@ namespace Curves_editor.Core.Class
             m_rectangle_rgb_shape = rectangle_rgb_shape;
             m_chart_marker = chart_marker_shape;
 
-            createTimer();          
+            createTimer();
         }
         enum ColorType
         {
@@ -74,7 +70,7 @@ namespace Curves_editor.Core.Class
                 Point time_in_canvas_cord = mainWindow_m.GetCoordToCanvast(temp_point);
                 Canvas.SetLeft(m_chart_marker, time_in_canvas_cord.X);
 
-              
+
                 foreach (Curve active_curve in mainWindow_m.curves)
                 {
                     y = active_curve.GetValueAt((float)(time_in_canvas_cord.X)) * multiply;
@@ -104,14 +100,14 @@ namespace Curves_editor.Core.Class
                     }
                 }
             }
-            
-          Console.WriteLine(velocity_red + " " + velocity_green + " " + velocity_blue + " " + velocity_alpha);
+
+            Console.WriteLine(velocity_red + " " + velocity_green + " " + velocity_blue + " " + velocity_alpha);
 
             m_rectangle_rgb_shape.Fill = new SolidColorBrush(Color.FromArgb(
-                (byte)velocity_alpha, 
-                (byte)velocity_red, 
-                (byte)velocity_green, 
+                (byte)velocity_alpha,
+                (byte)velocity_red,
+                (byte)velocity_green,
                 (byte)velocity_blue));
         }
-    }  
+    }
 }
