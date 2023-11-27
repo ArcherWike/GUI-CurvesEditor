@@ -13,6 +13,9 @@ namespace UiDesign
         Ellipse activepoint = null;
         Ellipse hoverpoint = null;
 
+        double window_height = 0;
+        double window_width = 0;
+
         public Curve active_curve = null;
         public List<Curve> curves = new List<Curve>();
 
@@ -200,13 +203,13 @@ namespace UiDesign
         //############### General static function ##################
         public Point GetCanvastToCoord(Point mousePosition)
         {
-            Point result = new Point((mousePosition.X - 40) / 200, 4 - (mousePosition.Y / 200));
+            Point result = new Point((mousePosition.X) / 200, 4 - (mousePosition.Y / 200));
 
             return result;
         }
         public Point GetCoordToCanvast(Point pointPosition)
         {
-            Point result = new Point((pointPosition.X * 200) + 40, 800 - pointPosition.Y * 200);
+            Point result = new Point((pointPosition.X * 200), 800 - pointPosition.Y * 200);
 
             return result;
         }
@@ -397,6 +400,13 @@ namespace UiDesign
         private void BlueEvent_Button_Click(object sender, RoutedEventArgs e)
         {
             ChangeColor(ColorType.Blue);
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            window_height = CordSys.ActualHeight;
+            window_width = CordSys.ActualWidth;
+
         }
     }
 }
