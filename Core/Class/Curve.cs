@@ -53,6 +53,7 @@ namespace Curves_editor.Core.Class
         private const double c_sampleSpan = 5;
         BezierType curveType = BezierType.Quadratic;
         ColorType curveColor = ColorType.Alpha;
+        public bool visible_mode = true;
 
         public List<Curve_point> points = new List<Curve_point>();  //this check m-
         List<Line> m_lines = new List<Line>();
@@ -176,6 +177,8 @@ namespace Curves_editor.Core.Class
             }
         }
 
+
+
         public Curve_point UpdateControlPointPosition()
         {
 
@@ -203,20 +206,28 @@ namespace Curves_editor.Core.Class
 
         public Shape GetCurveGeometry()
         {
-            switch (curveColor)
+            if (visible_mode)
             {
-                case ColorType.Alpha:
-                    curveGeometry.Stroke = Brushes.White;
-                    break;
-                case ColorType.Red:
-                    curveGeometry.Stroke = Brushes.Red;
-                    break;
-                case ColorType.Green:
-                    curveGeometry.Stroke = Brushes.Green;
-                    break;
-                case ColorType.Blue:
-                    curveGeometry.Stroke = Brushes.Blue;
-                    break;
+                switch (curveColor)
+                {
+                    case ColorType.Alpha:
+                        curveGeometry.Stroke = Brushes.White;
+                        break;
+                    case ColorType.Red:
+                        curveGeometry.Stroke = Brushes.Red;
+                        break;
+                    case ColorType.Green:
+                        curveGeometry.Stroke = Brushes.Green;
+                        break;
+                    case ColorType.Blue:
+                        curveGeometry.Stroke = Brushes.Blue;
+                        break;
+                }
+                curveGeometry.Opacity = 1;
+            }
+            else
+            {
+                curveGeometry.Opacity = 0.25;
             }
             
             curveGeometry.StrokeThickness = 3;
@@ -278,7 +289,6 @@ namespace Curves_editor.Core.Class
                     break;
             }
             curveGeometry.Points = curvePoints;
-
             interpolator_points = curvePoints;
             return curveGeometry;
         }
@@ -310,8 +320,35 @@ namespace Curves_editor.Core.Class
 
             return line;
         }
+
+        Line SetLineColor(Line line_)
+        {
+                if (visible_mode)
+                {
+                    line_.Opacity = 0.80;
+                    line_.StrokeThickness = 1;
+                    line_.Stroke = Brushes.Orange;
+            }
+                else
+                {
+                    line_.Opacity = 0.50;
+                    line_.StrokeThickness = 0.5;
+                    line_.Stroke = Brushes.Yellow;
+                }
+                return line_;
+        }
+
+        public void ChangeLinesColor()
+        {
+            for (int i = 0; i < points.Count() - 1;i++) 
+            {
+                m_lines[i] = SetLineColor(m_lines[i]);
+            }
+        }
+
         public List<Line> GetUpdatedLinesArray()
         {
+            //ChangeLinesColor();
             switch (curveType)
             {
                 case BezierType.Line:
@@ -472,6 +509,15 @@ namespace Curves_editor.Core.Class
             segment.GetUpdatedLinesArray();     
         }
 
+        public void ChangeVisibleCurve(bool visible_option)
+        {
+            foreach (Segment_curve segment in m_segmentsArray)
+            {
+                segment.visible_mode = visible_option;
+                AddSegment_to_viewport(segment);
+            }
+        }
+
         void ChangePointPosition(Point point, Curve_point curve_point)
         {
             curve_point.ellipse_positionID = point;
@@ -481,6 +527,7 @@ namespace Curves_editor.Core.Class
         void AddSegment_to_viewport(Segment_curve segment)
         {   //updating segments 
             PathEventArgs eventArgs = new PathEventArgs(segment.GetCurveGeometry());
+            segment.ChangeLinesColor();
             PathGeomertyAddToViewport(this, eventArgs);
         }
         public void ChangeSegmentBezierType(BezierType bezierType)

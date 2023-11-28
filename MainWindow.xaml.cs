@@ -227,8 +227,6 @@ namespace UiDesign
         {
             foreach (Line line in e.linesArray)
             {
-                line.Stroke = System.Windows.Media.Brushes.Black;
-                line.StrokeThickness = 1;
                 CordSys.Children.Add(line);
             }
         }
@@ -314,8 +312,6 @@ namespace UiDesign
             }
         }
 
-
-
         private void Clear_Viewport(object sender, RoutedEventArgs e)
         { 
             active_curve = null;
@@ -377,14 +373,20 @@ namespace UiDesign
             {
                 foreach (Curve curve in curves)
                 {
+                    curve.ChangeVisibleCurve(false);
                     if (curve.globalCurveColor == active_color)
                     {
+                        curve.ChangeVisibleCurve(true);
                         active_curve = curve;
                     }
                 }
             }
             else
             {
+                foreach (Curve curve in curves)
+                {
+                    curve.ChangeVisibleCurve(false);
+                }
                 CreateNewCurve();
             }
         }
