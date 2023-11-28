@@ -165,14 +165,14 @@
 
                         <RadioButton Grid.Row="3" Grid.Column="0" x:Name="AlphaEvent_Button"
                                      Content="A"
-                                     Foreground="Black" Background="White"
+                                     Foreground="Black" Background="#E7F0F0"
                                      FontSize="20"
                                      Style="{StaticResource MenuButtonTheme}" 
                                      Click="AlphaEvent_Button_Click"/>
 
                         <RadioButton Grid.Row="0" Grid.Column="1" x:Name="RedEvent_Button"
                                      Content="R"
-                                     Foreground="Black" Background="Red"
+                                     Foreground="Black" Background="#C85844"
                                      FontSize="20"
                                      Style="{StaticResource MenuButtonTheme}" 
                                      Click="RedEvent_Button_Click"/>
@@ -186,7 +186,7 @@
 
                         <RadioButton Grid.Row="0" Grid.Column="3" x:Name="BlueEvent_Button" 
                                      Content="B"
-                                     Foreground="Black" Background="Blue"
+                                     Foreground="Black" Background="#389BD0"
                                      FontSize="20"
                                      Style="{StaticResource MenuButtonTheme}" 
                                      Click="BlueEvent_Button_Click"/>

@@ -199,16 +199,16 @@ namespace Curves_editor.Core.Class
                 switch (curveColor)
                 {
                     case ColorType.Alpha:
-                        curveGeometry.Stroke = Brushes.White;
+                        curveGeometry.Stroke = new SolidColorBrush(Color.FromArgb(255, 231, 240, 240));
                         break;
                     case ColorType.Red:
-                        curveGeometry.Stroke = Brushes.Red;
+                        curveGeometry.Stroke = new SolidColorBrush(Color.FromArgb(255, 200, 88, 68));
                         break;
                     case ColorType.Green:
                         curveGeometry.Stroke = Brushes.Green;
                         break;
                     case ColorType.Blue:
-                        curveGeometry.Stroke = Brushes.Blue;
+                        curveGeometry.Stroke = new SolidColorBrush(Color.FromArgb(255, 56, 155, 208));
                         break;
                 }
                 curveGeometry.Opacity = 1;
@@ -218,7 +218,7 @@ namespace Curves_editor.Core.Class
                 curveGeometry.Opacity = 0.25;
             }
 
-            curveGeometry.StrokeThickness = 3;
+            curveGeometry.StrokeThickness = 6;
 
             PointCollection curvePoints = new PointCollection();
             switch (curveType)
