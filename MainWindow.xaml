@@ -6,21 +6,22 @@
         xmlns:local="clr-namespace:UiDesign"
         mc:Ignorable="d"
         Title="MainWindow" 
-        Height="1080" Width="1900"
+        Height="1080" Width="1600"
         WindowStyle="None"
         WindowState="Maximized"
         ResizeMode="NoResize"
         Background="#5f9186"
+        SizeChanged="Window_SizeChanged"
         AllowsTransparency="False">
-    <Border CornerRadius="90">
-        <Grid x:Name="Panel">
+    <Border CornerRadius="90" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Grid x:Name="Panel" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1400" MinWidth="1400"></ColumnDefinition>
-                <ColumnDefinition Width="480" MinWidth="480" MaxWidth="480"></ColumnDefinition>
+                <ColumnDefinition MinWidth="400"></ColumnDefinition>
+                <ColumnDefinition MinWidth="300" MaxWidth="300"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="100" MinHeight="100"></RowDefinition>
-                <RowDefinition Height="980" MinHeight="980"></RowDefinition>
+                <RowDefinition MinHeight="850"></RowDefinition>
             </Grid.RowDefinitions>
 
             <StackPanel x:Name="bar_settings" Grid.Row="0" Background="LightGray"
@@ -44,13 +45,13 @@
             </StackPanel>
 
             <StackPanel Grid.Row="1" Grid.Column="0" Background="#5e9b8e">
-                <Grid HorizontalAlignment="Center" Margin="0 50 0 0">
+                <Grid HorizontalAlignment="Center" VerticalAlignment="Stretch" Margin="0 50 0 0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="20" MinWidth="20"></ColumnDefinition>
-                        <ColumnDefinition Width="1201" MinWidth="1201"></ColumnDefinition>
+                        <ColumnDefinition MinWidth="1001"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="803"></RowDefinition>
+                        <RowDefinition MinHeight="803"></RowDefinition>
                         <RowDefinition Height="40" MinHeight="40"></RowDefinition>
                     </Grid.RowDefinitions>
 
@@ -75,6 +76,7 @@
 
 
                     <Canvas x:Name="CordSys" 
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="1200"
                             Grid.Row="0" Grid.Column="1"
                             Background="{DynamicResource LargeGridBrush}" 
                             MouseLeftButtonUp="Canvas_MouseLeftButtonUp" 
@@ -90,17 +92,18 @@
 
             <StackPanel x:Name="ModeOptions" 
                         Grid.Row="1" Grid.Column="1"
-                        HorizontalAlignment="Center"
-                        MaxWidth="460">
-                <Grid HorizontalAlignment="Left">
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        MaxWidth="260">
+                <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="460" MinWidth="460" MaxWidth="460"></ColumnDefinition>
+                        <ColumnDefinition MinWidth="260"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="100" MinHeight="100"></RowDefinition>
-                        <RowDefinition Height="100" MinHeight="100"></RowDefinition>
-                        <RowDefinition Height="100" MinHeight="100"></RowDefinition>
-                        <RowDefinition Height="100" MinHeight="100"></RowDefinition>
+                        <RowDefinition Height="55" MinHeight="55"></RowDefinition>
+                        <RowDefinition Height="50" MinHeight="50"></RowDefinition>
+                        <RowDefinition Height="50" MinHeight="50"></RowDefinition>
                         <RowDefinition Height="100" MinHeight="100"></RowDefinition>
                         <RowDefinition Height="400" MinHeight="100"></RowDefinition>
                     </Grid.RowDefinitions>
@@ -119,28 +122,28 @@
 
                     <Grid Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="110" MinWidth="75"></ColumnDefinition>
-                            <ColumnDefinition Width="110" MinWidth="75"></ColumnDefinition>
-                            <ColumnDefinition Width="110" MinWidth="75"></ColumnDefinition>
+                            <ColumnDefinition Width="55" MinWidth="55"></ColumnDefinition>
+                            <ColumnDefinition Width="55" MinWidth="55"></ColumnDefinition>
+                            <ColumnDefinition Width="55" MinWidth="55"></ColumnDefinition>
 
                         </Grid.ColumnDefinitions>
 
                         <Button Click="LineEventButton">
                         <StackPanel Grid.Row="0" Grid.Column="0">
-                                <Image Source="/bezier_line.png" Stretch="None"/>
+                                <Image Source="/bezier_line.png" Stretch="UniformToFill"/>
                             </StackPanel>
                         </Button>
 
                         <Button Grid.Row="0" Grid.Column="1" Click="CubicEventButton">
                             <StackPanel>
-                                <Image Source="/bezier_cubic.png" Stretch="None"/>
+                                <Image Source="/bezier_cubic.png" Stretch="UniformToFill"/>
                             </StackPanel>
                         </Button>
 
 
                         <Button Grid.Row="0" Grid.Column="2" Click="QuadraticEventButton">
                             <StackPanel>
-                                <Image Source="/bezier_quadratic.png" Stretch="None"/>
+                                <Image Source="/bezier_quadratic.png" Stretch="UniformToFill"/>
                             </StackPanel>
                         </Button>
 
@@ -154,40 +157,41 @@
 
                     </Grid>
 
-                    <Grid Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center">
+                    <Grid Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Stretch" >
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="110" MinWidth="75"></ColumnDefinition>
-                            <ColumnDefinition Width="110" MinWidth="75"></ColumnDefinition>
-                            <ColumnDefinition Width="110" MinWidth="75"></ColumnDefinition>
-                            <ColumnDefinition Width="110" MinWidth="75"></ColumnDefinition>
+                            <ColumnDefinition Width="55" MinWidth="55"></ColumnDefinition>
+                            <ColumnDefinition Width="55" MinWidth="55"></ColumnDefinition>
+                            <ColumnDefinition Width="55" MinWidth="55"></ColumnDefinition>
+                            <ColumnDefinition Width="55" MinWidth="55"></ColumnDefinition>
+                            
 
                         </Grid.ColumnDefinitions>
 
-                        <RadioButton Grid.Row="3" Grid.Column="0" x:Name="AlphaEvent_Button"
+                        <RadioButton Grid.Row="0" Grid.Column="0" x:Name="AlphaEvent_Button"
                                      Content="A"
                                      Foreground="Black" Background="#E7F0F0"
-                                     FontSize="20"
+                                     FontSize="10"
                                      Style="{StaticResource MenuButtonTheme}" 
                                      Click="AlphaEvent_Button_Click"/>
 
                         <RadioButton Grid.Row="0" Grid.Column="1" x:Name="RedEvent_Button"
                                      Content="R"
                                      Foreground="Black" Background="#C85844"
-                                     FontSize="20"
+                                     FontSize="10"
                                      Style="{StaticResource MenuButtonTheme}" 
                                      Click="RedEvent_Button_Click"/>
 
                         <RadioButton Grid.Row="0" Grid.Column="2" x:Name="GreenEvent_Button" 
                                      Content="G"
                                      Foreground="Black" Background="Green"
-                                     FontSize="20"
+                                     FontSize="10"
                                      Style="{StaticResource MenuButtonTheme}" 
-                                     Click="GreenEvent_Button_Click"/>
+                                     Click="GreenEvent_Button_Click" HorizontalAlignment="Left" Width="55"/>
 
                         <RadioButton Grid.Row="0" Grid.Column="3" x:Name="BlueEvent_Button" 
                                      Content="B"
                                      Foreground="Black" Background="#389BD0"
-                                     FontSize="20"
+                                     FontSize="10"
                                      Style="{StaticResource MenuButtonTheme}" 
                                      Click="BlueEvent_Button_Click"/>
                         
