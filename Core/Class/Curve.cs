@@ -546,6 +546,18 @@ namespace Curves_editor.Core.Class
                 segment.GetCurveGeometry();
             }
         }
+        public bool isPoint(Ellipse sender)
+        {
+            foreach (Curve_point curve_Point in m_pointArray)
+            {
+                //Find point
+                if (sender == curve_Point.ellipseID)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
         public void AddPoint(Point point, Ellipse ellipse)
         {

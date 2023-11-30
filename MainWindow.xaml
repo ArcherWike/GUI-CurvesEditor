@@ -146,15 +146,6 @@
                                 <Image Source="/bezier_quadratic.png" Stretch="UniformToFill"/>
                             </StackPanel>
                         </Button>
-
-
-
-
-
-
-
-
-
                     </Grid>
 
                     <Grid Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Stretch" >

@@ -103,8 +103,12 @@ namespace UiDesign
         private void Ellipse_mouseEnter(object sender, MouseEventArgs e)
         {
             hoverpoint = (sender as Ellipse);
-            hoverpoint.Opacity = 1;
-            hoverpoint.Fill = System.Windows.Media.Brushes.Red;
+
+            if (active_curve.isPoint(sender as Ellipse))
+            {
+                hoverpoint.Opacity = 1;
+                hoverpoint.Fill = System.Windows.Media.Brushes.Red;
+            }
         }
         private void Ellipse_mouseLeave(object sender, MouseEventArgs e)
         {
