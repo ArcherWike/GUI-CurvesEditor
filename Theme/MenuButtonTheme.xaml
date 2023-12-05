@@ -7,24 +7,36 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RadioButton">
-                    <Grid VerticalAlignment="Stretch"
+                        <Border BorderThickness="0" BorderBrush="Black" x:Name="ButtonBorder">
+                            <Grid VerticalAlignment="Stretch"
                               HorizontalAlignment="Stretch"
                               Background="{TemplateBinding Background}">
 
-                        <TextBlock Text="{TemplateBinding Property=Content}"
+                                <TextBlock Text="{TemplateBinding Property=Content}"
                                        VerticalAlignment="Center"
-                                       Margin="50,0,0,0"/>
-                    </Grid>
+                                       Margin="0,0,0,0" HorizontalAlignment="Center"
+                                        Foreground="Black"
+                                          FontSize="10"/>
+
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="BorderThickness" Value="5"></Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="BorderThickness" Value="10"/>
         </Style.Setters>
 
         <Style.Triggers>
             <Trigger Property="IsChecked" Value="True">
                 <Setter Property="Background" Value="#227443"/>
+                
             </Trigger>
         </Style.Triggers>
     </Style>

@@ -10,21 +10,21 @@
         WindowStyle="None"
         WindowState="Maximized"
         ResizeMode="NoResize"
-        Background="#5f9186"
+        Background="#FF333434"
         SizeChanged="Window_SizeChanged"
         AllowsTransparency="False">
     <Border CornerRadius="90" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <Grid x:Name="Panel" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition MinWidth="400"></ColumnDefinition>
-                <ColumnDefinition MinWidth="300" MaxWidth="300"></ColumnDefinition>
+                <ColumnDefinition MinWidth="350" MaxWidth="350"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="100" MinHeight="100"></RowDefinition>
                 <RowDefinition MinHeight="850"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <StackPanel x:Name="bar_settings" Grid.Row="0" Background="LightGray"
+            <StackPanel x:Name="bar_settings" Grid.Row="0" Background="#FF1E1E1F"
                         MouseLeftButtonDown="bar_settings_MouseLeftButtonDown">
                 <Grid HorizontalAlignment="Right">
                     <Grid.ColumnDefinitions>
@@ -36,15 +36,27 @@
                         <RowDefinition Height="30"></RowDefinition>
                     </Grid.RowDefinitions>
                     <Button x:Name="btnMinimalize" Grid.Column="0" 
-                            Content="Mi" Click="btnMinimalize_Click"/>
+                            Click="btnMinimalize_Click" BorderBrush="{x:Null}" Foreground="{x:Null}">
+                        <Button.Background>
+                            <ImageBrush ImageSource="/minimalize.jpg"/>
+                        </Button.Background>
+                    </Button>
                     <Button x:Name="btnMaximalize" Grid.Column="1" 
-                            Content="Ma" Click="btnMaximalize_Click" Background="{x:Null}"/>
+                            Click="btnMaximalize_Click" Foreground="{x:Null}" BorderBrush="{x:Null}">
+                        <Button.Background>
+                            <ImageBrush ImageSource="/maximalize.jpg"/>
+                        </Button.Background>
+                    </Button>
                     <Button x:Name="btnClose" Grid.Column="2" 
-                            Content="Cl" Click="btnClose_Click"/>
+                            Click="btnClose_Click" BorderBrush="{x:Null}" Foreground="{x:Null}">
+                        <Button.Background>
+                            <ImageBrush ImageSource="/close.jpg"/>
+                        </Button.Background>
+                    </Button>
                 </Grid>
             </StackPanel>
 
-            <StackPanel Grid.Row="1" Grid.Column="0" Background="#5e9b8e">
+            <StackPanel Grid.Row="1" Grid.Column="0" Background="#FF1A1A1A">
                 <Grid HorizontalAlignment="Center" VerticalAlignment="Stretch" Margin="0 50 0 0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="20" MinWidth="20"></ColumnDefinition>
@@ -56,7 +68,7 @@
                     </Grid.RowDefinitions>
 
                     <Grid.Resources>
-                        <Pen x:Key="GrayPenKey" Brush="LightGoldenrodYellow" Thickness="2"/>
+                        <Pen x:Key="GrayPenKey" Brush="#FF3F3F3F" Thickness="2"/>
                         <GeometryDrawing x:Key="SmallGridDrawing" 
                      Pen="{StaticResource GrayPenKey}" 
                      Geometry="M 40 40 L 200 40 L 200 200"/>
@@ -81,7 +93,7 @@
                             Background="{DynamicResource LargeGridBrush}" 
                             MouseLeftButtonUp="Canvas_MouseLeftButtonUp" 
                             MouseMove="CordSys_MouseMove" MouseLeftButtonDown="Canvas_MouseLeftButtonDown"/>
-                    
+
                     <Line Grid.Row="0" Grid.Column="0" X1="10" Y1="0" X2="10" Y2="800" 
                           Stroke="Green" StrokeThickness="5"/>
                     <Line Grid.Row="1" Grid.Column="1" X1="0" Y1="10" X2="1100" Y2="10" 
@@ -94,29 +106,31 @@
                         Grid.Row="1" Grid.Column="1"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
-                        MaxWidth="260">
+                        MaxWidth="280">
                 <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition MinWidth="260"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="100" MinHeight="100"></RowDefinition>
+                        <RowDefinition Height="50" MinHeight="50"></RowDefinition>
                         <RowDefinition Height="55" MinHeight="55"></RowDefinition>
                         <RowDefinition Height="50" MinHeight="50"></RowDefinition>
                         <RowDefinition Height="50" MinHeight="50"></RowDefinition>
                         <RowDefinition Height="100" MinHeight="100"></RowDefinition>
                         <RowDefinition Height="400" MinHeight="100"></RowDefinition>
+                        <RowDefinition Height="100" MinHeight="100"></RowDefinition>
                     </Grid.RowDefinitions>
 
-                    <RadioButton Grid.Row="0" Grid.Column="0" x:Name="ClearEvent_Button" 
+                    <Button Grid.Row="0" Grid.Column="0" x:Name="ClearEvent_Button" 
+                            Width="100" Height="35"
                                  Content="Clear"
                                  HorizontalAlignment="Center"
-                                     Foreground="White"
-                                     FontSize="30"
-                                 Style="{StaticResource MenuButtonTheme}" 
+                                     Background="White"
+                                     Opacity="0.6"
+                                     FontSize="20"
                                  Click="Clear_Viewport"/>
 
-                    <Canvas x:Name="Colour_square" Margin="25"
+                    <Canvas x:Name="Colour_square" Margin="0"
                             Grid.Row="5" Grid.Column="0">
                     </Canvas>
 
@@ -129,7 +143,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Button Click="LineEventButton">
-                        <StackPanel Grid.Row="0" Grid.Column="0">
+                            <StackPanel Grid.Row="0" Grid.Column="0">
                                 <Image Source="/bezier_line.png" Stretch="UniformToFill"/>
                             </StackPanel>
                         </Button>
@@ -154,38 +168,46 @@
                             <ColumnDefinition Width="55" MinWidth="55"></ColumnDefinition>
                             <ColumnDefinition Width="55" MinWidth="55"></ColumnDefinition>
                             <ColumnDefinition Width="55" MinWidth="55"></ColumnDefinition>
-                            
+
 
                         </Grid.ColumnDefinitions>
 
+
                         <RadioButton Grid.Row="0" Grid.Column="0" x:Name="AlphaEvent_Button"
-                                     Content="A"
-                                     Foreground="Black" Background="#E7F0F0"
-                                     FontSize="10"
+                                     Content="A"                             
+                                     Background="AntiqueWhite"
                                      Style="{StaticResource MenuButtonTheme}" 
-                                     Click="AlphaEvent_Button_Click"/>
+                                     Click="AlphaEvent_Button_Click"
+                                     />
+
 
                         <RadioButton Grid.Row="0" Grid.Column="1" x:Name="RedEvent_Button"
                                      Content="R"
-                                     Foreground="Black" Background="#C85844"
-                                     FontSize="10"
+                                     Background="#C85844"                  
                                      Style="{StaticResource MenuButtonTheme}" 
                                      Click="RedEvent_Button_Click"/>
 
                         <RadioButton Grid.Row="0" Grid.Column="2" x:Name="GreenEvent_Button" 
                                      Content="G"
-                                     Foreground="Black" Background="Green"
-                                     FontSize="10"
+                                     Background="Green"
                                      Style="{StaticResource MenuButtonTheme}" 
                                      Click="GreenEvent_Button_Click" HorizontalAlignment="Left" Width="55"/>
 
                         <RadioButton Grid.Row="0" Grid.Column="3" x:Name="BlueEvent_Button" 
                                      Content="B"
-                                     Foreground="Black" Background="#389BD0"
-                                     FontSize="10"
+                                     Background="#389BD0"
                                      Style="{StaticResource MenuButtonTheme}" 
                                      Click="BlueEvent_Button_Click"/>
-                        
+
+                    </Grid>
+                    <Grid Grid.Row="6" x:Name="StartGrid">
+                        <Button Grid.Row="0" Grid.Column="0" x:Name="StartEvent_Button" 
+        Width="100" Height="35"
+             Content="Play"
+             HorizontalAlignment="Center"
+                 Background="White"
+                 Opacity="0.6"
+                 FontSize="20" Click="StartEvent_Click"/>
                     </Grid>
                 </Grid>
             </StackPanel>
