@@ -155,5 +155,14 @@
   <ItemGroup>
     <Resource Include="bezier_quadratic.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="minimalize.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="close.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="play.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

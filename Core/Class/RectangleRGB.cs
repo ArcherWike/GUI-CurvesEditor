@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -15,6 +16,11 @@ namespace Curves_editor.Core.Class
 
         private Rectangle m_rectangle_rgb_shape = null;
         private Ellipse m_chart_marker = null;
+
+        bool run = false;
+        DispatcherTimer timer_val = null;
+
+
 
         public RectangleRGB(Rectangle rectangle_rgb_shape, Ellipse chart_marker_shape, UiDesign.MainWindow mainWindow)
         {
@@ -35,9 +41,24 @@ namespace Curves_editor.Core.Class
         void createTimer()
         {
             DispatcherTimer timer = new DispatcherTimer();
+            timer_val = timer;
             timer.Interval = TimeSpan.FromSeconds(0.01);
             timer.Tick += timer_Tick;
-            timer.Start();
+        }
+
+        public bool SetPause()
+        {
+            if (run) 
+            {
+                run = false;
+                timer_val.Stop();     
+            }
+            else
+            {
+                run = true;
+                timer_val.Start(); 
+            }
+            return run;
         }
 
         float velocity_alpha;

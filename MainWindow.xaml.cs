@@ -1,9 +1,11 @@
 using Curves_editor.Core.Class;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 namespace UiDesign
@@ -42,8 +44,8 @@ namespace UiDesign
             rectangle_rgb.Stroke = Brushes.Black;
             rectangle_rgb.Fill = new SolidColorBrush(Color.FromArgb(255, 0, 0, 0));
             rectangle_rgb.StrokeThickness = 2;
-            rectangle_rgb.Width = 100;
-            rectangle_rgb.Height = 100;
+            rectangle_rgb.Width = 300;
+            rectangle_rgb.Height = 300;
             Colour_square.Children.Add(rectangle_rgb);
         }
 
@@ -55,6 +57,7 @@ namespace UiDesign
             chart_marker.Width = 3;
             chart_marker.Height = 800;
             CordSys.Children.Add(chart_marker);
+            Canvas.SetZIndex(chart_marker, -1);
         }
 
         public void SetPointPosition(Ellipse myEllipse, Point mousePoint)
@@ -112,15 +115,18 @@ namespace UiDesign
         }
         private void Ellipse_mouseLeave(object sender, MouseEventArgs e)
         {
-            if ((sender as Ellipse).Width == 20)
+            if (active_curve.isPoint(sender as Ellipse))
             {
-                (sender as Ellipse).Fill = System.Windows.Media.Brushes.Blue;
-                (sender as Ellipse).Opacity = 0.65;
-            }
-            else
-            {
-                (sender as Ellipse).Fill = System.Windows.Media.Brushes.White;
-                (sender as Ellipse).Opacity = 0.75;
+                if ((sender as Ellipse).Width == 20)
+                {
+                    (sender as Ellipse).Fill = System.Windows.Media.Brushes.SlateGray;
+                    (sender as Ellipse).Opacity = 0.65;
+                }
+                else
+                {
+                    (sender as Ellipse).Fill = System.Windows.Media.Brushes.White;
+                    (sender as Ellipse).Opacity = 0.75;
+                }
             }
             hoverpoint = null;
         }
@@ -242,7 +248,7 @@ namespace UiDesign
             {
                 point.ellipseID.Width = 20;
                 point.ellipseID.Height = 20;
-                point.ellipseID.Fill = System.Windows.Media.Brushes.Blue;
+                point.ellipseID.Fill = System.Windows.Media.Brushes.SlateGray;
                 point.ellipseID.Opacity = 0.65;
                 Canvas.SetZIndex(point.ellipseID, 10);
                 CordSys.Children.Add(point.ellipseID);
@@ -279,6 +285,7 @@ namespace UiDesign
         private void UpdateSegmentViewport(object sender, PathEventArgs e)
         {
             //CordSys.Children.Remove(e.pathGeometry);
+            
             if (!CordSys.Children.Contains(e.pathGeometry))
             {
                 CordSys.Children.Add(e.pathGeometry);
@@ -411,6 +418,22 @@ namespace UiDesign
             window_height = CordSys.ActualHeight;
             window_width = CordSys.ActualWidth;
 
+        }
+
+
+        private void StartEvent_Click(object sender, RoutedEventArgs e)
+        {
+            if (rectangleRGB.SetPause())
+            {
+                var brush = new ImageBrush();
+                //**brush.ImageSource = new BitmapImage(new Uri(@"pack://application:,,,/Curves_editor;component//Theme/close.png"));
+                //
+                //brush.ImageSource = new BitmapImage(new Uri("/pause.png", UriKind.Relative));
+                //var uriSource = new Uri(@"pack://application:,,,/AssemblyName;component");
+
+                //StartEvent_Button.Background = brush;
+
+            }
         }
     }
 }

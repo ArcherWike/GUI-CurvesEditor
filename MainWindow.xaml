@@ -200,14 +200,20 @@
                                      Click="BlueEvent_Button_Click"/>
 
                     </Grid>
+                    
                     <Grid Grid.Row="6" x:Name="StartGrid">
+                        <Border Grid.Row="0" Background="Gray">
+                            
+                        </Border>
                         <Button Grid.Row="0" Grid.Column="0" x:Name="StartEvent_Button" 
-        Width="100" Height="35"
-             Content="Play"
+        Width="100" Height="100"
              HorizontalAlignment="Center"
-                 Background="White"
                  Opacity="0.6"
-                 FontSize="20" Click="StartEvent_Click"/>
+                 FontSize="20" Click="StartEvent_Click">
+                            <Button.Background>
+                                <ImageBrush Stretch="UniformToFill" ImageSource="/play.png"/>
+                            </Button.Background>
+                        </Button>
                     </Grid>
                 </Grid>
             </StackPanel>

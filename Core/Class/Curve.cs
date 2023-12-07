@@ -215,9 +215,9 @@ namespace Curves_editor.Core.Class
             }
             else
             {
-                curveGeometry.Opacity = 0.25;
+                curveGeometry.Opacity = 0.75;
             }
-
+            Set_control_point_visible_mode(visible_mode);
             curveGeometry.StrokeThickness = 6;
 
             PointCollection curvePoints = new PointCollection();
@@ -314,21 +314,19 @@ namespace Curves_editor.Core.Class
             if (visible_mode)
             {
                 line_.Opacity = 0.80;
-                line_.StrokeThickness = 1;
-                line_.Stroke = Brushes.Orange;
+                line_.StrokeThickness = 3;
+                line_.Stroke = Brushes.Gray;
             }
             else
             {
-                line_.Opacity = 0.50;
-                line_.StrokeThickness = 0.5;
-                line_.Stroke = Brushes.Yellow;
+                line_.Opacity = 0;
             }
             return line_;
         }
 
         public void ChangeLinesColor()
         {
-            for (int i = 0; i < points.Count() - 1; i++)
+            for (int i = 0; i < m_lines.Count(); i++)
             {
                 m_lines[i] = SetLineColor(m_lines[i]);
             }
@@ -369,6 +367,25 @@ namespace Curves_editor.Core.Class
         public void SetControlPMargin(int value = 0)
         {
             m_controlP_margin = value;
+        }
+
+        private void Set_control_point_visible_mode(bool visible)
+        {
+            if (visible)
+            {
+                foreach (Curve_point control_point in GetControlPointArray())
+                {
+                    control_point.ellipseID.Opacity = 0.75;
+                }
+            }
+            else
+            {
+                foreach (Curve_point control_point in GetControlPointArray())
+                {
+                    control_point.ellipseID.Opacity = 0;
+                }
+            }
+            
         }
 
         public float GetValueAt(float time)
@@ -502,6 +519,13 @@ namespace Curves_editor.Core.Class
             {
                 segment.visible_mode = visible_option;
                 AddSegment_to_viewport(segment);
+/*                if (!visible_option)
+                {
+                    CurvePointsListEventArgs eventArgs1 = new CurvePointsListEventArgs(
+                       segment.GetControlPointArray());
+                    DestroyCurvePoint(this, eventArgs1);
+
+                }*/
             }
         }
 
@@ -512,10 +536,12 @@ namespace Curves_editor.Core.Class
             CurvePointMove(this, eventArgs);
         }
         void AddSegment_to_viewport(Segment_curve segment)
-        {   //updating segments 
+        {   
+            //updating segments 
             PathEventArgs eventArgs = new PathEventArgs(segment.GetCurveGeometry());
             segment.ChangeLinesColor();
             PathGeomertyAddToViewport(this, eventArgs);
+            
         }
         public void ChangeSegmentBezierType(BezierType bezierType)
         {
@@ -540,6 +566,7 @@ namespace Curves_editor.Core.Class
                 foreach (Curve_point curvepoint in eventArgs1.curvePointArray)
                 {
                     m_pointArray.Add(curvepoint);
+                    //m_control_pointArray.Add(curvepoint);
                 }
                 OnCurvePointAdded(this, eventArgs1);
 
