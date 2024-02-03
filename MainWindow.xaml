@@ -38,7 +38,7 @@
                     <Button x:Name="btnMinimalize" Grid.Column="0" 
                             Click="btnMinimalize_Click" BorderBrush="{x:Null}" Foreground="{x:Null}">
                         <Button.Background>
-                            <ImageBrush ImageSource="/minimalize.jpg"/>
+                            <ImageBrush ImageSource="/minimalize.png"/>
                         </Button.Background>
                     </Button>
                     <Button x:Name="btnMaximalize" Grid.Column="1" 
@@ -50,7 +50,7 @@
                     <Button x:Name="btnClose" Grid.Column="2" 
                             Click="btnClose_Click" BorderBrush="{x:Null}" Foreground="{x:Null}">
                         <Button.Background>
-                            <ImageBrush ImageSource="/close.jpg"/>
+                            <ImageBrush ImageSource="/Close.png"/>
                         </Button.Background>
                     </Button>
                 </Grid>
@@ -174,44 +174,62 @@
 
 
                         <RadioButton Grid.Row="0" Grid.Column="0" x:Name="AlphaEvent_Button"
-                                     Content="A"                             
-                                     Background="AntiqueWhite"
+                                     Content="A"
                                      Style="{StaticResource MenuButtonTheme}" 
                                      Click="AlphaEvent_Button_Click"
-                                     />
+                                     >
+                            <RadioButton.Background>
+                                <ImageBrush ImageSource="/Alpha.png"/>
+                            </RadioButton.Background>
+                        </RadioButton>
 
 
                         <RadioButton Grid.Row="0" Grid.Column="1" x:Name="RedEvent_Button"
-                                     Content="R"
-                                     Background="#C85844"                  
+                                     Content="R"                  
                                      Style="{StaticResource MenuButtonTheme}" 
-                                     Click="RedEvent_Button_Click"/>
+                                     Click="RedEvent_Button_Click">
+                            <RadioButton.Background>
+                                <ImageBrush ImageSource="/Red.png"/>
+                            </RadioButton.Background>
+                        </RadioButton>
 
                         <RadioButton Grid.Row="0" Grid.Column="2" x:Name="GreenEvent_Button" 
                                      Content="G"
-                                     Background="Green"
                                      Style="{StaticResource MenuButtonTheme}" 
-                                     Click="GreenEvent_Button_Click" HorizontalAlignment="Left" Width="55"/>
+                                     Click="GreenEvent_Button_Click" HorizontalAlignment="Left" Width="55">
+                            <RadioButton.Background>
+                                <ImageBrush ImageSource="/Icon/Green.png"/>
+                            </RadioButton.Background>
+                        </RadioButton>
 
                         <RadioButton Grid.Row="0" Grid.Column="3" x:Name="BlueEvent_Button" 
                                      Content="B"
-                                     Background="#389BD0"
                                      Style="{StaticResource MenuButtonTheme}" 
-                                     Click="BlueEvent_Button_Click"/>
+                                     Click="BlueEvent_Button_Click">
+                            <RadioButton.Background>
+                                <ImageBrush ImageSource="/Icon/Blue.png"/>
+                            </RadioButton.Background>
+                        </RadioButton>
 
                     </Grid>
-                    
+
                     <Grid Grid.Row="6" x:Name="StartGrid">
-                        <Border Grid.Row="0" Background="Gray">
-                            
-                        </Border>
+                        <StackPanel OpacityMask="#FFF4F3F3">
+                            <Image>
+                                <Image.OpacityMask>
+                                    <ImageBrush ImageSource="/play.png"/>
+                                </Image.OpacityMask>
+                            </Image>
+                        </StackPanel>
+
+
                         <Button Grid.Row="0" Grid.Column="0" x:Name="StartEvent_Button" 
-        Width="100" Height="100"
-             HorizontalAlignment="Center"
-                 Opacity="0.6"
-                 FontSize="20" Click="StartEvent_Click">
+                            Width="100" Height="100"
+                            HorizontalAlignment="Center"
+                            Opacity="0.6"
+                            FontSize="20" Click="StartEvent_Click" BorderBrush="{x:Null}">
                             <Button.Background>
-                                <ImageBrush Stretch="UniformToFill" ImageSource="/play.png"/>
+                                <ImageBrush ImageSource="/play.png"/>
                             </Button.Background>
                         </Button>
                     </Grid>

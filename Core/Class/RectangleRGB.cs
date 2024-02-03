@@ -42,8 +42,10 @@ namespace Curves_editor.Core.Class
         {
             DispatcherTimer timer = new DispatcherTimer();
             timer_val = timer;
-            timer.Interval = TimeSpan.FromSeconds(0.01);
+            
+            timer.Interval = TimeSpan.FromTicks(150);
             timer.Tick += timer_Tick;
+            
         }
 
         public bool SetPause()
@@ -72,6 +74,7 @@ namespace Curves_editor.Core.Class
 
         void timer_Tick(object sender, EventArgs e)
         {
+            Console.WriteLine(mainWindow_m.GetDeltaTime()/10);
             velocity_alpha = 255.0f;
             velocity_red = 0.0f;
             velocity_green = 0.0f;
@@ -83,6 +86,7 @@ namespace Curves_editor.Core.Class
             if (mainWindow_m.active_curve != null)
             {
                 time += 10;
+                //time = time + 10 * (mainWindow_m.GetDeltaTime()/10);// (100 * mainWindow_m.GetDeltaTime());
                 if (time > 6000)
                 {
                     time = 0;
@@ -122,7 +126,7 @@ namespace Curves_editor.Core.Class
                 }
             }
 
-            Console.WriteLine(velocity_red + " " + velocity_green + " " + velocity_blue + " " + velocity_alpha);
+            //Console.WriteLine(velocity_red + " " + velocity_green + " " + velocity_blue + " " + velocity_alpha);
 
             m_rectangle_rgb_shape.Fill = new SolidColorBrush(Color.FromArgb(
                 (byte)velocity_alpha,

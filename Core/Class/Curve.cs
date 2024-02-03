@@ -112,13 +112,30 @@ namespace Curves_editor.Core.Class
                     List<Curve_point> newPoints2 = new List<Curve_point>();
 
                     newPoints2.Add(points[0]);
-                    Curve_point control_point_1 = new Curve_point(new Point(
-                        points[0].ellipse_positionID.X + 1, points[0].ellipse_positionID.Y + 1),
+
+
+                    Point supportStartPoint1 = GetCanvastToCoord(new Point(
+                        points[0].ellipse_positionID.X, points[0].ellipse_positionID.Y));
+                    Point supportEndPoint1 = GetCanvastToCoord(new Point(
+                        points[points.Count() - 1].ellipse_positionID.X,
+                        points[points.Count() - 1].ellipse_positionID.Y));
+                    Point supportCenterPoint1 = (new Point(
+                                Math.Abs(supportStartPoint1.X + supportEndPoint1.X) / 2,
+                                Math.Abs(supportStartPoint1.Y + supportEndPoint1.Y) / 2));
+
+                    Curve_point control_point_1 = new Curve_point(
+                        GetCoordToCanvast(new Point(
+                            Math.Abs(supportStartPoint1.X + supportCenterPoint1.X) / 2,
+                            Math.Abs(supportStartPoint1.Y + supportCenterPoint1.Y) / 2)),
                         new Ellipse());
 
-                    Curve_point control_point_2 = new Curve_point(new Point(
-                        points.Last().ellipse_positionID.X + 1, points.Last().ellipse_positionID.Y + 1),
+                    Curve_point control_point_2 = new Curve_point(
+                        GetCoordToCanvast(new Point(
+                            Math.Abs(supportCenterPoint1.X + supportEndPoint1.X) / 2,
+                            Math.Abs(supportCenterPoint1.Y + supportEndPoint1.Y) / 2)),
                         new Ellipse());
+
+
 
                     newPoints2.Add(control_point_1);
                     newPoints2.Add(control_point_2);
@@ -369,7 +386,7 @@ namespace Curves_editor.Core.Class
             m_controlP_margin = value;
         }
 
-        private void Set_control_point_visible_mode(bool visible)
+        private void Set_control_point_visible_mode(bool visible = true)
         {
             if (visible)
             {
@@ -570,7 +587,8 @@ namespace Curves_editor.Core.Class
                 }
                 OnCurvePointAdded(this, eventArgs1);
 
-                segment.GetCurveGeometry();
+                //segment.GetCurveGeometry();
+                AddSegment_to_viewport(segment);
             }
         }
         public bool isPoint(Ellipse sender)
@@ -818,12 +836,12 @@ namespace Curves_editor.Core.Class
                 //find and update control point (if moved control P)
                 if (!executed)
                 {
-                    for (int i = 0; i < m_control_pointArray.Count(); i++)
+                    for (int i = 0; i < m_pointArray.Count(); i++)
                     {
-                        if (m_control_pointArray[i].ellipseID == sender)
+                        if (m_pointArray[i].ellipseID == sender)
                         {
-                            ChangePointPosition(GetCoordToCanvast(e), m_control_pointArray[i]);
-                            activeSegmentIndex = m_control_pointArray[i].default_segment_index;
+                            ChangePointPosition(GetCoordToCanvast(e), m_pointArray[i]);
+                            activeSegmentIndex = m_pointArray[i].default_segment_index;
                             break;
                         }
                     }
@@ -842,6 +860,11 @@ namespace Curves_editor.Core.Class
                 {
                     UpdateSegment(m_segmentsArray.Last());
                 }
+            }
+
+            foreach (Segment_curve segment_ in m_segmentsArray) 
+            {
+                UpdateSegment(segment_);
             }
         }
         public float GetValueAt(float time)

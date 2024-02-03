@@ -31,6 +31,16 @@ namespace UiDesign
         Ellipse chart_marker = new Ellipse();
         Point ChartMarkerPoint = new Point(190, 120);
 
+        static long lastTime = 0;
+        public float GetDeltaTime()
+        {
+            long now = DateTime.Now.Ticks;
+            float dT = (now - lastTime) / 1000;
+            lastTime = now;
+            //Console.WriteLine(dT);
+            return dT;
+        }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -263,8 +273,8 @@ namespace UiDesign
         {
             if (active_curve != null)
             {
-                Point delta = new Point((mousePoint.X - 10 - Canvas.GetLeft(myEllipse)) / 200,
-                     (Canvas.GetTop(myEllipse) - mousePoint.Y + 10) / 200);
+                Point delta = new Point((mousePoint.X - Canvas.GetLeft(myEllipse)) / 200,
+                     (Canvas.GetTop(myEllipse) - mousePoint.Y) / 200);
 
                 Point new_pos = GetCanvastToCoord(mousePoint);
                 active_curve.UpdatePointPosition(myEllipse, new_pos);
@@ -411,6 +421,7 @@ namespace UiDesign
         private void BlueEvent_Button_Click(object sender, RoutedEventArgs e)
         {
             ChangeColor(ColorType.Blue);
+            GetDeltaTime();
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -420,20 +431,40 @@ namespace UiDesign
 
         }
 
-
+        private StackPanel stackPnl = new StackPanel();
         private void StartEvent_Click(object sender, RoutedEventArgs e)
         {
+            stackPnl.Children.Clear();
+
             if (rectangleRGB.SetPause())
             {
+                Image img = new Image();
+                img.Source = new BitmapImage(new Uri(@"pack://application:,,,/Curves_editor;component//Icon/Play.png"));
+
+                
+                //StackPanel stackPnl = new StackPanel();
+                stackPnl.Orientation = Orientation.Horizontal;
+                stackPnl.Margin = new Thickness(10);
+                //StartEvent_Button.Add(stackPnl);
+                stackPnl.Children.Add(img);
+
+                StartEvent_Button.Content = stackPnl;
                 var brush = new ImageBrush();
-                //**brush.ImageSource = new BitmapImage(new Uri(@"pack://application:,,,/Curves_editor;component//Theme/close.png"));
-                //
-                //brush.ImageSource = new BitmapImage(new Uri("/pause.png", UriKind.Relative));
-                //var uriSource = new Uri(@"pack://application:,,,/AssemblyName;component");
-
-                //StartEvent_Button.Background = brush;
-
             }
+            else
+            {
+                Image img = new Image();
+                img.Source = new BitmapImage(new Uri(@"pack://application:,,,/Curves_editor;component//Icon/pause.png"));
+
+                //StackPanel stackPnl = new StackPanel();
+                stackPnl.Orientation = Orientation.Horizontal;
+                stackPnl.Margin = new Thickness(10);
+                stackPnl.Children.Add(img);
+
+                
+                //var brush = new ImageBrush();
+            }
+            StartEvent_Button.Content = stackPnl;
         }
     }
 }
