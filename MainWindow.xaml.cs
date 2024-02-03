@@ -30,16 +30,7 @@ namespace UiDesign
         //chart marker
         Ellipse chart_marker = new Ellipse();
         Point ChartMarkerPoint = new Point(190, 120);
-
-        static long lastTime = 0;
-        public float GetDeltaTime()
-        {
-            long now = DateTime.Now.Ticks;
-            float dT = (now - lastTime) / 1000;
-            lastTime = now;
-            //Console.WriteLine(dT);
-            return dT;
-        }
+     
 
         public MainWindow()
         {
@@ -82,9 +73,15 @@ namespace UiDesign
             }
         }
 
+        
+        
+
+
+
         //###################### Point function ###########################
         private Ellipse CreatePoint(Point mousePosition)
         {
+            
             Ellipse myEllipse = new Ellipse();
 
             myEllipse.Width = 30;
@@ -115,6 +112,7 @@ namespace UiDesign
         }
         private void Ellipse_mouseEnter(object sender, MouseEventArgs e)
         {
+            rectangleRGB.DisconectedTimer();
             hoverpoint = (sender as Ellipse);
 
             if (active_curve.isPoint(sender as Ellipse))
@@ -139,6 +137,7 @@ namespace UiDesign
                 }
             }
             hoverpoint = null;
+            rectangleRGB.ConnectTimer();
         }
         private void MyEllipse_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
@@ -271,17 +270,20 @@ namespace UiDesign
         }
         public void SetControlPointPosition(Ellipse myEllipse, Point mousePoint)
         {
+            //rectangleRGB.DisconectedTimer();
             if (active_curve != null)
             {
                 Point delta = new Point((mousePoint.X - Canvas.GetLeft(myEllipse)) / 200,
                      (Canvas.GetTop(myEllipse) - mousePoint.Y) / 200);
 
                 Point new_pos = GetCanvastToCoord(mousePoint);
+                
                 active_curve.UpdatePointPosition(myEllipse, new_pos);
             }
 
             Canvas.SetLeft(myEllipse, mousePoint.X - 15);
             Canvas.SetTop(myEllipse, mousePoint.Y - 15);
+            
         }
         private void DestroyControlPoint(object sender, CurvePointsListEventArgs e)
         {
@@ -421,7 +423,6 @@ namespace UiDesign
         private void BlueEvent_Button_Click(object sender, RoutedEventArgs e)
         {
             ChangeColor(ColorType.Blue);
-            GetDeltaTime();
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)

@@ -21,31 +21,69 @@ namespace Curves_editor.Core.Class
         DispatcherTimer timer_val = null;
 
 
-
         public RectangleRGB(Rectangle rectangle_rgb_shape, Ellipse chart_marker_shape, UiDesign.MainWindow mainWindow)
         {
             mainWindow_m = mainWindow;
             m_rectangle_rgb_shape = rectangle_rgb_shape;
             m_chart_marker = chart_marker_shape;
 
-            createTimer();
+
+            //create timer - per-frame
+            CompositionTarget.Rendering += (timer_Tick);
         }
+
+        public void DisconectedTimer()
+        {
+            CompositionTarget.Rendering -= (timer_Tick);
+        }
+
+        public void ConnectTimer()
+        {
+            CompositionTarget.Rendering += (timer_Tick);
+        }
+
+
+        public class CompositionTargetEx
+        {
+            private static TimeSpan _last = TimeSpan.Zero;
+            public static event EventHandler<RenderingEventArgs> _FrameUpdating;
+            public static event EventHandler<RenderingEventArgs> FrameUpdating
+            {
+                add
+                {
+                    if (_FrameUpdating == null)
+                    {
+                        CompositionTarget.Rendering += CompositionTarget_Rendering;
+                        _FrameUpdating += value;
+                    }
+                }
+                remove
+                {
+                    _FrameUpdating -= value;
+
+                    if (_FrameUpdating == null)
+                        CompositionTarget.Rendering -= CompositionTarget_Rendering;
+                }
+            }
+            static void CompositionTarget_Rendering(object sender, EventArgs e)
+            {
+                RenderingEventArgs args = (RenderingEventArgs)e;
+                if (args.RenderingTime == _last)
+                    return;
+                _last = args.RenderingTime;
+                _FrameUpdating(sender, args);
+            }
+        }
+
+
+
+
         enum ColorType
         {
             Alpha,
             Red,
             Green,
             Blue,
-        }
-
-        void createTimer()
-        {
-            DispatcherTimer timer = new DispatcherTimer();
-            timer_val = timer;
-            
-            timer.Interval = TimeSpan.FromTicks(150);
-            timer.Tick += timer_Tick;
-            
         }
 
         public bool SetPause()
@@ -74,7 +112,7 @@ namespace Curves_editor.Core.Class
 
         void timer_Tick(object sender, EventArgs e)
         {
-            Console.WriteLine(mainWindow_m.GetDeltaTime()/10);
+            
             velocity_alpha = 255.0f;
             velocity_red = 0.0f;
             velocity_green = 0.0f;
@@ -86,7 +124,7 @@ namespace Curves_editor.Core.Class
             if (mainWindow_m.active_curve != null)
             {
                 time += 10;
-                //time = time + 10 * (mainWindow_m.GetDeltaTime()/10);// (100 * mainWindow_m.GetDeltaTime());
+                
                 if (time > 6000)
                 {
                     time = 0;
