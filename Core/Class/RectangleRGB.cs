@@ -18,6 +18,7 @@ namespace Curves_editor.Core.Class
         private Ellipse m_chart_marker = null;
 
         bool run = false;
+        bool button_pause = false;
         DispatcherTimer timer_val = null;
 
 
@@ -29,7 +30,7 @@ namespace Curves_editor.Core.Class
 
 
             //create timer - per-frame
-            CompositionTarget.Rendering += (timer_Tick);
+            //CompositionTarget.Rendering += (timer_Tick);
         }
 
         public void DisconectedTimer()
@@ -86,19 +87,32 @@ namespace Curves_editor.Core.Class
             Blue,
         }
 
+        public void SetPauseMode(bool pauseMode) 
+        {
+            if (!pauseMode && button_pause)
+            {
+                ConnectTimer();
+            }
+            if (pauseMode)
+            {
+                DisconectedTimer();
+            }
+        }
+
+
         public bool SetPause()
         {
-            if (run) 
+            if (button_pause) 
             {
-                run = false;
-                timer_val.Stop();     
+                button_pause = false;
+                DisconectedTimer();
             }
             else
             {
-                run = true;
-                timer_val.Start(); 
+                button_pause = true;
+                ConnectTimer();
             }
-            return run;
+            return button_pause;
         }
 
         float velocity_alpha;
@@ -112,6 +126,7 @@ namespace Curves_editor.Core.Class
 
         void timer_Tick(object sender, EventArgs e)
         {
+            
             
             velocity_alpha = 255.0f;
             velocity_red = 0.0f;

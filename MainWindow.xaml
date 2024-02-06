@@ -13,6 +13,39 @@
         Background="#FF333434"
         SizeChanged="Window_SizeChanged"
         AllowsTransparency="False">
+
+    <Window.Resources>
+        <!--<FinalTemplate>-->
+        <ControlTemplate x:Key="roundbutton" TargetType="Button">
+            <Grid>
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroup Name="CommonStates">
+                        <VisualState Name="Normal">
+                            <Storyboard>
+                                <ColorAnimation Storyboard.TargetName="backgroundElement" 
+                                 Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)"
+                                 To="{TemplateBinding Foreground}"
+                                 Duration="0:0:0.3"/>
+                            </Storyboard>
+                        </VisualState>
+                        <VisualState Name="MouseOver">
+                            <Storyboard>
+                                <ColorAnimation Storyboard.TargetName="backgroundElement" 
+                                 Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" 
+                                 To="White" 
+                                 Duration="0:0:0.3"/>
+                            </Storyboard>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateManager.VisualStateGroups>
+                <Ellipse Name="backgroundElement" Fill="{TemplateBinding Foreground}" Stroke="{TemplateBinding Foreground}" />
+                <ContentPresenter x:Name="contentPresenter" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Grid>
+        </ControlTemplate>
+        <!--</FinalTemplate>-->
+    </Window.Resources>
+
+
     <Border CornerRadius="90" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <Grid x:Name="Panel" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Grid.ColumnDefinitions>
@@ -37,21 +70,21 @@
                     </Grid.RowDefinitions>
                     <Button x:Name="btnMinimalize" Grid.Column="0" 
                             Click="btnMinimalize_Click" BorderBrush="{x:Null}" Foreground="{x:Null}">
-                        <Button.Background>
-                            <ImageBrush ImageSource="/minimalize.png"/>
-                        </Button.Background>
+                        <StackPanel Grid.Row="0" Grid.Column="0">
+                            <Image Stretch="UniformToFill" Source="/minimalize.png"/>
+                        </StackPanel>
                     </Button>
                     <Button x:Name="btnMaximalize" Grid.Column="1" 
                             Click="btnMaximalize_Click" Foreground="{x:Null}" BorderBrush="{x:Null}">
-                        <Button.Background>
-                            <ImageBrush ImageSource="/maximalize.jpg"/>
-                        </Button.Background>
+                        <StackPanel Grid.Row="0" Grid.Column="0">
+                            <Image Stretch="UniformToFill" Source="/maximalize.png"/>
+                        </StackPanel>
                     </Button>
                     <Button x:Name="btnClose" Grid.Column="2" 
                             Click="btnClose_Click" BorderBrush="{x:Null}" Foreground="{x:Null}">
-                        <Button.Background>
-                            <ImageBrush ImageSource="/Close.png"/>
-                        </Button.Background>
+                        <StackPanel Grid.Row="0" Grid.Column="0">
+                            <Image Stretch="UniformToFill" Source="/exit.png"/>
+                        </StackPanel>
                     </Button>
                 </Grid>
             </StackPanel>
@@ -63,7 +96,7 @@
                         <ColumnDefinition MinWidth="1001"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition MinHeight="803"></RowDefinition>
+                        <RowDefinition MinHeight="800"></RowDefinition>
                         <RowDefinition Height="40" MinHeight="40"></RowDefinition>
                     </Grid.RowDefinitions>
 
@@ -95,9 +128,9 @@
                             MouseMove="CordSys_MouseMove" MouseLeftButtonDown="Canvas_MouseLeftButtonDown"/>
 
                     <Line Grid.Row="0" Grid.Column="0" X1="10" Y1="0" X2="10" Y2="800" 
-                          Stroke="Green" StrokeThickness="5"/>
-                    <Line Grid.Row="1" Grid.Column="1" X1="0" Y1="10" X2="1100" Y2="10" 
-                          Stroke="Red" StrokeThickness="5" Margin="0, 10, 0 ,10"/>
+                          Stroke="Green" StrokeThickness="5" Margin="0,0,0,40" Grid.RowSpan="2"/>
+                    <Line Grid.Row="1" Grid.Column="1" X1="0" Y1="10" X2="1200" Y2="10" 
+                          Stroke="Red" StrokeThickness="5" Margin="0,0,0,20"/>
 
                 </Grid>
             </StackPanel>
@@ -122,13 +155,21 @@
                     </Grid.RowDefinitions>
 
                     <Button Grid.Row="0" Grid.Column="0" x:Name="ClearEvent_Button" 
-                            Width="100" Height="35"
-                                 Content="Clear"
-                                 HorizontalAlignment="Center"
-                                     Background="White"
+                            Width="100" Height="40"
+                                 Content="CLEAR"                                       
+                                 HorizontalAlignment="Center"                      
                                      Opacity="0.6"
-                                     FontSize="20"
-                                 Click="Clear_Viewport"/>
+                                     FontSize="22"
+                                 Click="Clear_Viewport" Background="#FFB8B8B8" BorderThickness="2,2,2,2" RenderTransformOrigin="0.5,0.5">
+                        <Button.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform AngleX="0"/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Button.RenderTransform>
+                    </Button>
 
                     <Canvas x:Name="Colour_square" Margin="0"
                             Grid.Row="5" Grid.Column="0">
@@ -144,20 +185,20 @@
 
                         <Button Click="LineEventButton">
                             <StackPanel Grid.Row="0" Grid.Column="0">
-                                <Image Source="/bezier_line.png" Stretch="UniformToFill"/>
+                                <Image Stretch="UniformToFill" Source="/line.png"/>
                             </StackPanel>
                         </Button>
 
                         <Button Grid.Row="0" Grid.Column="1" Click="CubicEventButton">
                             <StackPanel>
-                                <Image Source="/bezier_cubic.png" Stretch="UniformToFill"/>
+                                <Image Stretch="UniformToFill" Source="/Cubic_bezier.png"/>
                             </StackPanel>
                         </Button>
 
 
                         <Button Grid.Row="0" Grid.Column="2" Click="QuadraticEventButton">
                             <StackPanel>
-                                <Image Source="/bezier_quadratic.png" Stretch="UniformToFill"/>
+                                <Image Source="/quadratic.png" Stretch="UniformToFill"/>
                             </StackPanel>
                         </Button>
                     </Grid>
@@ -174,7 +215,6 @@
 
 
                         <RadioButton Grid.Row="0" Grid.Column="0" x:Name="AlphaEvent_Button"
-                                     Content="A"
                                      Style="{StaticResource MenuButtonTheme}" 
                                      Click="AlphaEvent_Button_Click"
                                      >
@@ -184,17 +224,15 @@
                         </RadioButton>
 
 
-                        <RadioButton Grid.Row="0" Grid.Column="1" x:Name="RedEvent_Button"
-                                     Content="R"                  
+                        <RadioButton Grid.Row="0" Grid.Column="1" x:Name="RedEvent_Button"                
                                      Style="{StaticResource MenuButtonTheme}" 
                                      Click="RedEvent_Button_Click">
                             <RadioButton.Background>
-                                <ImageBrush ImageSource="/Red.png"/>
+                                <ImageBrush ImageSource="/Icon/Red.png"/>
                             </RadioButton.Background>
                         </RadioButton>
 
                         <RadioButton Grid.Row="0" Grid.Column="2" x:Name="GreenEvent_Button" 
-                                     Content="G"
                                      Style="{StaticResource MenuButtonTheme}" 
                                      Click="GreenEvent_Button_Click" HorizontalAlignment="Left" Width="55">
                             <RadioButton.Background>
@@ -203,7 +241,6 @@
                         </RadioButton>
 
                         <RadioButton Grid.Row="0" Grid.Column="3" x:Name="BlueEvent_Button" 
-                                     Content="B"
                                      Style="{StaticResource MenuButtonTheme}" 
                                      Click="BlueEvent_Button_Click">
                             <RadioButton.Background>
@@ -214,23 +251,17 @@
                     </Grid>
 
                     <Grid Grid.Row="6" x:Name="StartGrid">
-                        <StackPanel OpacityMask="#FFF4F3F3">
-                            <Image>
-                                <Image.OpacityMask>
-                                    <ImageBrush ImageSource="/play.png"/>
-                                </Image.OpacityMask>
-                            </Image>
-                        </StackPanel>
 
 
                         <Button Grid.Row="0" Grid.Column="0" x:Name="StartEvent_Button" 
+                            Template="{StaticResource roundbutton}"
                             Width="100" Height="100"
                             HorizontalAlignment="Center"
                             Opacity="0.6"
-                            FontSize="20" Click="StartEvent_Click" BorderBrush="{x:Null}">
-                            <Button.Background>
-                                <ImageBrush ImageSource="/play.png"/>
-                            </Button.Background>
+                            FontSize="20" Click="StartEvent_Click">
+
+
+                            >
                         </Button>
                     </Grid>
                 </Grid>

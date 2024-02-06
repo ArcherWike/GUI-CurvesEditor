@@ -112,7 +112,7 @@ namespace UiDesign
         }
         private void Ellipse_mouseEnter(object sender, MouseEventArgs e)
         {
-            rectangleRGB.DisconectedTimer();
+            rectangleRGB.SetPauseMode(true);
             hoverpoint = (sender as Ellipse);
 
             if (active_curve.isPoint(sender as Ellipse))
@@ -137,7 +137,7 @@ namespace UiDesign
                 }
             }
             hoverpoint = null;
-            rectangleRGB.ConnectTimer();
+            rectangleRGB.SetPauseMode(false);
         }
         private void MyEllipse_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {

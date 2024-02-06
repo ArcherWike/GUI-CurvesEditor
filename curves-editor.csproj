@@ -141,20 +141,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="minimalize.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="maximalize.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="minimalize.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="pause.png" />
     <Resource Include="Theme\Play.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Play.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Theme\pause-button.png" />
@@ -164,13 +151,8 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icon\Alpha.png" />
-    <Resource Include="Icon\Bezier_cubic.png" />
-    <Resource Include="Icon\Bezier_Line.png" />
-    <Resource Include="Icon\Bezier_quadratic.png" />
     <Resource Include="Icon\Blue.png" />
-    <Resource Include="Icon\Close.png" />
     <Resource Include="Icon\Green.png" />
-    <Resource Include="Icon\Minimalize.png" />
     <Resource Include="Icon\Pause.png" />
     <Resource Include="Icon\Play.png" />
     <Resource Include="Icon\Red.png" />
@@ -179,22 +161,33 @@
     <Resource Include="Alpha.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Icon\cubic.png" />
+    <Resource Include="Icon\line.png" />
+    <Resource Include="Icon\quadratic.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon\exit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="line.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Cubic_bezier.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="quadratic.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="exit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="maximalize.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Minimalize.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="Red.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Green.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Bezier_Line.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Bezier_cubic.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Bezier_quadratic.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Close.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
