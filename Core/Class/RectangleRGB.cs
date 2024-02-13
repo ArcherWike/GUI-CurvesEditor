@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -17,20 +16,14 @@ namespace Curves_editor.Core.Class
         private Rectangle m_rectangle_rgb_shape = null;
         private Ellipse m_chart_marker = null;
 
-        bool run = false;
         bool button_pause = false;
         DispatcherTimer timer_val = null;
-
 
         public RectangleRGB(Rectangle rectangle_rgb_shape, Ellipse chart_marker_shape, UiDesign.MainWindow mainWindow)
         {
             mainWindow_m = mainWindow;
             m_rectangle_rgb_shape = rectangle_rgb_shape;
             m_chart_marker = chart_marker_shape;
-
-
-            //create timer - per-frame
-            //CompositionTarget.Rendering += (timer_Tick);
         }
 
         public void DisconectedTimer()
@@ -42,7 +35,6 @@ namespace Curves_editor.Core.Class
         {
             CompositionTarget.Rendering += (timer_Tick);
         }
-
 
         public class CompositionTargetEx
         {
@@ -76,18 +68,7 @@ namespace Curves_editor.Core.Class
             }
         }
 
-
-
-
-        enum ColorType
-        {
-            Alpha,
-            Red,
-            Green,
-            Blue,
-        }
-
-        public void SetPauseMode(bool pauseMode) 
+        public void SetPauseMode(bool pauseMode)
         {
             if (!pauseMode && button_pause)
             {
@@ -99,10 +80,9 @@ namespace Curves_editor.Core.Class
             }
         }
 
-
         public bool SetPause()
         {
-            if (button_pause) 
+            if (button_pause)
             {
                 button_pause = false;
                 DisconectedTimer();
@@ -126,8 +106,6 @@ namespace Curves_editor.Core.Class
 
         void timer_Tick(object sender, EventArgs e)
         {
-            
-            
             velocity_alpha = 255.0f;
             velocity_red = 0.0f;
             velocity_green = 0.0f;
@@ -139,7 +117,7 @@ namespace Curves_editor.Core.Class
             if (mainWindow_m.active_curve != null)
             {
                 time += 10;
-                
+
                 if (time > 6000)
                 {
                     time = 0;
@@ -147,7 +125,6 @@ namespace Curves_editor.Core.Class
                 Point temp_point = new Point(time / 1000, 0);
                 Point time_in_canvas_cord = mainWindow_m.GetCoordToCanvast(temp_point);
                 Canvas.SetLeft(m_chart_marker, time_in_canvas_cord.X);
-
 
                 foreach (Curve active_curve in mainWindow_m.curves)
                 {
@@ -178,7 +155,6 @@ namespace Curves_editor.Core.Class
                     }
                 }
             }
-
             //Console.WriteLine(velocity_red + " " + velocity_green + " " + velocity_blue + " " + velocity_alpha);
 
             m_rectangle_rgb_shape.Fill = new SolidColorBrush(Color.FromArgb(

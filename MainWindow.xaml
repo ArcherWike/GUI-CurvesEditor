@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UiDesign"
         mc:Ignorable="d"
-        Title="MainWindow" 
+        Title="CurveEditor" 
         Height="1080" Width="1600"
         WindowStyle="None"
         WindowState="Maximized"
@@ -57,8 +57,7 @@
                 <RowDefinition MinHeight="850"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <StackPanel x:Name="bar_settings" Grid.Row="0" Background="#FF1E1E1F"
-                        MouseLeftButtonDown="bar_settings_MouseLeftButtonDown">
+            <StackPanel x:Name="bar_settings" Grid.Row="0" Background="#FF1E1E1F">
                 <Grid HorizontalAlignment="Right">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="30" MinWidth="30"></ColumnDefinition>
@@ -125,7 +124,7 @@
                             Grid.Row="0" Grid.Column="1"
                             Background="{DynamicResource LargeGridBrush}" 
                             MouseLeftButtonUp="Canvas_MouseLeftButtonUp" 
-                            MouseMove="CordSys_MouseMove" MouseLeftButtonDown="Canvas_MouseLeftButtonDown"/>
+                            MouseMove="CordSys_MouseMove"/>
 
                     <Line Grid.Row="0" Grid.Column="0" X1="10" Y1="0" X2="10" Y2="800" 
                           Stroke="Green" StrokeThickness="5" Margin="0,0,0,40" Grid.RowSpan="2"/>

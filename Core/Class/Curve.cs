@@ -21,12 +21,10 @@ namespace Curves_editor.Core.Class
         Green,
         Blue,
     }
-
     public class Curve_point
     {
         public Point ellipse_positionID { get; set; }
         public Ellipse ellipseID { get; set; }
-
         public int default_segment_index { get; set; }
 
         public Curve_point(Point position, Ellipse ellipse)
@@ -35,28 +33,29 @@ namespace Curves_editor.Core.Class
             ellipseID = ellipse;
         }
     }
-
     public class Segment_curve
     {
+        //-- curve settings
         private const double c_sampleSpan = 5;
         BezierType curveType = BezierType.Quadratic;
         ColorType curveColor = ColorType.Alpha;
         public bool visible_mode = true;
+        private int m_controlP_margin = 0;
 
-        public List<Curve_point> points = new List<Curve_point>();  //this check m-
+        //-- curve content
+        public List<Curve_point> points = new List<Curve_point>();
         List<Line> m_lines = new List<Line>();
         private Polyline curveGeometry = new Polyline();
 
-        int m_controlP_margin = 0;
-
         PointCollection interpolator_points = new PointCollection();
 
+        ///???????????????????????????????????????????????????????????????????????funkcje CordToCanvas
         static Point GetCanvastToCoord(Point mousePosition)
         {
             Point result = new Point((mousePosition.X) / 200, 4 - (mousePosition.Y / 200));
 
             return result;
-        }
+        }   
         static Point GetCoordToCanvast(Point pointPosition)
         {
             Point result = new Point((pointPosition.X * 200), 800 - pointPosition.Y * 200);
@@ -64,9 +63,7 @@ namespace Curves_editor.Core.Class
             return result;
         }
 
-        public Segment_curve(
-            Curve_point start_point,
-            Curve_point end_point,
+        public Segment_curve(Curve_point start_point, Curve_point end_point,
             BezierType bezierType = BezierType.Quadratic,
             ColorType colorType = ColorType.Alpha)
         {
@@ -113,7 +110,6 @@ namespace Curves_editor.Core.Class
 
                     newPoints2.Add(points[0]);
 
-
                     Point supportStartPoint1 = GetCanvastToCoord(new Point(
                         points[0].ellipse_positionID.X, points[0].ellipse_positionID.Y));
                     Point supportEndPoint1 = GetCanvastToCoord(new Point(
@@ -134,8 +130,6 @@ namespace Curves_editor.Core.Class
                             Math.Abs(supportCenterPoint1.X + supportEndPoint1.X) / 2,
                             Math.Abs(supportCenterPoint1.Y + supportEndPoint1.Y) / 2)),
                         new Ellipse());
-
-
 
                     newPoints2.Add(control_point_1);
                     newPoints2.Add(control_point_2);
@@ -168,7 +162,7 @@ namespace Curves_editor.Core.Class
                     newPoints1.Add(control_point1);
 
                     newPoints1.Add(points.Last());
-
+                                        
                     points = newPoints1;
 
                     m_lines.Add(CreateLine(
@@ -182,11 +176,8 @@ namespace Curves_editor.Core.Class
             }
         }
 
-
-
         public Curve_point UpdateControlPointPosition()
         {
-
             for (int i = 1; i < points.Count() - 1; i++)
             {
                 if (points[i].ellipse_positionID.X - m_controlP_margin < points[0].ellipse_positionID.X)
@@ -297,7 +288,6 @@ namespace Curves_editor.Core.Class
             interpolator_points = curvePoints;
             return curveGeometry;
         }
-
         public List<Curve_point> GetControlPointArray()
         {
             List<Curve_point> controlPointArray = new List<Curve_point>();
@@ -318,10 +308,10 @@ namespace Curves_editor.Core.Class
         {
             Line line = new Line();
 
-            line.X1 = start.X - 5;
-            line.Y1 = start.Y - 5;
-            line.X2 = end.X - 5;
-            line.Y2 = end.Y - 5;
+            line.X1 = start.X;
+            line.Y1 = start.Y;
+            line.X2 = end.X;
+            line.Y2 = end.Y;
 
             return line;
         }
@@ -358,22 +348,22 @@ namespace Curves_editor.Core.Class
                 case BezierType.Cubic:
                     m_lines[0].X1 = points[0].ellipse_positionID.X;
                     m_lines[0].Y1 = points[0].ellipse_positionID.Y;
-                    m_lines[0].X2 = points[1].ellipse_positionID.X - 5;
-                    m_lines[0].Y2 = points[1].ellipse_positionID.Y - 5;
+                    m_lines[0].X2 = points[1].ellipse_positionID.X;
+                    m_lines[0].Y2 = points[1].ellipse_positionID.Y;
 
-                    m_lines[1].X1 = points[2].ellipse_positionID.X - 5;
-                    m_lines[1].Y1 = points[2].ellipse_positionID.Y - 5;
+                    m_lines[1].X1 = points[2].ellipse_positionID.X;
+                    m_lines[1].Y1 = points[2].ellipse_positionID.Y;
                     m_lines[1].X2 = points[3].ellipse_positionID.X;
                     m_lines[1].Y2 = points[3].ellipse_positionID.Y;
                     break;
                 case BezierType.Quadratic:
                     m_lines[0].X1 = points[0].ellipse_positionID.X;
                     m_lines[0].Y1 = points[0].ellipse_positionID.Y;
-                    m_lines[0].X2 = points[1].ellipse_positionID.X - 5;
-                    m_lines[0].Y2 = points[1].ellipse_positionID.Y - 5;
+                    m_lines[0].X2 = points[1].ellipse_positionID.X;
+                    m_lines[0].Y2 = points[1].ellipse_positionID.Y;
 
-                    m_lines[1].X1 = points[1].ellipse_positionID.X - 5;
-                    m_lines[1].Y1 = points[1].ellipse_positionID.Y - 5;
+                    m_lines[1].X1 = points[1].ellipse_positionID.X;
+                    m_lines[1].Y1 = points[1].ellipse_positionID.Y;
                     m_lines[1].X2 = points[2].ellipse_positionID.X;
                     m_lines[1].Y2 = points[2].ellipse_positionID.Y;
                     break;
@@ -402,9 +392,9 @@ namespace Curves_editor.Core.Class
                     control_point.ellipseID.Opacity = 0;
                 }
             }
-            
         }
 
+        //value at the chart point
         public float GetValueAt(float time)
         {
             if (interpolator_points[0].X == time)
@@ -430,7 +420,6 @@ namespace Curves_editor.Core.Class
                 {
                     low_ix = midpoint_ix;
                 }
-
             }
 
             float factor = (float)(
@@ -439,7 +428,6 @@ namespace Curves_editor.Core.Class
             return (float)(interpolator_points[low_ix].Y + factor *
                 (interpolator_points[high_ix].Y -
                 interpolator_points[low_ix].Y));
-            //return (float)(interpolator_points[low_ix].Y);
         }
     }
 
@@ -479,7 +467,6 @@ namespace Curves_editor.Core.Class
             curvePoint = new Curve_point(curvePoint_.ellipse_positionID, curvePoint_.ellipseID);
         }
     }
-
     public class Curve
     {
         BezierType globalCuveType = BezierType.Quadratic;
@@ -536,13 +523,6 @@ namespace Curves_editor.Core.Class
             {
                 segment.visible_mode = visible_option;
                 AddSegment_to_viewport(segment);
-/*                if (!visible_option)
-                {
-                    CurvePointsListEventArgs eventArgs1 = new CurvePointsListEventArgs(
-                       segment.GetControlPointArray());
-                    DestroyCurvePoint(this, eventArgs1);
-
-                }*/
             }
         }
 
@@ -553,12 +533,11 @@ namespace Curves_editor.Core.Class
             CurvePointMove(this, eventArgs);
         }
         void AddSegment_to_viewport(Segment_curve segment)
-        {   
+        {
             //updating segments 
             PathEventArgs eventArgs = new PathEventArgs(segment.GetCurveGeometry());
             segment.ChangeLinesColor();
             PathGeomertyAddToViewport(this, eventArgs);
-            
         }
         public void ChangeSegmentBezierType(BezierType bezierType)
         {
@@ -583,11 +562,9 @@ namespace Curves_editor.Core.Class
                 foreach (Curve_point curvepoint in eventArgs1.curvePointArray)
                 {
                     m_pointArray.Add(curvepoint);
-                    //m_control_pointArray.Add(curvepoint);
                 }
                 OnCurvePointAdded(this, eventArgs1);
 
-                //segment.GetCurveGeometry();
                 AddSegment_to_viewport(segment);
             }
         }
@@ -625,7 +602,6 @@ namespace Curves_editor.Core.Class
 
                     LineEventArgs eventArgs = new LineEventArgs(segment_Curve.GetUpdatedLinesArray());
                     OnLineAdded(this, eventArgs);
-
 
                     CurvePointsListEventArgs eventArgs1 = new CurvePointsListEventArgs(segment_Curve.GetControlPointArray());
                     foreach (Curve_point curvepoint in eventArgs1.curvePointArray)
@@ -697,7 +673,7 @@ namespace Curves_editor.Core.Class
                         }
                         i++;
                     }
-                    if (!temp_mode) // && temp != null
+                    if (!temp_mode)
                     {
                         new_curve_point.ellipse_positionID = temp.ellipse_positionID;
                         new_curve_point.ellipseID = temp.ellipseID;
@@ -754,7 +730,6 @@ namespace Curves_editor.Core.Class
         }
         public void UpdatePointPosition(Ellipse sender, Point e)
         {
-            //Console.WriteLine(GetCoordToCanvast(e).X);
             if ((GetCoordToCanvast(e).X > 0 && GetCoordToCanvast(e).X < 1240) && (GetCoordToCanvast(e).Y > 0 && GetCoordToCanvast(e).Y < 800))
             {
                 bool executed = false;
@@ -816,7 +791,7 @@ namespace Curves_editor.Core.Class
                                 GetCoordToCanvast(e).X + m_point_margin <=
                                 m_base_pointArray[index_pointArray + 1].ellipse_positionID.X)
                             {
-                                //between points - in are
+                                //between points
                                 ChangePointPosition(GetCoordToCanvast(e), curve_Point);
                             }
                             else
@@ -862,7 +837,7 @@ namespace Curves_editor.Core.Class
                 }
             }
 
-            foreach (Segment_curve segment_ in m_segmentsArray) 
+            foreach (Segment_curve segment_ in m_segmentsArray)
             {
                 UpdateSegment(segment_);
             }
