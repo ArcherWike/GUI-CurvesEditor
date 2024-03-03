@@ -5,6 +5,8 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
+using CanvasWindow;
+
 namespace Curves_editor.Core.Class
 {
     internal class RectangleRGB
@@ -123,7 +125,7 @@ namespace Curves_editor.Core.Class
                     time = 0;
                 }
                 Point temp_point = new Point(time / 1000, 0);
-                Point time_in_canvas_cord = mainWindow_m.GetCoordToCanvast(temp_point);
+                Point time_in_canvas_cord = Canvas_calculations.GetCoordToCanvast(temp_point);
                 Canvas.SetLeft(m_chart_marker, time_in_canvas_cord.X);
 
                 foreach (Curve active_curve in mainWindow_m.curves)

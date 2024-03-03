@@ -1,3 +1,4 @@
+using CanvasWindow;
 using Curves_editor.Core.Class;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,10 @@ namespace UiDesign
         Ellipse chart_marker = new Ellipse();
         Point ChartMarkerPoint = new Point(190, 120);
 
+        //button start-pause time
+        private StackPanel stackPnl = new StackPanel();
+        Image img = new Image();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -36,6 +41,13 @@ namespace UiDesign
             CreateRectangleRGB();
             Create_chart_marker_point();
             rectangleRGB = new RectangleRGB(rectangle_rgb, chart_marker, this);
+
+            //set up button - play (start time)
+            img.Source = new BitmapImage(new Uri(@"pack://application:,,,/Curves_editor;component//Icon/Play.png"));
+            stackPnl.Orientation = Orientation.Horizontal;
+            stackPnl.Margin = new Thickness(10);
+            StartEvent_Button.Content = stackPnl;
+            stackPnl.Children.Add(img);
         }
         private void CreateRectangleRGB()
         {
@@ -64,8 +76,8 @@ namespace UiDesign
             {
                 Point delta = new Point((mousePoint.X - 15 - Canvas.GetLeft(myEllipse)) / 200,
                      (Canvas.GetTop(myEllipse) - mousePoint.Y + 15) / 200);
-
-                Point new_pos = GetCanvastToCoord(mousePoint);
+                
+                Point new_pos = Canvas_calculations.GetCanvastToCoord(mousePoint);
                 active_curve.UpdatePointPosition(myEllipse, new_pos);
             }
         }
@@ -180,24 +192,10 @@ namespace UiDesign
         private void UpdatePointPosition(object sender, CurvePointEventArgs e)
         {
 
-            //SetPointPosition(e.curvePoint.ellipseID, GetCoordToCanvast(e.curvePoint.ellipse_positionID));
-            Canvas.SetLeft(e.curvePoint.ellipseID, e.curvePoint.ellipse_positionID.X - 15);
-            Canvas.SetTop(e.curvePoint.ellipseID, e.curvePoint.ellipse_positionID.Y - 15);
+            //SetPointPosition(e.curvePoint.ellipse, GetCoordToCanvast(e.curvePoint.ellipse_position));
+            Canvas.SetLeft(e.curvePoint.ellipse, e.curvePoint.ellipse_position.X - 15);
+            Canvas.SetTop(e.curvePoint.ellipse, e.curvePoint.ellipse_position.Y - 15);
 
-        }
-
-        //############### General static function ##################
-        public Point GetCanvastToCoord(Point mousePosition)
-        {
-            Point result = new Point((mousePosition.X) / 200, 4 - (mousePosition.Y / 200));
-
-            return result;
-        }
-        public Point GetCoordToCanvast(Point pointPosition)
-        {
-            Point result = new Point((pointPosition.X * 200), 800 - pointPosition.Y * 200);
-
-            return result;
         }
 
         ///############################## Line - Control Point Function ###############################
@@ -222,17 +220,17 @@ namespace UiDesign
         {
             foreach (Curve_point point in e.curvePointArray)
             {
-                point.ellipseID.Width = 20;
-                point.ellipseID.Height = 20;
-                point.ellipseID.Fill = System.Windows.Media.Brushes.SlateGray;
-                point.ellipseID.Opacity = 0.65;
-                Canvas.SetZIndex(point.ellipseID, 10);
-                CordSys.Children.Add(point.ellipseID);
-                SetControlPointPosition(point.ellipseID, (point.ellipse_positionID));
-                point.ellipseID.MouseEnter += Ellipse_mouseEnter;
-                point.ellipseID.MouseLeave += Ellipse_mouseLeave;
-                point.ellipseID.MouseLeftButtonDown += MyEllipse_MouseLeftButtonDown;
-                point.ellipseID.MouseLeftButtonUp += MyEllipse_MouseLeftButtonUp;
+                point.ellipse.Width = 20;
+                point.ellipse.Height = 20;
+                point.ellipse.Fill = System.Windows.Media.Brushes.SlateGray;
+                point.ellipse.Opacity = 0.65;
+                Canvas.SetZIndex(point.ellipse, 10);
+                CordSys.Children.Add(point.ellipse);
+                SetControlPointPosition(point.ellipse, (point.ellipse_position));
+                point.ellipse.MouseEnter += Ellipse_mouseEnter;
+                point.ellipse.MouseLeave += Ellipse_mouseLeave;
+                point.ellipse.MouseLeftButtonDown += MyEllipse_MouseLeftButtonDown;
+                point.ellipse.MouseLeftButtonUp += MyEllipse_MouseLeftButtonUp;
             }
         }
         public void SetControlPointPosition(Ellipse myEllipse, Point mousePoint)
@@ -243,7 +241,7 @@ namespace UiDesign
                 Point delta = new Point((mousePoint.X - Canvas.GetLeft(myEllipse)) / 200,
                      (Canvas.GetTop(myEllipse) - mousePoint.Y) / 200);
 
-                Point new_pos = GetCanvastToCoord(mousePoint);
+                Point new_pos = Canvas_calculations.GetCanvastToCoord(mousePoint);
 
                 active_curve.UpdatePointPosition(myEllipse, new_pos);
             }
@@ -256,7 +254,7 @@ namespace UiDesign
         {
             foreach (Curve_point point in e.curvePointArray)
             {
-                CordSys.Children.Remove(point.ellipseID);
+                CordSys.Children.Remove(point.ellipse);
             }
         }
 
@@ -269,27 +267,29 @@ namespace UiDesign
             }
         }
 
-        private void ChangeColor(ColorType new_color)
-        {
-            if (active_curve != null)
+        private void PickByColor(ColorType new_color)
+        {            
+            if (active_curve != null) 
             {
-                curves.Add(active_curve);
+                if (active_curve.globalCurveColor == new_color)
+                {
+                    return;
+                }
+                active_curve.ChangeVisibleCurve(false);
                 active_curve = null;
             }
             active_color = new_color;
-            bool exist_active_color = false;
 
             foreach (Curve curve in curves)
             {
-                curve.ChangeVisibleCurve(false);
                 if (curve.globalCurveColor == active_color)
                 {
                     curve.ChangeVisibleCurve(true);
                     active_curve = curve;
-                    exist_active_color = true;
+                    return;
                 }
             }
-            if (!exist_active_color) CreateNewCurve();
+            CreateNewCurve();
         }
 
         //############################# Window buttons ##############################
@@ -297,7 +297,7 @@ namespace UiDesign
         {
             if (active_curve != null)
             {
-                active_curve.ChangeSegmentBezierType(BezierType.Line);
+                active_curve.ChangeSegmentBezierType(CurveType.Line);
             }
         }
 
@@ -305,7 +305,7 @@ namespace UiDesign
         {
             if (active_curve != null)
             {
-                active_curve.ChangeSegmentBezierType(BezierType.Cubic);
+                active_curve.ChangeSegmentBezierType(CurveType.Cubic);
             }
         }
 
@@ -313,7 +313,7 @@ namespace UiDesign
         {
             if (active_curve != null)
             {
-                active_curve.ChangeSegmentBezierType(BezierType.Quadratic);
+                active_curve.ChangeSegmentBezierType(CurveType.Quadratic);
             }
         }
 
@@ -346,22 +346,22 @@ namespace UiDesign
         
         private void AlphaEvent_Button_Click(object sender, RoutedEventArgs e)
         {
-            ChangeColor(ColorType.Alpha);
+            PickByColor(ColorType.Alpha);
         }
 
         private void RedEvent_Button_Click(object sender, RoutedEventArgs e)
         {
-            ChangeColor(ColorType.Red);
+            PickByColor(ColorType.Red);
         }
 
         private void GreenEvent_Button_Click(object sender, RoutedEventArgs e)
         {
-            ChangeColor(ColorType.Green);
+            PickByColor(ColorType.Green);
         }
 
         private void BlueEvent_Button_Click(object sender, RoutedEventArgs e)
         {
-            ChangeColor(ColorType.Blue);
+            PickByColor(ColorType.Blue);
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -370,35 +370,20 @@ namespace UiDesign
             window_width = CordSys.ActualWidth;
         }
 
-        private StackPanel stackPnl = new StackPanel();
         private void StartEvent_Click(object sender, RoutedEventArgs e)
         {
             stackPnl.Children.Clear();
 
             if (rectangleRGB.SetPause())
-            {
-                Image img = new Image();
-                img.Source = new BitmapImage(new Uri(@"pack://application:,,,/Curves_editor;component//Icon/Play.png"));
-
-                //StackPanel stackPnl = new StackPanel();
-                stackPnl.Orientation = Orientation.Horizontal;
-                stackPnl.Margin = new Thickness(10);
-                //StartEvent_Button.Add(stackPnl);
+            {             
+                img.Source = new BitmapImage(new Uri(@"pack://application:,,,/Curves_editor;component//Icon/pause.png"));
                 stackPnl.Children.Add(img);
-
-                StartEvent_Button.Content = stackPnl;
-                var brush = new ImageBrush();
             }
             else
             {
-                Image img = new Image();
-                img.Source = new BitmapImage(new Uri(@"pack://application:,,,/Curves_editor;component//Icon/pause.png"));
-
-                stackPnl.Orientation = Orientation.Horizontal;
-                stackPnl.Margin = new Thickness(10);
+                img.Source = new BitmapImage(new Uri(@"pack://application:,,,/Curves_editor;component//Icon/Play.png"));
                 stackPnl.Children.Add(img);
             }
-            StartEvent_Button.Content = stackPnl;
         }
     }
 }
