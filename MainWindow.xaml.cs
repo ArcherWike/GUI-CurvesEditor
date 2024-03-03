@@ -91,7 +91,7 @@ namespace UiDesign
             myEllipse.Width = 30;
             myEllipse.Height = 30;
             myEllipse.Fill = new SolidColorBrush(Color.FromArgb(148, 98, 98, 0));
-            Canvas.SetZIndex(myEllipse, 7);
+            Canvas.SetZIndex(myEllipse, 2);
             CordSys.Children.Add(myEllipse);
             SetPointPosition(myEllipse, mousePosition);
 
@@ -191,8 +191,6 @@ namespace UiDesign
 
         private void UpdatePointPosition(object sender, CurvePointEventArgs e)
         {
-
-            //SetPointPosition(e.curvePoint.ellipse, GetCoordToCanvast(e.curvePoint.ellipse_position));
             Canvas.SetLeft(e.curvePoint.ellipse, e.curvePoint.ellipse_position.X - 15);
             Canvas.SetTop(e.curvePoint.ellipse, e.curvePoint.ellipse_position.Y - 15);
 
@@ -204,6 +202,7 @@ namespace UiDesign
             foreach (Line line in e.linesArray)
             {
                 CordSys.Children.Add(line);
+                Canvas.SetZIndex(line, 2);
             }
         }
 
@@ -224,7 +223,7 @@ namespace UiDesign
                 point.ellipse.Height = 20;
                 point.ellipse.Fill = System.Windows.Media.Brushes.SlateGray;
                 point.ellipse.Opacity = 0.65;
-                Canvas.SetZIndex(point.ellipse, 10);
+                Canvas.SetZIndex(point.ellipse, 3);
                 CordSys.Children.Add(point.ellipse);
                 SetControlPointPosition(point.ellipse, (point.ellipse_position));
                 point.ellipse.MouseEnter += Ellipse_mouseEnter;
@@ -264,6 +263,7 @@ namespace UiDesign
             if (!CordSys.Children.Contains(e.pathGeometry))
             {
                 CordSys.Children.Add(e.pathGeometry);
+                Canvas.SetZIndex(e.pathGeometry, 2);
             }
         }
 
@@ -320,7 +320,10 @@ namespace UiDesign
         private void Clear_Viewport(object sender, RoutedEventArgs e)
         {
             active_curve = null;
+            curves.Clear();
             CordSys.Children.Clear();
+            Create_chart_marker_point();
+
         }
 
         private void btnMinimalize_Click(object sender, RoutedEventArgs e)
@@ -384,6 +387,11 @@ namespace UiDesign
                 img.Source = new BitmapImage(new Uri(@"pack://application:,,,/Curves_editor;component//Icon/Play.png"));
                 stackPnl.Children.Add(img);
             }
+        }
+
+        private void bar_settings_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            this.DragMove();
         }
     }
 }
