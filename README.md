@@ -12,7 +12,7 @@ https://github.com/ArcherWike/GUI-CurvesEditor/assets/87717209/9eaa1ba5-21b9-4ca
 Application generates an RGBA (Red, Green, Blue, Alpha) colour of a square - color based on the graph of the Bezier curve.
 <h2></h2>
 <h3> Curve Types: <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Symbols/Right%20Arrow%20Curving%20Down.png" alt="Right Arrow Curving Down" width="25" height="25" /> </h3>
-The application supports switching between three types of curves: 
+Application supports switching between three types of curves: 
 
 - `Linear`
 - `Bézier Quadratic`
