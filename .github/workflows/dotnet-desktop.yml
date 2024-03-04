@@ -25,7 +25,7 @@ jobs:
     - name: Install MAUI workload
       run: dotnet workload install maui
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore -s Curves_editor.sln
     - name: Build
       run: dotnet build  curves-editor.csproj -c Release -f:v4.7.2 /p:GenerateAppxPackageOnBuild=true /p:AppxPackageSigningEnabled=true    
     - name: Upload Build Artifacts
