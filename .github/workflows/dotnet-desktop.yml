@@ -1,0 +1,33 @@
+name: .NET Build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    strategy:
+      matrix:
+        configuration: [Release]
+
+    runs-on: windows-latest  # For a list of available runner types, refer to
+                             # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+    - name: Install MAUI workload
+      run: dotnet workload install maui
+
+    - name: Build
+      run: dotnet build  curves-editor.csproj -c Release -f:v4.7.2 /p:GenerateAppxPackageOnBuild=true /p:AppxPackageSigningEnabled=true    
+    - name: Upload Build Artifacts
+      uses: actions/upload-artifact@v3.1.0
+      with:
+        path: .\**\AppPackages\**\*.*
