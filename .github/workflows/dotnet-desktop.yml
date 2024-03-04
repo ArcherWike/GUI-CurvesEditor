@@ -29,7 +29,7 @@ jobs:
         echo "${{ secrets.WINDOWS_PFX_FILE }}" > cert.pfx.asc
         certutil -decode cert.pfx.asc cert.pfx
     - name: Add Cert to Store
-      run: certutil -user -q -p ${{ secrets.WINDOWS_PFX_PASSWORD }} -importpfx cert.pfx NoRoot
+      run: certutil -user -q -p ${{ secrets.WINDOWS_PFX_PASSWORD }} -importpfx cert.pfx
     - name: Build
       run: dotnet publish curves-editor.csproj -c Release -f:v4.7.2 /p:GenerateAppxPackageOnBuild=true /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWS_PFX_THUMBPRINT }}"      
     - name: Upload Build Artifacts
