@@ -2,7 +2,7 @@
 namespace CanvasWindow
 {
     public struct Canvas_calculations
-    { 
+    {
         public static Point GetCanvastToCoord(Point mousePosition)
         {
             Point result = new Point((mousePosition.X) / 200, 4 - (mousePosition.Y / 200));

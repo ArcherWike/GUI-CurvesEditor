@@ -1,13 +1,10 @@
+using CanvasWindow;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-
-using CanvasWindow;
-using static System.Security.Cryptography.ECCurve;
 
 
 namespace Curves_editor.Core.Class
@@ -65,7 +62,7 @@ namespace Curves_editor.Core.Class
 
             m_curveColor = colorType;
         }
-        
+
         private void CreateLineTypePoints()
         {
             List<Curve_point> newPoints = new List<Curve_point>();
@@ -181,7 +178,7 @@ namespace Curves_editor.Core.Class
             switch (m_curveType)
             {
                 case CurveType.Line:
-                    CreateLineTypePoints();                    
+                    CreateLineTypePoints();
                     break;
 
                 case CurveType.Cubic:
@@ -218,7 +215,7 @@ namespace Curves_editor.Core.Class
             return null;
         }
 
-        private  void  RecalculationLineType()
+        private void RecalculationLineType()
         {
             PointCollection curvePoints = new PointCollection();
             curvePoints.Add(m_points[0].ellipse_position);
@@ -304,7 +301,7 @@ namespace Curves_editor.Core.Class
                     }
                     break;
             }
-            
+
         }
         public List<Curve_point> GetControlPointArray()
         {
@@ -362,18 +359,18 @@ namespace Curves_editor.Core.Class
                     m_lines[0].Y1 = m_points[0].ellipse_position.Y;
                     m_lines[0].X2 = m_points[1].ellipse_position.X;
                     m_lines[0].Y2 = m_points[1].ellipse_position.Y;
-                                                
+
                     m_lines[1].X1 = m_points[2].ellipse_position.X;
                     m_lines[1].Y1 = m_points[2].ellipse_position.Y;
                     m_lines[1].X2 = m_points[3].ellipse_position.X;
                     m_lines[1].Y2 = m_points[3].ellipse_position.Y;
-                    break;                      
-                case CurveType.Quadratic:       
+                    break;
+                case CurveType.Quadratic:
                     m_lines[0].X1 = m_points[0].ellipse_position.X;
                     m_lines[0].Y1 = m_points[0].ellipse_position.Y;
                     m_lines[0].X2 = m_points[1].ellipse_position.X;
                     m_lines[0].Y2 = m_points[1].ellipse_position.Y;
-                                                
+
                     m_lines[1].X1 = m_points[1].ellipse_position.X;
                     m_lines[1].Y1 = m_points[1].ellipse_position.Y;
                     m_lines[1].X2 = m_points[2].ellipse_position.X;
@@ -580,7 +577,7 @@ namespace Curves_editor.Core.Class
 
                 //update and create new segment
                 segment.SetBezierType(bezierType);
-                
+
                 eventArgs = new LineEventArgs(segment.GetUpdatedLinesArray());
                 OnLineAdded(this, eventArgs);
 

@@ -1,11 +1,10 @@
+using CanvasWindow;
 using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
-
-using CanvasWindow;
 
 namespace Curves_editor.Core.Class
 {
@@ -19,7 +18,6 @@ namespace Curves_editor.Core.Class
         private Ellipse m_chart_marker = null;
 
         bool button_pause = false;
-        DispatcherTimer timer_val = null;
 
         public RectangleRGB(Rectangle rectangle_rgb_shape, Ellipse chart_marker_shape, UiDesign.MainWindow mainWindow)
         {

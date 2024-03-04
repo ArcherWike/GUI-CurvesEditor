@@ -52,6 +52,9 @@
   <PropertyGroup>
     <StartupObject>UiDesign.App</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Cubic_bezier.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -127,9 +130,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Theme\minimalize1.bmp" />
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4.7.2 %28x86 and x64%29</ProductName>
@@ -142,24 +142,12 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Theme\Play.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Theme\pause-button.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Theme\pause.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Icon\Alpha.png" />
     <Resource Include="Icon\Blue.png" />
     <Resource Include="Icon\Green.png" />
     <Resource Include="Icon\Pause.png" />
     <Resource Include="Icon\Play.png" />
     <Resource Include="Icon\Red.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Alpha.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icon\cubic.png" />
@@ -170,25 +158,14 @@
     <Resource Include="Icon\exit.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="line.png" />
+    <Resource Include="Icon\Cubic_bezier.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Cubic_bezier.png" />
+    <Resource Include="Icon\maximalize.png" />
+    <Resource Include="Icon\Minimalize.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="quadratic.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="exit.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="maximalize.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Minimalize.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Red.png" />
+    <Resource Include="Cubic_bezier.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

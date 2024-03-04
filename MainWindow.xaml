@@ -53,12 +53,13 @@
                 <ColumnDefinition MinWidth="350" MaxWidth="350"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="100" MinHeight="100"></RowDefinition>
+                <RowDefinition Height="50" MinHeight="50"></RowDefinition>
                 <RowDefinition MinHeight="850"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <StackPanel x:Name="bar_settings" Grid.Row="0" Background="#FF1E1E1F">
-                <Grid HorizontalAlignment="Right">
+            <StackPanel x:Name="bar_settings" Grid.Row="0" Background="#FF646467" 
+                        MouseLeftButtonDown="bar_settings_MouseLeftButtonDown">
+                <Grid HorizontalAlignment="Right" Margin="0 10 0 0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="30" MinWidth="30"></ColumnDefinition>
                         <ColumnDefinition Width="30" MinWidth="30"></ColumnDefinition>
@@ -70,19 +71,19 @@
                     <Button x:Name="btnMinimalize" Grid.Column="0" 
                             Click="btnMinimalize_Click" BorderBrush="{x:Null}" Foreground="{x:Null}">
                         <StackPanel Grid.Row="0" Grid.Column="0">
-                            <Image Stretch="UniformToFill" Source="/minimalize.png"/>
+                            <Image Stretch="UniformToFill" Source="/Icon/Minimalize.png"/>
                         </StackPanel>
                     </Button>
                     <Button x:Name="btnMaximalize" Grid.Column="1" 
                             Click="btnMaximalize_Click" Foreground="{x:Null}" BorderBrush="{x:Null}">
                         <StackPanel Grid.Row="0" Grid.Column="0">
-                            <Image Stretch="UniformToFill" Source="/maximalize.png"/>
+                            <Image Stretch="UniformToFill" Source="/Icon/maximalize.png"/>
                         </StackPanel>
                     </Button>
                     <Button x:Name="btnClose" Grid.Column="2" 
                             Click="btnClose_Click" BorderBrush="{x:Null}" Foreground="{x:Null}">
                         <StackPanel Grid.Row="0" Grid.Column="0">
-                            <Image Stretch="UniformToFill" Source="/exit.png"/>
+                            <Image Stretch="UniformToFill" Source="/Icon/exit.png"/>
                         </StackPanel>
                     </Button>
                 </Grid>
@@ -184,20 +185,20 @@
 
                         <Button Click="LineEventButton">
                             <StackPanel Grid.Row="0" Grid.Column="0">
-                                <Image Stretch="UniformToFill" Source="/line.png"/>
+                                <Image Stretch="UniformToFill" Source="/Icon/line.png"/>
                             </StackPanel>
                         </Button>
 
                         <Button Grid.Row="0" Grid.Column="1" Click="CubicEventButton">
                             <StackPanel>
-                                <Image Stretch="UniformToFill" Source="/Cubic_bezier.png"/>
+                                <Image Stretch="UniformToFill" Source="/Icon/Cubic_bezier.png"/>
                             </StackPanel>
                         </Button>
 
 
                         <Button Grid.Row="0" Grid.Column="2" Click="QuadraticEventButton">
                             <StackPanel>
-                                <Image Source="/quadratic.png" Stretch="UniformToFill"/>
+                                <Image Source="/Icon/quadratic.png" Stretch="UniformToFill"/>
                             </StackPanel>
                         </Button>
                     </Grid>
@@ -218,7 +219,7 @@
                                      Click="AlphaEvent_Button_Click"
                                      >
                             <RadioButton.Background>
-                                <ImageBrush ImageSource="/Alpha.png"/>
+                                <ImageBrush ImageSource="/Icon/Alpha.png"/>
                             </RadioButton.Background>
                         </RadioButton>
 

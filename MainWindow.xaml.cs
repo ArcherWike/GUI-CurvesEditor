@@ -76,7 +76,7 @@ namespace UiDesign
             {
                 Point delta = new Point((mousePoint.X - 15 - Canvas.GetLeft(myEllipse)) / 200,
                      (Canvas.GetTop(myEllipse) - mousePoint.Y + 15) / 200);
-                
+
                 Point new_pos = Canvas_calculations.GetCanvastToCoord(mousePoint);
                 active_curve.UpdatePointPosition(myEllipse, new_pos);
             }
@@ -268,8 +268,8 @@ namespace UiDesign
         }
 
         private void PickByColor(ColorType new_color)
-        {            
-            if (active_curve != null) 
+        {
+            if (active_curve != null)
             {
                 if (active_curve.globalCurveColor == new_color)
                 {
@@ -346,7 +346,7 @@ namespace UiDesign
         {
             this.Close();
         }
-        
+
         private void AlphaEvent_Button_Click(object sender, RoutedEventArgs e)
         {
             PickByColor(ColorType.Alpha);
@@ -378,7 +378,7 @@ namespace UiDesign
             stackPnl.Children.Clear();
 
             if (rectangleRGB.SetPause())
-            {             
+            {
                 img.Source = new BitmapImage(new Uri(@"pack://application:,,,/Curves_editor;component//Icon/pause.png"));
                 stackPnl.Children.Add(img);
             }
