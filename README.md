@@ -32,3 +32,8 @@ Application supports switching between three types of curves:
 <h2></h2>
 
 ![image](https://github.com/ArcherWike/GUI-CurvesEditor/assets/87717209/148beb20-b126-4091-bcee-b20d48b5c514)
+
+
+https://github.com/ArcherWike/GUI-CurvesEditor/assets/87717209/d74d86a8-a1d4-46da-ae4b-cf31bd57d94c
+
+
