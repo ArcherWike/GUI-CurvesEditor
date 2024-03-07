@@ -5,7 +5,9 @@
 This application allows to create and manipulate Bezier curves. Users can add, move, or remove control points to change the shape of the curve.
 <h2></h2>
 
-https://github.com/ArcherWike/GUI-CurvesEditor/assets/87717209/9eaa1ba5-21b9-4ca5-a160-7d7d1b8001c8
+<p align="center">
+<img src="https://github.com/ArcherWike/GUI-CurvesEditor/assets/87717209/20a32a04-a1c8-4310-914d-5bfe53bf0b48" width="560" height="343"/>
+</p>
 
 <h2></h2>
 <h3> RGBA Color Generation: <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Symbols/Red%20Square.png" alt="Red Square" width="25" height="25" /> </h3>
