@@ -2,7 +2,7 @@
 
 <h2></h2>
 
-This application allows to create and manipulate Bezier curves. Users can add, move, or remove control points to change the shape of the curve.
+<b>This application allows to create and manipulate Bezier curves. Users can add, move, or remove control points to change the shape of the curve.<b/>
 <h2></h2>
 
 <p align="center">
@@ -10,7 +10,7 @@ This application allows to create and manipulate Bezier curves. Users can add, m
 </p>
 
 <h2></h2>
-<h3> RGBA Color Generation: <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Symbols/Red%20Square.png" alt="Red Square" width="25" height="25" /> </h3>
+<h3> <b>RGBA Color Generation:<b/> <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Symbols/Red%20Square.png" alt="Red Square" width="25" height="25" /> </h3>
 Application generates an RGBA (Red, Green, Blue, Alpha) colour of a square - color based on the graph of the Bezier curve.
 <h2></h2>
 <h3> Curve Types: <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Symbols/Right%20Arrow%20Curving%20Down.png" alt="Right Arrow Curving Down" width="25" height="25" /> </h3>
